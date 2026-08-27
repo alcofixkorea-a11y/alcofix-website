@@ -1,156 +1,334 @@
 (function(){
     'use strict';
 
-    // Header scroll + scroll-to-top
-    var hdr = document.getElementById('hdr');
-    var btnTop = document.getElementById('btnTop');
-    window.addEventListener('scroll', function(){
-        hdr.classList.toggle('scrolled', window.scrollY > 60);
-        if (btnTop) btnTop.classList.toggle('show', window.scrollY > 400);
-    });
-    if (btnTop) {
-        btnTop.addEventListener('click', function(){
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+    var intro = document.getElementById('intro');
+    var menuScreen = document.getElementById('menuScreen');
+    var menuAmbient = document.getElementById('menuAmbient');
+    var skipBtn = document.getElementById('skipBtn');
+    var logoPhase = document.getElementById('logoPhase');
+    var sloganPhase = document.getElementById('sloganPhase');
+    var netCanvas = document.getElementById('netCanvas');
+
+    // Supporting keywords: quiet background texture, no animation sequence
+    var ambientKeywords = [
+        'HEALTH', 'HANGOVER CURE', 'NATURAL', 'INNOVATION', 'GLOBAL',
+        'WELLNESS', 'SCIENCE', 'PATENT', 'DETOX', 'LIVER CARE',
+        'SUPPLEMENT', 'BEAUTY', 'COSMETIC', 'EXPORT', 'ASIA MARKET',
+        'GMP', 'HERBAL', 'RESEARCH', 'VITALITY', 'TRUST'
+    ];
+    var ambientPositions = [
+        {x:'3%', y:'12%'}, {x:'22%', y:'6%'}, {x:'46%', y:'4%'}, {x:'70%', y:'8%'}, {x:'88%', y:'14%'},
+        {x:'94%', y:'32%'}, {x:'2%', y:'34%'}, {x:'91%', y:'52%'}, {x:'5%', y:'54%'}, {x:'86%', y:'70%'},
+        {x:'8%', y:'72%'}, {x:'30%', y:'93%'}, {x:'52%', y:'96%'}, {x:'74%', y:'92%'}, {x:'93%', y:'86%'},
+        {x:'16%', y:'90%'}, {x:'38%', y:'34%'}, {x:'62%', y:'62%'}, {x:'27%', y:'62%'}, {x:'66%', y:'30%'}
+    ];
+
+    var introTimeout = [];
+
+    function schedule(fn, ms) {
+        var t = setTimeout(fn, ms);
+        introTimeout.push(t);
+        return t;
+    }
+
+    function rand(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    function startIntro() {
+        logoPhase.classList.add('active');
+        var letters = logoPhase.querySelectorAll('.lt');
+        letters.forEach(function(l, i) {
+            schedule(function(){ l.classList.add('show'); }, 400 + i * 140);
+        });
+
+        schedule(function() {
+            logoPhase.classList.remove('active');
+            sloganPhase.classList.add('active');
+            schedule(function() {
+                sloganPhase.querySelector('.slogan-en').classList.add('show');
+            }, 200);
+            schedule(function() {
+                sloganPhase.querySelector('.slogan-ko').classList.add('show');
+            }, 600);
+        }, 2400);
+
+        schedule(showMenu, 5400);
+    }
+
+    function spawnAmbientKeywords() {
+        if (!menuAmbient || menuAmbient.childElementCount) return;
+        ambientKeywords.forEach(function(word, i) {
+            var pos = ambientPositions[i % ambientPositions.length];
+            var el = document.createElement('span');
+            el.className = 'kw-ambient';
+            el.textContent = word;
+            el.style.left = pos.x;
+            el.style.top = pos.y;
+            el.style.setProperty('--ad', rand(0, 4).toFixed(2) + 's');
+            el.style.setProperty('--op', rand(0.1, 0.22).toFixed(2));
+            menuAmbient.appendChild(el);
+            setTimeout(function() {
+                el.classList.add('show');
+            }, 200 + i * 60);
         });
     }
 
-    // Mobile menu
-    var mobBtn = document.getElementById('mobBtn');
-    var navEl = document.getElementById('navEl');
-    mobBtn.addEventListener('click', function(){ navEl.classList.toggle('open'); });
+    /* ===== Network backdrop: glowing nodes linked by soft arcs ===== */
+    function initNetwork() {
+        if (!netCanvas) return;
+        var ctx = netCanvas.getContext('2d');
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var w = 0, h = 0;
+        var nodes = [];
+        var links = [];
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    document.querySelectorAll('.nav a').forEach(function(a){
-        a.addEventListener('click', function(e){
-            e.preventDefault();
-            var target = document.querySelector(this.getAttribute('href'));
-            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            navEl.classList.remove('open');
-        });
-    });
+        function resize() {
+            w = window.innerWidth;
+            h = window.innerHeight;
+            netCanvas.width = w * dpr;
+            netCanvas.height = h * dpr;
+            netCanvas.style.width = w + 'px';
+            netCanvas.style.height = h + 'px';
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            build();
+        }
 
-    // Scroll reveal
-    var reveals = document.querySelectorAll('.reveal, .reveal-l, .reveal-r');
-    var obs = new IntersectionObserver(function(entries){
-        entries.forEach(function(en){
-            if (en.isIntersecting) en.target.classList.add('vis');
-        });
-    }, { threshold: 0.12 });
-    reveals.forEach(function(el){ obs.observe(el); });
+        function build() {
+            var count = w < 700 ? 14 : (w < 1200 ? 20 : 28);
+            nodes = [];
+            for (var i = 0; i < count; i++) {
+                nodes.push({
+                    x: rand(0.04, 0.96) * w,
+                    y: rand(0.06, 0.94) * h,
+                    r: rand(1.4, 3.4),
+                    phase: rand(0, Math.PI * 2),
+                    speed: rand(0.4, 1.1),
+                    dx: rand(-0.09, 0.09),
+                    dy: rand(-0.07, 0.07),
+                    hub: Math.random() < 0.22
+                });
+            }
+            // Link each node to its 2 nearest neighbours (organic web, no clutter)
+            links = [];
+            nodes.forEach(function(n, i) {
+                var others = nodes
+                    .map(function(m, j) { return { j: j, d: Math.hypot(m.x - n.x, m.y - n.y) }; })
+                    .filter(function(o) { return o.j !== i; })
+                    .sort(function(a, b) { return a.d - b.d; });
+                others.slice(0, 2).forEach(function(o) {
+                    var key = i < o.j ? i + '-' + o.j : o.j + '-' + i;
+                    if (links.indexOf(key) === -1) links.push(key);
+                });
+            });
+        }
 
-    // Side dot navigation
-    var sideNav = document.getElementById('sideNav');
-    if (sideNav) {
-        var dots = sideNav.querySelectorAll('a');
-        var sections = [];
-        dots.forEach(function(d){
-            var sec = document.querySelector(d.getAttribute('href'));
-            if (sec) sections.push({ el: sec, dot: d, id: d.dataset.section });
-        });
-        var darkSections = { about: true, business: true, product: true, news: true, contact: true };
-        var secObs = new IntersectionObserver(function(entries){
-            entries.forEach(function(en){
-                if (en.isIntersecting && en.intersectionRatio >= 0.4) {
-                    var id = en.target.id;
-                    dots.forEach(function(d){ d.classList.remove('active'); });
-                    var match = sideNav.querySelector('[data-section="' + id + '"]');
-                    if (match) match.classList.add('active');
-                    sideNav.classList.toggle('dark', !!darkSections[id]);
+        function drawArc(a, b) {
+            // Curved connector, bowed perpendicular to the chord
+            var mx = (a.x + b.x) / 2;
+            var my = (a.y + b.y) / 2;
+            var vx = b.x - a.x, vy = b.y - a.y;
+            var len = Math.hypot(vx, vy) || 1;
+            var bow = Math.min(len * 0.18, 70);
+            var cx = mx - (vy / len) * bow;
+            var cy = my + (vx / len) * bow;
+
+            var grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
+            grad.addColorStop(0, 'rgba(0,191,165,0.04)');
+            grad.addColorStop(0.5, 'rgba(160,245,225,0.32)');
+            grad.addColorStop(1, 'rgba(0,191,165,0.04)');
+
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = 1.1;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.quadraticCurveTo(cx, cy, b.x, b.y);
+            ctx.stroke();
+        }
+
+        function frame(t) {
+            ctx.clearRect(0, 0, w, h);
+            var time = t / 1000;
+
+            if (!reduced) {
+                nodes.forEach(function(n) {
+                    n.x += n.dx * 0.35;
+                    n.y += n.dy * 0.35;
+                    if (n.x < 20 || n.x > w - 20) n.dx *= -1;
+                    if (n.y < 20 || n.y > h - 20) n.dy *= -1;
+                });
+            }
+
+            links.forEach(function(key) {
+                var p = key.split('-');
+                drawArc(nodes[+p[0]], nodes[+p[1]]);
+            });
+
+            nodes.forEach(function(n) {
+                var pulse = reduced ? 0.6 : 0.5 + 0.5 * Math.sin(time * n.speed + n.phase);
+                var r = n.r * (n.hub ? 1.5 : 1);
+                var glow = r * (n.hub ? 7 : 5);
+
+                var g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, glow);
+                g.addColorStop(0, 'rgba(170,250,232,' + (0.5 * pulse + 0.18).toFixed(3) + ')');
+                g.addColorStop(0.35, 'rgba(0,191,165,' + (0.24 * pulse + 0.05).toFixed(3) + ')');
+                g.addColorStop(1, 'rgba(0,191,165,0)');
+                ctx.fillStyle = g;
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, glow, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = 'rgba(235,255,251,' + (0.7 + 0.3 * pulse).toFixed(3) + ')';
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (n.hub) {
+                    ctx.strokeStyle = 'rgba(160,248,230,' + (0.3 * pulse + 0.06).toFixed(3) + ')';
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.arc(n.x, n.y, r + 7 + pulse * 6, 0, Math.PI * 2);
+                    ctx.stroke();
+
+                    ctx.strokeStyle = 'rgba(160,248,230,' + (0.14 * pulse).toFixed(3) + ')';
+                    ctx.beginPath();
+                    ctx.arc(n.x, n.y, r + 15 + pulse * 10, 0, Math.PI * 2);
+                    ctx.stroke();
                 }
             });
-        }, { threshold: 0.4 });
-        sections.forEach(function(s){ secObs.observe(s.el); });
 
-        dots.forEach(function(d){
-            d.addEventListener('click', function(e){
-                e.preventDefault();
-                var target = document.querySelector(this.getAttribute('href'));
-                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            requestAnimationFrame(frame);
+        }
+
+        resize();
+        window.addEventListener('resize', resize);
+        requestAnimationFrame(frame);
+        netCanvas.classList.add('show');
+    }
+
+    /* Cards drift with the pointer, each by its own depth factor */
+    function initParallax() {
+        var nav = document.getElementById('menuNav');
+        if (!nav) return;
+        if (window.matchMedia('(hover:none), (prefers-reduced-motion: reduce)').matches) return;
+
+        var cards = nav.querySelectorAll('.ms-card');
+        var pending = false;
+        var px = 0, py = 0;
+
+        function apply() {
+            pending = false;
+            cards.forEach(function(c) {
+                c.style.setProperty('--px', px.toFixed(1) + 'px');
+                c.style.setProperty('--py', py.toFixed(1) + 'px');
             });
+        }
+
+        menuScreen.addEventListener('mousemove', function(e) {
+            px = ((e.clientX / window.innerWidth) - 0.5) * 26;
+            py = ((e.clientY / window.innerHeight) - 0.5) * 18;
+            if (!pending) {
+                pending = true;
+                requestAnimationFrame(apply);
+            }
+        });
+
+        menuScreen.addEventListener('mouseleave', function() {
+            px = 0; py = 0;
+            if (!pending) {
+                pending = true;
+                requestAnimationFrame(apply);
+            }
         });
     }
 
-    // Product carousel
-    var carousel = document.getElementById('prodCarousel');
-    if (carousel) {
-        var imgs = carousel.querySelectorAll('.carousel-img');
-        var prevBtn = document.getElementById('carPrev');
-        var nextBtn = document.getElementById('carNext');
-        var counter = document.getElementById('carCur');
-        var current = 0;
-
-        function showSlide(idx) {
-            imgs[current].classList.remove('active');
-            current = (idx + imgs.length) % imgs.length;
-            imgs[current].classList.add('active');
-            counter.textContent = current + 1;
-        }
-
-        prevBtn.addEventListener('click', function(){ showSlide(current - 1); });
-        nextBtn.addEventListener('click', function(){ showSlide(current + 1); });
+    function revealMenu() {
+        menuScreen.classList.add('active');
+        spawnAmbientKeywords();
+        initNetwork();
+        initParallax();
     }
 
-    // Contact form
-    var form = document.getElementById('cForm');
-    form.addEventListener('submit', function(e){
-        e.preventDefault();
-        var fd = new FormData(form);
-        var subj = encodeURIComponent('[알코픽스 문의] ' + fd.get('type') + ' - ' + fd.get('name'));
-        var body = encodeURIComponent(
-            '이름/회사명: ' + fd.get('name') +
-            '\n이메일: ' + fd.get('email') +
-            '\n문의 유형: ' + fd.get('type') +
-            '\n\n' + fd.get('message')
-        );
-        window.open('mailto:alcofixkorea@gmail.com?subject=' + subj + '&body=' + body, '_self');
-    });
+    function showMenu() {
+        intro.style.transition = 'opacity 0.7s ease';
+        intro.style.opacity = '0';
+        skipBtn.style.transition = 'opacity 0.3s';
+        skipBtn.style.opacity = '0';
 
-    // Admin editor (Ctrl+Shift+E)
-    var panel = document.getElementById('adminPanel');
-    var adminBody = document.getElementById('adminBody');
+        schedule(function() {
+            intro.style.display = 'none';
+            skipBtn.style.display = 'none';
+            revealMenu();
 
-    document.addEventListener('keydown', function(e){
-        if (e.ctrlKey && e.shiftKey && e.key === 'E') {
-            e.preventDefault();
-            toggleAdmin();
-        }
-    });
-
-    document.getElementById('adminClose').addEventListener('click', function(){ panel.classList.remove('open'); });
-
-    function toggleAdmin() {
-        if (panel.classList.contains('open')) {
-            panel.classList.remove('open');
-            return;
-        }
-        adminBody.innerHTML = '';
-        var editables = document.querySelectorAll('[data-edit]');
-        editables.forEach(function(el){
-            var key = el.dataset.edit;
-            var div = document.createElement('div');
-            div.className = 'admin-field';
-            var label = document.createElement('label');
-            label.textContent = key;
-            var ta = document.createElement('textarea');
-            ta.value = el.innerHTML.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '').trim();
-            ta.dataset.target = key;
-            ta.addEventListener('focus', function(){ el.classList.add('editing'); });
-            ta.addEventListener('blur', function(){ el.classList.remove('editing'); });
-            div.appendChild(label);
-            div.appendChild(ta);
-            adminBody.appendChild(div);
-        });
-        panel.classList.add('open');
+            var items = menuScreen.querySelectorAll('.ms-card');
+            items.forEach(function(item, i) {
+                setTimeout(function() {
+                    item.classList.add('show');
+                }, 100 + i * 110);
+            });
+        }, 700);
     }
 
-    document.getElementById('adminApply').addEventListener('click', function(){
-        var fields = adminBody.querySelectorAll('textarea');
-        fields.forEach(function(ta){
-            var target = document.querySelector('[data-edit="' + ta.dataset.target + '"]');
-            if (target) {
-                var lines = ta.value.split('\n');
-                target.innerHTML = lines.join('<br>');
+    function skipIntro() {
+        introTimeout.forEach(clearTimeout);
+        introTimeout = [];
+        intro.style.display = 'none';
+        skipBtn.style.display = 'none';
+        revealMenu();
+        var items = menuScreen.querySelectorAll('.ms-card');
+        items.forEach(function(item) { item.classList.add('show'); });
+    }
+
+    skipBtn.addEventListener('click', skipIntro);
+
+    document.querySelectorAll('.ms-card').forEach(function(item) {
+        item.addEventListener('click', function() {
+            var id = 'panel-' + this.dataset.panel;
+            var panel = document.getElementById(id);
+            if (panel) {
+                panel.classList.add('open');
+                document.body.style.overflow = 'hidden';
             }
         });
     });
+
+    document.querySelectorAll('.panel-back').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var panel = this.closest('.panel');
+            panel.classList.remove('open');
+            panel.scrollTop = 0;
+            document.body.style.overflow = '';
+        });
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            var open = document.querySelector('.panel.open');
+            if (open) {
+                open.classList.remove('open');
+                open.scrollTop = 0;
+                document.body.style.overflow = '';
+            }
+        }
+    });
+
+    var form = document.getElementById('cForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var fd = new FormData(form);
+            var subj = encodeURIComponent('[알코픽스 문의] ' + fd.get('type') + ' - ' + fd.get('name'));
+            var body = encodeURIComponent(
+                '이름/회사명: ' + fd.get('name') +
+                '\n이메일: ' + fd.get('email') +
+                '\n문의 유형: ' + fd.get('type') +
+                '\n\n' + fd.get('message')
+            );
+            window.open('mailto:alcofixkorea@gmail.com?subject=' + subj + '&body=' + body, '_self');
+        });
+    }
+
+    startIntro();
 
 })();
