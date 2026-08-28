@@ -192,6 +192,8 @@
             if (!src) return;
             item.addEventListener('mouseenter', function() {
                 photo.style.backgroundImage = 'url("' + src + '")';
+                // Low-resolution shots are shown whole rather than blown up to fill
+                photo.style.backgroundSize = item.dataset.fit || 'cover';
                 photo.classList.add('lit');
             });
             // Preload so the first hover does not flash
