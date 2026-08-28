@@ -207,22 +207,14 @@ body,.intro{
     position:relative;z-index:3;flex:1;
     min-height:0;
 }
-.ms-card{
+/* Each menu item is a node in the same network the backdrop draws:
+   a photo disc inside a segmented HUD ring. */
+.ms-node{
     position:absolute;
     left:var(--x);top:var(--y);
-    width:var(--w);height:var(--h);
-    display:flex;flex-direction:column;justify-content:flex-end;
-    gap:8px;
-    padding:clamp(15px,1.5vw,24px);
-    cursor:pointer;overflow:hidden;
-    border-radius:2px;
-    background:rgba(255,255,255,0.9);
-    backdrop-filter:blur(6px) saturate(1.1);
-    -webkit-backdrop-filter:blur(6px) saturate(1.1);
-    box-shadow:
-        inset 0 0 0 1px rgba(13,47,33,0.14),
-        0 16px 38px rgba(10,64,48,0.14);
-    color:var(--ink);
+    width:var(--d);height:var(--d);
+    display:grid;place-items:center;
+    cursor:pointer;
 
     translate:calc(var(--px,0px) * var(--z)) calc(var(--py,0px) * var(--z));
     scale:0.94;
@@ -231,10 +223,52 @@ body,.intro{
         translate 0.35s cubic-bezier(0.2,0.7,0.3,1),
         scale 0.75s cubic-bezier(0.2,0.7,0.3,1),
         opacity 0.75s ease,
-        box-shadow 0.4s ease,
         filter 0.45s ease;
 }
-.ms-card.show{scale:1;opacity:1}
+.ms-node.show{scale:1;opacity:1}
+
+/* Outer HUD ring: two arc pairs turning in opposite directions */
+.ms-ring{
+    position:absolute;inset:-7%;
+    border-radius:50%;
+    pointer-events:none;
+}
+.ms-ring::before,.ms-ring::after{
+    content:'';position:absolute;inset:0;
+    border-radius:50%;
+    border:1.5px solid transparent;
+}
+.ms-ring::before{
+    border-top-color:rgba(0,168,143,0.55);
+    border-bottom-color:rgba(0,168,143,0.55);
+    animation:hudSpin 26s linear infinite;
+}
+.ms-ring::after{
+    inset:5%;
+    border-width:1px;
+    border-left-color:rgba(27,107,49,0.4);
+    border-right-color:rgba(27,107,49,0.4);
+    animation:hudSpin 34s linear infinite reverse;
+}
+@keyframes hudSpin{to{transform:rotate(360deg)}}
+
+/* Photo disc */
+.ms-disc{
+    position:relative;
+    width:100%;height:100%;
+    border-radius:50%;
+    overflow:hidden;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    gap:6px;
+    padding:0 14%;
+    text-align:center;
+    background:rgba(255,255,255,0.9);
+    box-shadow:
+        inset 0 0 0 1px rgba(13,47,33,0.12),
+        0 14px 34px rgba(10,64,48,0.14);
+    transition:box-shadow 0.4s ease,background 0.4s ease;
+}
 
 .ms-media{
     position:absolute;inset:0;z-index:0;
@@ -242,15 +276,15 @@ body,.intro{
     opacity:0.42;
     transition:opacity 0.55s ease,transform 0.9s ease;
 }
-/* Light scrim keeps the deep-green type legible once the photo comes up */
+/* Light scrim keeps the deep-green type legible over the photo */
 .ms-media::after{
     content:'';position:absolute;inset:0;
-    background:linear-gradient(180deg,rgba(255,255,255,0.28) 0%,rgba(255,255,255,0.82) 62%,rgba(244,252,249,0.95) 100%);
+    background:radial-gradient(circle at 50% 50%,rgba(255,255,255,0.92) 0%,rgba(255,255,255,0.72) 52%,rgba(255,255,255,0.34) 100%);
 }
 
 .ms-line{
     position:relative;z-index:2;
-    display:flex;flex-direction:column;gap:7px;
+    display:flex;flex-direction:column;align-items:center;gap:5px;
 }
 .ms-num{
     font-size:10px;font-weight:600;letter-spacing:2.5px;
@@ -259,36 +293,46 @@ body,.intro{
 }
 .ms-text{
     font-family:'Unbounded',sans-serif;
-    font-size:var(--fs,20px);
+    font-size:var(--fs,18px);
     font-weight:700;letter-spacing:-0.03em;
-    line-height:1.1;
+    line-height:1.14;
     color:var(--accent);
 }
 .ms-sub{
-    font-size:11px;font-weight:500;letter-spacing:1.6px;
+    font-size:11px;font-weight:500;letter-spacing:1.4px;
     color:var(--ink-mid);
     transition:color 0.4s ease;
 }
 
-/* Approach one card and the rest recede out of focus */
-.menu-depth:hover .ms-card{filter:blur(1.4px);opacity:0.52}
-.menu-depth .ms-card:hover{
-    filter:none;opacity:1;z-index:9;
+/* Approach one node and the rest recede out of focus */
+.menu-depth:hover .ms-node{filter:blur(1.4px);opacity:0.5}
+.menu-depth .ms-node:hover{filter:none;opacity:1;z-index:9}
+.ms-node:hover .ms-disc{
     background:rgba(255,255,255,0.82);
     box-shadow:
         inset 0 0 0 1.5px var(--teal),
-        0 24px 60px rgba(0,120,100,0.22);
+        0 22px 54px rgba(0,120,100,0.26);
 }
-.ms-card:hover .ms-media{opacity:0.9;transform:scale(1.05)}
-.ms-card:hover .ms-num{color:var(--teal)}
-.ms-card:hover .ms-sub{color:var(--ink-mid)}
+.ms-node:hover .ms-media{opacity:0.92;transform:scale(1.06)}
+.ms-node:hover .ms-ring::before{
+    border-top-color:var(--teal);
+    border-bottom-color:var(--teal);
+    animation-duration:8s;
+}
+.ms-node:hover .ms-ring::after{
+    border-left-color:var(--teal-bright);
+    border-right-color:var(--teal-bright);
+    animation-duration:11s;
+}
+.ms-node:hover .ms-sub{color:var(--ink)}
 
 @media(hover:none){
-    .menu-depth:hover .ms-card{filter:none;opacity:1}
+    .menu-depth:hover .ms-node{filter:none;opacity:1}
 }
 @media(prefers-reduced-motion:reduce){
-    .ms-card{translate:none}
-    .ms-card,.ms-media{transition-duration:0.01ms}
+    .ms-node{translate:none}
+    .ms-node,.ms-media{transition-duration:0.01ms}
+    .ms-ring::before,.ms-ring::after{animation:none}
 }
 
 .menu-footer{
@@ -431,7 +475,7 @@ body,.intro{
     .panel-inner{padding-left:24px;padding-right:24px}
 }
 
-/* Phones: the floating planes settle into a staggered two-up grid */
+/* Phones: the drifting nodes settle into a two-up cluster */
 @media(max-width:768px){
     .menu-header{padding:20px}
     .menu-tag{display:none}
@@ -439,19 +483,20 @@ body,.intro{
     .menu-depth{
         display:grid;
         grid-template-columns:repeat(2,1fr);
-        grid-auto-rows:minmax(108px,1fr);
-        gap:8px;
+        justify-items:center;align-content:center;
+        gap:clamp(10px,3vw,20px);
         padding:0 14px 14px;
         overflow-y:auto;
     }
-    .ms-card{
+    .ms-node{
         position:relative;
-        left:auto;top:auto;width:auto;height:auto;
+        left:auto;top:auto;
+        width:min(40vw,168px);height:min(40vw,168px);
         translate:none;
-        padding:15px;
     }
-    .ms-card:first-child{grid-column:span 2}
-    .ms-text{font-size:19px}
+    .ms-node:first-child{grid-column:span 2;width:min(52vw,206px);height:min(52vw,206px)}
+    .ms-text{font-size:clamp(13px,3.6vw,18px)}
+    .ms-sub{font-size:10px}
     .ms-media{opacity:0.5}
     .menu-footer{padding:12px 20px 16px}
 

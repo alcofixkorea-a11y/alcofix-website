@@ -220,7 +220,7 @@
         if (!nav) return;
         if (window.matchMedia('(hover:none), (prefers-reduced-motion: reduce)').matches) return;
 
-        var cards = nav.querySelectorAll('.ms-card');
+        var cards = nav.querySelectorAll('.ms-node');
         var pending = false;
         var px = 0, py = 0;
 
@@ -268,7 +268,7 @@
             skipBtn.style.display = 'none';
             revealMenu();
 
-            var items = menuScreen.querySelectorAll('.ms-card');
+            var items = menuScreen.querySelectorAll('.ms-node');
             items.forEach(function(item, i) {
                 setTimeout(function() {
                     item.classList.add('show');
@@ -283,13 +283,13 @@
         intro.style.display = 'none';
         skipBtn.style.display = 'none';
         revealMenu();
-        var items = menuScreen.querySelectorAll('.ms-card');
+        var items = menuScreen.querySelectorAll('.ms-node');
         items.forEach(function(item) { item.classList.add('show'); });
     }
 
     skipBtn.addEventListener('click', skipIntro);
 
-    document.querySelectorAll('.ms-card').forEach(function(item) {
+    document.querySelectorAll('.ms-node').forEach(function(item) {
         item.addEventListener('click', function() {
             var id = 'panel-' + this.dataset.panel;
             var panel = document.getElementById(id);
