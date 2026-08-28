@@ -45,6 +45,9 @@
 <!-- Network canvas (shared backdrop) -->
 <canvas class="net-canvas" id="netCanvas"></canvas>
 
+<!-- Full-bleed photo that answers whichever menu item is hovered -->
+<div class="menu-photo" id="menuPhoto"></div>
+
 <!-- ===== MENU SCREEN ===== -->
 <div class="menu-screen" id="menuScreen">
     <div class="menu-ambient" id="menuAmbient"></div>
@@ -52,66 +55,36 @@
         <img src="images/logo.png" class="menu-logo" alt="ALCOFIX">
         <span class="menu-tag">Empower Your Everyday</span>
     </header>
-    <nav class="menu-depth" id="menuNav">
-        <a class="ms-node" data-panel="about"
-           style="--x:8%;--y:13%;--d:clamp(168px,20vw,268px);--z:1.5;--fs:clamp(15px,1.6vw,23px)">
-            <span class="ms-ring"></span>
-            <span class="ms-disc">
-                <span class="ms-media" style="background-image:url('images/about-cheers.jpg')"></span>
-                <span class="ms-line">
-                    <span class="ms-num">01</span>
-                    <span class="ms-text">We are<br>ALCOFIX</span>
-                    <span class="ms-sub">기업 소개</span>
-                </span>
-            </span>
+    <nav class="menu-scatter" id="menuNav">
+        <a class="mi" data-panel="about" data-img="images/about-cheers.jpg"
+           style="--x:6%;--y:19%;--fs:clamp(24px,4.2vw,58px)">
+            <span class="mi-k">01</span>
+            <span class="mi-t">We are ALCOFIX</span>
+            <span class="mi-s">기업 소개</span>
         </a>
-        <a class="ms-node" data-panel="product"
-           style="--x:39%;--y:4%;--d:clamp(140px,16vw,214px);--z:0.75;--fs:clamp(13px,1.4vw,20px)">
-            <span class="ms-ring"></span>
-            <span class="ms-disc">
-                <span class="ms-media" style="background-image:url('images/prod-1.jpg')"></span>
-                <span class="ms-line">
-                    <span class="ms-num">02</span>
-                    <span class="ms-text">Our<br>Product</span>
-                    <span class="ms-sub">제품 소개</span>
-                </span>
-            </span>
+        <a class="mi" data-panel="product" data-img="images/prod-1.jpg"
+           style="--x:53%;--y:9%;--fs:clamp(19px,3vw,41px)">
+            <span class="mi-k">02</span>
+            <span class="mi-t">Our Product</span>
+            <span class="mi-s">제품 소개</span>
         </a>
-        <a class="ms-node" data-panel="vision"
-           style="--x:66%;--y:19%;--d:clamp(148px,17vw,230px);--z:1.15;--fs:clamp(13px,1.45vw,21px)">
-            <span class="ms-ring"></span>
-            <span class="ms-disc">
-                <span class="ms-media" style="background-image:url('images/vision-global.jpg')"></span>
-                <span class="ms-line">
-                    <span class="ms-num">03</span>
-                    <span class="ms-text">Our<br>Vision</span>
-                    <span class="ms-sub">비전</span>
-                </span>
-            </span>
+        <a class="mi" data-panel="vision" data-img="images/vision-global.jpg"
+           style="--x:70%;--y:45%;--fs:clamp(18px,2.8vw,38px)">
+            <span class="mi-k">03</span>
+            <span class="mi-t">Our Vision</span>
+            <span class="mi-s">비전</span>
         </a>
-        <a class="ms-node" data-panel="business"
-           style="--x:25%;--y:55%;--d:clamp(140px,16vw,212px);--z:0.45;--fs:clamp(13px,1.4vw,20px)">
-            <span class="ms-ring"></span>
-            <span class="ms-disc">
-                <span class="ms-media" style="background-image:url('images/biz-health.jpg')"></span>
-                <span class="ms-line">
-                    <span class="ms-num">04</span>
-                    <span class="ms-text">Business<br>Area</span>
-                    <span class="ms-sub">사업 분야</span>
-                </span>
-            </span>
+        <a class="mi" data-panel="business" data-img="images/biz-health.jpg"
+           style="--x:20%;--y:55%;--fs:clamp(21px,3.4vw,47px)">
+            <span class="mi-k">04</span>
+            <span class="mi-t">Business Area</span>
+            <span class="mi-s">사업 분야</span>
         </a>
-        <a class="ms-node" data-panel="contact"
-           style="--x:60%;--y:58%;--d:clamp(132px,15vw,198px);--z:1.9;--fs:clamp(12px,1.35vw,19px)">
-            <span class="ms-ring"></span>
-            <span class="ms-disc">
-                <span class="ms-media" style="background-image:url('images/hero-bg.jpg')"></span>
-                <span class="ms-line">
-                    <span class="ms-num">05</span>
-                    <span class="ms-text">Contact<br>Us</span>
-                    <span class="ms-sub">문의하기</span>
-                </span>
-            </span>
+        <a class="mi" data-panel="contact" data-img="images/hero-bg.jpg"
+           style="--x:47%;--y:78%;--fs:clamp(17px,2.6vw,35px)">
+            <span class="mi-k">05</span>
+            <span class="mi-t">Contact Us</span>
+            <span class="mi-s">문의하기</span>
         </a>
     </nav>
     <footer class="menu-footer">

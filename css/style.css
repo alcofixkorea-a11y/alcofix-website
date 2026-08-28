@@ -200,139 +200,79 @@ body,.intro{
     color:var(--ink-soft);
 }
 
-/* ===== Floating depth cards — five planes drifting at different depths =====
-   Parallax rides the `translate` property and the entry reveal rides `scale`,
-   so the two never fight over `transform`. */
-.menu-depth{
+/* ===== Scattered text menu — no frames, the words are the interface ===== */
+.menu-scatter{
     position:relative;z-index:3;flex:1;
     min-height:0;
 }
-/* Each menu item is a node in the same network the backdrop draws:
-   a photo disc inside a segmented HUD ring. */
-.ms-node{
+
+/* Full-bleed photo, sitting under the network canvas (z 50) */
+.menu-photo{
+    position:fixed;inset:0;z-index:40;
+    background-size:cover;background-position:center;
+    opacity:0;transform:scale(1.06);
+    pointer-events:none;
+    transition:opacity 0.7s ease,transform 1.4s cubic-bezier(0.2,0.7,0.3,1);
+}
+.menu-photo::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(120deg,rgba(255,255,255,0.93) 0%,rgba(255,255,255,0.76) 46%,rgba(238,250,246,0.62) 100%);
+}
+.menu-photo.lit{opacity:1;transform:scale(1)}
+
+.mi{
     position:absolute;
     left:var(--x);top:var(--y);
-    width:var(--d);height:var(--d);
-    display:grid;place-items:center;
-    cursor:pointer;
-
-    translate:calc(var(--px,0px) * var(--z)) calc(var(--py,0px) * var(--z));
-    scale:0.94;
+    display:flex;flex-direction:column;gap:3px;
+    width:max-content;cursor:pointer;
+    color:var(--accent);
     opacity:0;
     transition:
-        translate 0.35s cubic-bezier(0.2,0.7,0.3,1),
-        scale 0.75s cubic-bezier(0.2,0.7,0.3,1),
-        opacity 0.75s ease,
-        filter 0.45s ease;
+        opacity 0.6s ease,
+        color 0.35s ease,
+        transform 0.5s cubic-bezier(0.2,0.7,0.3,1);
 }
-.ms-node.show{scale:1;opacity:1}
+.mi.show{opacity:1}
 
-/* Outer HUD ring: two arc pairs turning in opposite directions */
-.ms-ring{
-    position:absolute;inset:-7%;
-    border-radius:50%;
-    pointer-events:none;
+.mi-k{
+    font-size:10px;font-weight:600;letter-spacing:3px;
+    color:var(--ink-soft);
+    font-variant-numeric:tabular-nums;
+    transition:color 0.35s ease;
 }
-.ms-ring::before,.ms-ring::after{
-    content:'';position:absolute;inset:0;
-    border-radius:50%;
-    border:1.5px solid transparent;
-}
-.ms-ring::before{
-    border-top-color:rgba(0,168,143,0.55);
-    border-bottom-color:rgba(0,168,143,0.55);
-    animation:hudSpin 26s linear infinite;
-}
-.ms-ring::after{
-    inset:5%;
-    border-width:1px;
-    border-left-color:rgba(27,107,49,0.4);
-    border-right-color:rgba(27,107,49,0.4);
-    animation:hudSpin 34s linear infinite reverse;
-}
-@keyframes hudSpin{to{transform:rotate(360deg)}}
-
-/* Photo disc */
-.ms-disc{
-    position:relative;
-    width:100%;height:100%;
-    border-radius:50%;
-    overflow:hidden;
-    display:flex;flex-direction:column;
-    align-items:center;justify-content:center;
-    gap:6px;
-    padding:0 14%;
-    text-align:center;
-    background:rgba(255,255,255,0.9);
-    box-shadow:
-        inset 0 0 0 1px rgba(13,47,33,0.12),
-        0 14px 34px rgba(10,64,48,0.14);
-    transition:box-shadow 0.4s ease,background 0.4s ease;
-}
-
-.ms-media{
-    position:absolute;inset:0;z-index:0;
-    background-size:cover;background-position:center;
-    opacity:0.42;
-    transition:opacity 0.55s ease,transform 0.9s ease;
-}
-/* Light scrim keeps the deep-green type legible over the photo */
-.ms-media::after{
-    content:'';position:absolute;inset:0;
-    background:radial-gradient(circle at 50% 50%,rgba(255,255,255,0.92) 0%,rgba(255,255,255,0.72) 52%,rgba(255,255,255,0.34) 100%);
-}
-
-.ms-line{
-    position:relative;z-index:2;
-    display:flex;flex-direction:column;align-items:center;gap:5px;
-}
-.ms-num{
-    font-size:10px;font-weight:600;letter-spacing:2.5px;
-    color:var(--teal);
-    transition:color 0.4s ease;
-}
-.ms-text{
+.mi-t{
+    position:relative;display:inline-block;
     font-family:'Unbounded',sans-serif;
-    font-size:var(--fs,18px);
-    font-weight:700;letter-spacing:-0.03em;
-    line-height:1.14;
-    color:var(--accent);
+    font-size:var(--fs,32px);
+    font-weight:800;letter-spacing:-0.035em;line-height:1.02;
 }
-.ms-sub{
-    font-size:11px;font-weight:500;letter-spacing:1.4px;
+/* underline draws in from the left on hover */
+.mi-t::after{
+    content:'';position:absolute;
+    left:0;bottom:-0.1em;
+    width:100%;height:2px;background:var(--teal);
+    transform:scaleX(0);transform-origin:left;
+    transition:transform 0.45s cubic-bezier(0.2,0.7,0.3,1);
+}
+.mi-s{
+    margin-top:2px;
+    font-size:11px;font-weight:500;letter-spacing:1.6px;
     color:var(--ink-mid);
-    transition:color 0.4s ease;
+    transition:color 0.35s ease;
 }
 
-/* Approach one node and the rest recede out of focus */
-.menu-depth:hover .ms-node{filter:blur(1.4px);opacity:0.5}
-.menu-depth .ms-node:hover{filter:none;opacity:1;z-index:9}
-.ms-node:hover .ms-disc{
-    background:rgba(255,255,255,0.82);
-    box-shadow:
-        inset 0 0 0 1.5px var(--teal),
-        0 22px 54px rgba(0,120,100,0.26);
-}
-.ms-node:hover .ms-media{opacity:0.92;transform:scale(1.06)}
-.ms-node:hover .ms-ring::before{
-    border-top-color:var(--teal);
-    border-bottom-color:var(--teal);
-    animation-duration:8s;
-}
-.ms-node:hover .ms-ring::after{
-    border-left-color:var(--teal-bright);
-    border-right-color:var(--teal-bright);
-    animation-duration:11s;
-}
-.ms-node:hover .ms-sub{color:var(--ink)}
+/* Approach one word and the rest step back */
+.menu-scatter:hover .mi.show{opacity:0.26}
+.menu-scatter .mi.show:hover{opacity:1;color:var(--teal);transform:scale(1.05)}
+.mi:hover .mi-t::after{transform:scaleX(1)}
+.mi:hover .mi-k{color:var(--teal)}
+.mi:hover .mi-s{color:var(--green-700,#125a30)}
 
 @media(hover:none){
-    .menu-depth:hover .ms-node{filter:none;opacity:1}
+    .menu-scatter:hover .mi.show{opacity:1}
 }
 @media(prefers-reduced-motion:reduce){
-    .ms-node{translate:none}
-    .ms-node,.ms-media{transition-duration:0.01ms}
-    .ms-ring::before,.ms-ring::after{animation:none}
+    .mi,.menu-photo{transition-duration:0.01ms}
 }
 
 .menu-footer{
@@ -475,29 +415,24 @@ body,.intro{
     .panel-inner{padding-left:24px;padding-right:24px}
 }
 
-/* Phones: the drifting nodes settle into a two-up cluster */
+/* Phones: scattering has no room, so the words stack flush left */
 @media(max-width:768px){
     .menu-header{padding:20px}
     .menu-tag{display:none}
     .menu-ambient{display:none}
-    .menu-depth{
-        display:grid;
-        grid-template-columns:repeat(2,1fr);
-        justify-items:center;align-content:center;
-        gap:clamp(10px,3vw,20px);
-        padding:0 14px 14px;
-        overflow-y:auto;
+    .menu-scatter{
+        display:flex;flex-direction:column;
+        align-items:flex-start;justify-content:center;
+        gap:clamp(14px,2.6vh,26px);
+        padding:0 24px 20px;
     }
-    .ms-node{
+    .mi{
         position:relative;
-        left:auto;top:auto;
-        width:min(40vw,168px);height:min(40vw,168px);
-        translate:none;
+        left:auto!important;top:auto!important;
+        --fs:clamp(22px,7vw,34px)!important;
     }
-    .ms-node:first-child{grid-column:span 2;width:min(52vw,206px);height:min(52vw,206px)}
-    .ms-text{font-size:clamp(13px,3.6vw,18px)}
-    .ms-sub{font-size:10px}
-    .ms-media{opacity:0.5}
+    .mi-s{font-size:10px}
+    .menu-photo{opacity:0.34;transform:none}
     .menu-footer{padding:12px 20px 16px}
 
     .panel-hero{height:40vh;min-height:240px}

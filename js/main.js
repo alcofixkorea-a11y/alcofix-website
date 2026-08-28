@@ -214,39 +214,26 @@
         netCanvas.classList.add('show');
     }
 
-    /* Cards drift with the pointer, each by its own depth factor */
-    function initParallax() {
+    /* Hovering a word paints its photo across the whole screen */
+    function initPhotoReveal() {
         var nav = document.getElementById('menuNav');
-        if (!nav) return;
-        if (window.matchMedia('(hover:none), (prefers-reduced-motion: reduce)').matches) return;
+        var photo = document.getElementById('menuPhoto');
+        if (!nav || !photo) return;
 
-        var cards = nav.querySelectorAll('.ms-node');
-        var pending = false;
-        var px = 0, py = 0;
-
-        function apply() {
-            pending = false;
-            cards.forEach(function(c) {
-                c.style.setProperty('--px', px.toFixed(1) + 'px');
-                c.style.setProperty('--py', py.toFixed(1) + 'px');
+        nav.querySelectorAll('.mi').forEach(function(item) {
+            var src = item.dataset.img;
+            if (!src) return;
+            item.addEventListener('mouseenter', function() {
+                photo.style.backgroundImage = 'url("' + src + '")';
+                photo.classList.add('lit');
             });
-        }
-
-        menuScreen.addEventListener('mousemove', function(e) {
-            px = ((e.clientX / window.innerWidth) - 0.5) * 26;
-            py = ((e.clientY / window.innerHeight) - 0.5) * 18;
-            if (!pending) {
-                pending = true;
-                requestAnimationFrame(apply);
-            }
+            // Preload so the first hover does not flash
+            var pre = new Image();
+            pre.src = src;
         });
 
-        menuScreen.addEventListener('mouseleave', function() {
-            px = 0; py = 0;
-            if (!pending) {
-                pending = true;
-                requestAnimationFrame(apply);
-            }
+        nav.addEventListener('mouseleave', function() {
+            photo.classList.remove('lit');
         });
     }
 
@@ -254,7 +241,7 @@
         menuScreen.classList.add('active');
         spawnAmbientKeywords();
         initNetwork();
-        initParallax();
+        initPhotoReveal();
     }
 
     function showMenu() {
@@ -268,7 +255,7 @@
             skipBtn.style.display = 'none';
             revealMenu();
 
-            var items = menuScreen.querySelectorAll('.ms-node');
+            var items = menuScreen.querySelectorAll('.mi');
             items.forEach(function(item, i) {
                 setTimeout(function() {
                     item.classList.add('show');
@@ -283,13 +270,13 @@
         intro.style.display = 'none';
         skipBtn.style.display = 'none';
         revealMenu();
-        var items = menuScreen.querySelectorAll('.ms-node');
+        var items = menuScreen.querySelectorAll('.mi');
         items.forEach(function(item) { item.classList.add('show'); });
     }
 
     skipBtn.addEventListener('click', skipIntro);
 
-    document.querySelectorAll('.ms-node').forEach(function(item) {
+    document.querySelectorAll('.mi').forEach(function(item) {
         item.addEventListener('click', function() {
             var id = 'panel-' + this.dataset.panel;
             var panel = document.getElementById(id);
