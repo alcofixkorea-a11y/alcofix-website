@@ -3,25 +3,10 @@
 
     var intro = document.getElementById('intro');
     var menuScreen = document.getElementById('menuScreen');
-    var menuAmbient = document.getElementById('menuAmbient');
     var skipBtn = document.getElementById('skipBtn');
     var logoPhase = document.getElementById('logoPhase');
     var sloganPhase = document.getElementById('sloganPhase');
     var netCanvas = document.getElementById('netCanvas');
-
-    // Supporting keywords: quiet background texture, no animation sequence
-    var ambientKeywords = [
-        'HEALTH', 'HANGOVER CURE', 'NATURAL', 'INNOVATION', 'GLOBAL',
-        'WELLNESS', 'SCIENCE', 'PATENT', 'DETOX', 'LIVER CARE',
-        'SUPPLEMENT', 'BEAUTY', 'COSMETIC', 'EXPORT', 'ASIA MARKET',
-        'GMP', 'HERBAL', 'RESEARCH', 'VITALITY', 'TRUST'
-    ];
-    var ambientPositions = [
-        {x:'3%', y:'12%'}, {x:'22%', y:'6%'}, {x:'46%', y:'4%'}, {x:'70%', y:'8%'}, {x:'88%', y:'14%'},
-        {x:'94%', y:'32%'}, {x:'2%', y:'34%'}, {x:'91%', y:'52%'}, {x:'5%', y:'54%'}, {x:'86%', y:'70%'},
-        {x:'8%', y:'72%'}, {x:'30%', y:'93%'}, {x:'52%', y:'96%'}, {x:'74%', y:'92%'}, {x:'93%', y:'86%'},
-        {x:'16%', y:'90%'}, {x:'38%', y:'34%'}, {x:'62%', y:'62%'}, {x:'27%', y:'62%'}, {x:'66%', y:'30%'}
-    ];
 
     var introTimeout = [];
 
@@ -54,24 +39,6 @@
         }, 2400);
 
         schedule(showMenu, 5400);
-    }
-
-    function spawnAmbientKeywords() {
-        if (!menuAmbient || menuAmbient.childElementCount) return;
-        ambientKeywords.forEach(function(word, i) {
-            var pos = ambientPositions[i % ambientPositions.length];
-            var el = document.createElement('span');
-            el.className = 'kw-ambient';
-            el.textContent = word;
-            el.style.left = pos.x;
-            el.style.top = pos.y;
-            el.style.setProperty('--ad', rand(0, 4).toFixed(2) + 's');
-            el.style.setProperty('--op', rand(0.16, 0.32).toFixed(2));
-            menuAmbient.appendChild(el);
-            setTimeout(function() {
-                el.classList.add('show');
-            }, 200 + i * 60);
-        });
     }
 
     /* ===== Network backdrop: glowing nodes linked by soft arcs ===== */
@@ -239,7 +206,6 @@
 
     function revealMenu() {
         menuScreen.classList.add('active');
-        spawnAmbientKeywords();
         initNetwork();
         initPhotoReveal();
     }

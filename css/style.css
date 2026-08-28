@@ -159,25 +159,6 @@ body,.intro{
 }
 .net-canvas.show{opacity:1}
 
-/* Ambient supporting keywords (background texture) */
-.menu-ambient{position:absolute;inset:0;z-index:1;pointer-events:none}
-.kw-ambient{
-    position:absolute;
-    font-size:clamp(9px,0.95vw,12px);
-    font-weight:600;letter-spacing:2px;
-    color:var(--accent);
-    opacity:0;
-    white-space:nowrap;
-    animation:ambientFloat 9s ease-in-out infinite;
-    animation-delay:var(--ad,0s);
-    transition:opacity 1.4s ease;
-}
-.kw-ambient.show{opacity:var(--op,0.22)}
-@keyframes ambientFloat{
-    0%,100%{transform:translateY(0)}
-    50%{transform:translateY(-8px)}
-}
-
 /* ===== MENU SCREEN ===== */
 .menu-screen{
     position:fixed;inset:0;z-index:100;
@@ -419,7 +400,6 @@ body,.intro{
 @media(max-width:768px){
     .menu-header{padding:20px}
     .menu-tag{display:none}
-    .menu-ambient{display:none}
     .menu-scatter{
         display:flex;flex-direction:column;
         align-items:flex-start;justify-content:center;
