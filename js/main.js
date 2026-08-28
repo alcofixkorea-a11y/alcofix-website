@@ -242,35 +242,76 @@
 
     skipBtn.addEventListener('click', skipIntro);
 
+    /* ===== Panels ===== */
+    var pages = [
+        { id: 'about',    en: 'We are ALCOFIX', ko: '기업 소개' },
+        { id: 'product',  en: 'Our Product',    ko: '제품 소개' },
+        { id: 'vision',   en: 'Our Vision',     ko: '비전' },
+        { id: 'business', en: 'Business Area',  ko: '사업 분야' },
+        { id: 'contact',  en: 'Contact Us',     ko: '문의하기' }
+    ];
+
+    function openPanel(id) {
+        document.querySelectorAll('.panel.open').forEach(function(p) {
+            p.classList.remove('open');
+            p.scrollTop = 0;
+        });
+        var panel = document.getElementById('panel-' + id);
+        if (!panel) return;
+        panel.classList.add('open');
+        panel.scrollTop = 0;
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePanels() {
+        document.querySelectorAll('.panel.open').forEach(function(p) {
+            p.classList.remove('open');
+            p.scrollTop = 0;
+        });
+        document.body.style.overflow = '';
+    }
+
+    /* Give every panel the same category bar, current page marked */
+    document.querySelectorAll('.panel').forEach(function(panel) {
+        var current = panel.id.replace('panel-', '');
+        var bar = panel.querySelector('.panel-bar');
+        if (!bar) return;
+
+        var label = bar.querySelector('.panel-label');
+        if (label) label.remove();
+
+        var nav = document.createElement('nav');
+        nav.className = 'panel-nav';
+        pages.forEach(function(pg) {
+            var a = document.createElement('a');
+            a.className = 'pn' + (pg.id === current ? ' active' : '');
+            a.dataset.go = pg.id;
+            if (pg.id === current) a.setAttribute('aria-current', 'page');
+            a.innerHTML = '<span class="pn-en">' + pg.en + '</span>' +
+                          '<span class="pn-ko">' + pg.ko + '</span>';
+            nav.appendChild(a);
+        });
+        bar.appendChild(nav);
+
+        nav.addEventListener('click', function(e) {
+            var link = e.target.closest('.pn');
+            if (!link || link.classList.contains('active')) return;
+            openPanel(link.dataset.go);
+        });
+    });
+
     document.querySelectorAll('.mi').forEach(function(item) {
         item.addEventListener('click', function() {
-            var id = 'panel-' + this.dataset.panel;
-            var panel = document.getElementById(id);
-            if (panel) {
-                panel.classList.add('open');
-                document.body.style.overflow = 'hidden';
-            }
+            openPanel(this.dataset.panel);
         });
     });
 
     document.querySelectorAll('.panel-back').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            var panel = this.closest('.panel');
-            panel.classList.remove('open');
-            panel.scrollTop = 0;
-            document.body.style.overflow = '';
-        });
+        btn.addEventListener('click', closePanels);
     });
 
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            var open = document.querySelector('.panel.open');
-            if (open) {
-                open.classList.remove('open');
-                open.scrollTop = 0;
-                document.body.style.overflow = '';
-            }
-        }
+        if (e.key === 'Escape' && document.querySelector('.panel.open')) closePanels();
     });
 
     var form = document.getElementById('cForm');

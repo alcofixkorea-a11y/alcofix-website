@@ -274,21 +274,56 @@ body,.intro{
 
 .panel-bar{
     position:sticky;top:0;z-index:10;
-    display:flex;align-items:center;gap:16px;
-    padding:16px 40px;
-    background:rgba(255,255,255,0.92);
+    display:flex;align-items:center;gap:clamp(12px,2vw,26px);
+    padding:12px clamp(20px,3vw,40px);
+    background:rgba(255,255,255,0.94);
     backdrop-filter:blur(12px);
-    border-bottom:1px solid #eee;
+    -webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
 }
 .panel-back{
+    flex:none;
     width:40px;height:40px;
-    border:1px solid #ddd;border-radius:50%;
-    background:none;color:#333;
+    border:1px solid var(--line);border-radius:50%;
+    background:none;color:var(--ink);
     display:flex;align-items:center;justify-content:center;
     transition:all 0.25s;
 }
-.panel-back:hover{background:#111;color:#fff;border-color:#111}
-.panel-label{font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#888}
+.panel-back:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* Category bar — jump straight to another page without going back */
+.panel-nav{
+    display:flex;align-items:stretch;
+    gap:clamp(4px,1vw,14px);
+    flex:1;min-width:0;
+    overflow-x:auto;
+    scrollbar-width:none;
+}
+.panel-nav::-webkit-scrollbar{display:none}
+.pn{
+    position:relative;flex:none;
+    display:flex;flex-direction:column;gap:1px;
+    padding:7px 2px 9px;
+    cursor:pointer;white-space:nowrap;
+    color:var(--ink-soft);
+    transition:color 0.25s ease;
+}
+.pn-en{
+    font-family:'Unbounded',sans-serif;
+    font-size:clamp(11px,1.05vw,14px);
+    font-weight:700;letter-spacing:-0.02em;
+}
+.pn-ko{font-size:10px;font-weight:400;letter-spacing:0.5px;opacity:0.8}
+.pn::after{
+    content:'';position:absolute;left:0;right:0;bottom:0;
+    height:2px;background:var(--teal);
+    transform:scaleX(0);transform-origin:center;
+    transition:transform 0.32s cubic-bezier(0.2,0.7,0.3,1);
+}
+.pn:hover{color:var(--accent)}
+.pn:hover::after{transform:scaleX(1)}
+.pn.active{color:var(--accent);cursor:default}
+.pn.active::after{transform:scaleX(1)}
 
 .panel-body{min-height:100vh}
 
