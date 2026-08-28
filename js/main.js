@@ -66,7 +66,7 @@
             el.style.left = pos.x;
             el.style.top = pos.y;
             el.style.setProperty('--ad', rand(0, 4).toFixed(2) + 's');
-            el.style.setProperty('--op', rand(0.1, 0.22).toFixed(2));
+            el.style.setProperty('--op', rand(0.16, 0.32).toFixed(2));
             menuAmbient.appendChild(el);
             setTimeout(function() {
                 el.classList.add('show');
@@ -135,9 +135,9 @@
             var cy = my + (vx / len) * bow;
 
             var grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
-            grad.addColorStop(0, 'rgba(0,191,165,0.04)');
-            grad.addColorStop(0.5, 'rgba(160,245,225,0.32)');
-            grad.addColorStop(1, 'rgba(0,191,165,0.04)');
+            grad.addColorStop(0, 'rgba(0,168,143,0.05)');
+            grad.addColorStop(0.5, 'rgba(0,150,126,0.34)');
+            grad.addColorStop(1, 'rgba(0,168,143,0.05)');
 
             ctx.strokeStyle = grad;
             ctx.lineWidth = 1.1;
@@ -168,32 +168,39 @@
             nodes.forEach(function(n) {
                 var pulse = reduced ? 0.6 : 0.5 + 0.5 * Math.sin(time * n.speed + n.phase);
                 var r = n.r * (n.hub ? 1.5 : 1);
-                var glow = r * (n.hub ? 7 : 5);
+                var glow = r * (n.hub ? 8 : 5.5);
 
+                // Soft halo — tinted, not white, so it reads on the light ground
                 var g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, glow);
-                g.addColorStop(0, 'rgba(170,250,232,' + (0.5 * pulse + 0.18).toFixed(3) + ')');
-                g.addColorStop(0.35, 'rgba(0,191,165,' + (0.24 * pulse + 0.05).toFixed(3) + ')');
-                g.addColorStop(1, 'rgba(0,191,165,0)');
+                g.addColorStop(0, 'rgba(0,168,143,' + (0.3 * pulse + 0.14).toFixed(3) + ')');
+                g.addColorStop(0.4, 'rgba(0,168,143,' + (0.13 * pulse + 0.04).toFixed(3) + ')');
+                g.addColorStop(1, 'rgba(0,168,143,0)');
                 ctx.fillStyle = g;
                 ctx.beginPath();
                 ctx.arc(n.x, n.y, glow, 0, Math.PI * 2);
                 ctx.fill();
 
-                ctx.fillStyle = 'rgba(235,255,251,' + (0.7 + 0.3 * pulse).toFixed(3) + ')';
+                ctx.fillStyle = 'rgba(0,150,126,' + (0.6 + 0.3 * pulse).toFixed(3) + ')';
                 ctx.beginPath();
                 ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
                 ctx.fill();
 
+                // Hub nodes wear a segmented HUD ring, echoing the reference art
                 if (n.hub) {
-                    ctx.strokeStyle = 'rgba(160,248,230,' + (0.3 * pulse + 0.06).toFixed(3) + ')';
+                    var rr = r + 9 + pulse * 5;
+                    var spin = reduced ? 0 : time * 0.35 * (n.dx > 0 ? 1 : -1);
+                    ctx.strokeStyle = 'rgba(0,168,143,' + (0.42 * pulse + 0.16).toFixed(3) + ')';
+                    ctx.lineWidth = 1.4;
+                    for (var s = 0; s < 3; s++) {
+                        var a0 = spin + s * (Math.PI * 2 / 3);
+                        ctx.beginPath();
+                        ctx.arc(n.x, n.y, rr, a0, a0 + 1.35);
+                        ctx.stroke();
+                    }
+                    ctx.strokeStyle = 'rgba(27,107,49,' + (0.16 * pulse + 0.05).toFixed(3) + ')';
                     ctx.lineWidth = 1;
                     ctx.beginPath();
-                    ctx.arc(n.x, n.y, r + 7 + pulse * 6, 0, Math.PI * 2);
-                    ctx.stroke();
-
-                    ctx.strokeStyle = 'rgba(160,248,230,' + (0.14 * pulse).toFixed(3) + ')';
-                    ctx.beginPath();
-                    ctx.arc(n.x, n.y, r + 15 + pulse * 10, 0, Math.PI * 2);
+                    ctx.arc(n.x, n.y, rr + 8 + pulse * 6, 0, Math.PI * 2);
                     ctx.stroke();
                 }
             });
