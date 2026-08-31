@@ -181,35 +181,18 @@
         netCanvas.classList.add('show');
     }
 
-    /* Hovering a word paints its photo across the whole screen */
-    function initPhotoReveal() {
-        var nav = document.getElementById('menuNav');
-        var photo = document.getElementById('menuPhoto');
-        if (!nav || !photo) return;
-
-        nav.querySelectorAll('.mi').forEach(function(item) {
-            var src = item.dataset.img;
-            if (!src) return;
-            item.addEventListener('mouseenter', function() {
-                photo.style.backgroundImage = 'url("' + src + '")';
-                // Low-resolution shots are shown whole rather than blown up to fill
-                photo.style.backgroundSize = item.dataset.fit || 'cover';
-                photo.classList.add('lit');
-            });
-            // Preload so the first hover does not flash
-            var pre = new Image();
-            pre.src = src;
-        });
-
-        nav.addEventListener('mouseleave', function() {
-            photo.classList.remove('lit');
-        });
-    }
-
     function revealMenu() {
         menuScreen.classList.add('active');
+        menuScreen.dataset.mode = 'scatter';
         initNetwork();
-        initPhotoReveal();
+        preloadMenuPhotos();
+    }
+
+    function preloadMenuPhotos() {
+        document.querySelectorAll('.mi[data-img]').forEach(function(item) {
+            var pre = new Image();
+            pre.src = item.dataset.img;
+        });
     }
 
     function showMenu() {
@@ -253,25 +236,64 @@
         { id: 'contact',  en: 'Contact Us',     ko: '문의하기' }
     ];
 
-    function openPanel(id) {
-        document.querySelectorAll('.panel.open').forEach(function(p) {
-            p.classList.remove('open');
-            p.scrollTop = 0;
+    /* Hover previews a page beside the docked menu; a click pins it there.
+       Touch devices have no hover, so there the first tap pins straight away. */
+    var canHover = window.matchMedia('(hover: hover)').matches;
+    var menuPhoto = document.getElementById('menuPhoto');
+    var pinned = false;
+    var exitTimer = null;
+
+    function paintPhoto(item) {
+        if (!menuPhoto || !item) return;
+        var src = item.dataset.img;
+        if (!src) return;
+        menuPhoto.style.backgroundImage = 'url("' + src + '")';
+        menuPhoto.style.backgroundSize = item.dataset.fit || 'cover';
+        menuPhoto.classList.add('lit');
+    }
+
+    function openPanel(id, pin) {
+        clearTimeout(exitTimer);
+        if (pin) pinned = true;
+
+        var item = document.querySelector('.mi[data-panel="' + id + '"]');
+        paintPhoto(item);
+
+        document.querySelectorAll('.mi').forEach(function(m) {
+            m.classList.toggle('on', m.dataset.panel === id);
         });
-        var panel = document.getElementById('panel-' + id);
-        if (!panel) return;
-        panel.classList.add('open');
-        panel.scrollTop = 0;
+
+        document.querySelectorAll('.panel').forEach(function(p) {
+            var on = p.id === 'panel-' + id;
+            p.classList.toggle('dock', canHover);
+            p.classList.toggle('pinned', pinned);
+            p.classList.toggle('open', on);
+            if (!on) p.scrollTop = 0;
+        });
+
+        menuScreen.dataset.mode = pinned ? 'locked' : 'preview';
         document.body.style.overflow = 'hidden';
     }
 
     function closePanels() {
-        document.querySelectorAll('.panel.open').forEach(function(p) {
-            p.classList.remove('open');
+        clearTimeout(exitTimer);
+        pinned = false;
+        document.querySelectorAll('.panel').forEach(function(p) {
+            p.classList.remove('open', 'pinned');
             p.scrollTop = 0;
         });
+        document.querySelectorAll('.mi').forEach(function(m) { m.classList.remove('on'); });
+        if (menuPhoto) menuPhoto.classList.remove('lit');
+        menuScreen.dataset.mode = 'scatter';
         document.body.style.overflow = '';
     }
+
+    function scheduleClose() {
+        if (pinned) return;
+        clearTimeout(exitTimer);
+        exitTimer = setTimeout(closePanels, 340);
+    }
+    function cancelClose() { clearTimeout(exitTimer); }
 
     /* Give every panel the same category bar, current page marked */
     document.querySelectorAll('.panel').forEach(function(panel) {
@@ -298,15 +320,31 @@
         nav.addEventListener('click', function(e) {
             var link = e.target.closest('.pn');
             if (!link || link.classList.contains('active')) return;
-            openPanel(link.dataset.go);
+            openPanel(link.dataset.go, true);
         });
+
+        // Reading the page keeps the preview alive
+        panel.addEventListener('mouseenter', cancelClose);
+        panel.addEventListener('mouseleave', scheduleClose);
     });
 
     document.querySelectorAll('.mi').forEach(function(item) {
-        item.addEventListener('click', function() {
-            openPanel(this.dataset.panel);
+        if (canHover) {
+            item.addEventListener('mouseenter', function() {
+                openPanel(this.dataset.panel, pinned);
+            });
+        }
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            openPanel(this.dataset.panel, true);
         });
     });
+
+    var menuNav = document.getElementById('menuNav');
+    if (menuNav && canHover) {
+        menuNav.addEventListener('mouseenter', cancelClose);
+        menuNav.addEventListener('mouseleave', scheduleClose);
+    }
 
     document.querySelectorAll('.panel-back').forEach(function(btn) {
         btn.addEventListener('click', closePanels);

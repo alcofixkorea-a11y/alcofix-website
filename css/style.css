@@ -1,6 +1,6 @@
 /* ===== RESET & BASE ===== */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;font-family:'Outfit','Noto Sans KR',sans-serif;background:#fff;color:#0d2f21}
+html,body{height:100%;overflow:hidden;font-family:'Roboto','Noto Sans KR',sans-serif;background:#fff;color:#0d2f21}
 img{display:block;max-width:100%}
 a{text-decoration:none;color:inherit}
 button{font-family:inherit;cursor:pointer}
@@ -17,69 +17,12 @@ button{font-family:inherit;cursor:pointer}
     --teal-bright:#00BFA5;
     --teal-dim:rgba(0,168,143,0.14);
 
-    /* Light source blooming from the right, mesh field pooling on the left —
-       the staging of the reference image, in brand green. */
-    --brand-bg:
-        radial-gradient(64% 74% at 76% 34%,rgba(255,255,255,0.98) 0%,rgba(255,255,255,0.5) 40%,rgba(255,255,255,0) 70%),
-        radial-gradient(70% 86% at 14% 58%,rgba(0,168,143,0.28) 0%,rgba(0,168,143,0.09) 44%,rgba(255,255,255,0) 78%),
-        radial-gradient(84% 108% at 54% 124%,rgba(27,107,49,0.2) 0%,rgba(255,255,255,0) 60%),
-        linear-gradient(152deg,#ffffff 0%,#eefaf6 44%,#dcf1ea 100%);
-    --hex-pattern:
-        linear-gradient(30deg,rgba(0,140,118,0.035) 12%,transparent 12.5%,transparent 87%,rgba(0,140,118,0.035) 87.5%,rgba(0,140,118,0.035)),
-        linear-gradient(150deg,rgba(0,140,118,0.035) 12%,transparent 12.5%,transparent 87%,rgba(0,140,118,0.035) 87.5%,rgba(0,140,118,0.035)),
-        linear-gradient(30deg,rgba(0,140,118,0.035) 12%,transparent 12.5%,transparent 87%,rgba(0,140,118,0.035) 87.5%,rgba(0,140,118,0.035)),
-        linear-gradient(150deg,rgba(0,140,118,0.035) 12%,transparent 12.5%,transparent 87%,rgba(0,140,118,0.035) 87.5%,rgba(0,140,118,0.035));
+    --dock-w:clamp(230px,29vw,380px);
 }
 
-/* Shared brand backdrop, painted on body so the network canvas
-   can sit above it and below the menu. */
-body,.intro{
-    background-color:var(--paper);
-    background-image:var(--brand-bg),var(--hex-pattern);
-    background-size:cover,cover,cover,cover,56px 98px,56px 98px,56px 98px,56px 98px;
-    background-position:center,center,center,center,0 0,0 0,28px 49px,28px 49px;
-    background-repeat:no-repeat,no-repeat,no-repeat,no-repeat,repeat,repeat,repeat,repeat;
-    background-attachment:fixed;
-}
+/* Plain white ground — the network canvas is the only thing on it */
+body,.intro{background:var(--paper)}
 .menu-screen{background:transparent}
-
-/* Slow-drifting light pools that keep the ground from reading as flat */
-.intro::before,.intro::after,.menu-screen::before,.menu-screen::after{
-    content:'';position:absolute;z-index:0;pointer-events:none;
-    border-radius:50%;filter:blur(16px);
-}
-.intro::before{
-    width:52vw;height:52vw;max-width:720px;max-height:720px;
-    left:-16vw;top:-18vw;
-    background:radial-gradient(circle,rgba(0,168,143,0.16) 0%,transparent 68%);
-    animation:driftA 22s ease-in-out infinite alternate;
-}
-.intro::after{
-    width:44vw;height:44vw;max-width:600px;max-height:600px;
-    right:-12vw;bottom:-16vw;
-    background:radial-gradient(circle,rgba(27,107,49,0.13) 0%,transparent 68%);
-    animation:driftB 26s ease-in-out infinite alternate;
-}
-.menu-screen::before{
-    width:46vw;height:46vw;max-width:660px;max-height:660px;
-    right:-12vw;top:-14vw;left:auto;
-    background:radial-gradient(circle,rgba(0,191,165,0.15) 0%,transparent 68%);
-    animation:driftB 24s ease-in-out infinite alternate;
-}
-.menu-screen::after{
-    width:40vw;height:40vw;max-width:540px;max-height:540px;
-    left:-10vw;bottom:-12vw;
-    background:radial-gradient(circle,rgba(27,107,49,0.12) 0%,transparent 68%);
-    animation:driftA 20s ease-in-out infinite alternate;
-}
-@keyframes driftA{
-    0%{transform:translate(0,0) scale(1)}
-    100%{transform:translate(4vw,3vw) scale(1.12)}
-}
-@keyframes driftB{
-    0%{transform:translate(0,0) scale(1)}
-    100%{transform:translate(-3vw,-4vw) scale(1.08)}
-}
 
 /* ===== SKIP BUTTON ===== */
 .skip-btn{
@@ -105,7 +48,7 @@ body,.intro{
 .logo-anim{display:flex;align-items:baseline;gap:2px}
 .lt{
     display:inline-block;
-    font-family:'Unbounded',sans-serif;
+    font-family:'Roboto','Noto Sans KR',sans-serif;
     font-size:clamp(40px,9vw,104px);
     font-weight:900;
     color:var(--accent);
@@ -131,7 +74,7 @@ body,.intro{
 /* Slogan */
 .slogan-wrap{text-align:center}
 .slogan-en{
-    font-family:'Unbounded',sans-serif;
+    font-family:'Roboto','Noto Sans KR',sans-serif;
     font-size:clamp(24px,4vw,50px);
     font-weight:800;letter-spacing:-0.01em;
     background:linear-gradient(100deg,var(--accent) 0%,var(--teal) 62%,var(--teal-bright) 100%);
@@ -176,7 +119,7 @@ body,.intro{
 }
 .menu-logo{height:28px;opacity:0.92}
 .menu-tag{
-    font-family:'Unbounded',sans-serif;
+    font-family:'Roboto','Noto Sans KR',sans-serif;
     font-size:11px;font-weight:400;letter-spacing:2px;
     color:var(--ink-soft);
 }
@@ -211,6 +154,9 @@ body,.intro{
     transition:
         opacity 0.6s ease,
         color 0.35s ease,
+        left 0.62s cubic-bezier(0.22,0.72,0.24,1),
+        top 0.62s cubic-bezier(0.22,0.72,0.24,1),
+        font-size 0.5s ease,
         transform 0.5s cubic-bezier(0.2,0.7,0.3,1);
 }
 .mi.show{opacity:1}
@@ -223,7 +169,7 @@ body,.intro{
 }
 .mi-t{
     position:relative;display:inline-block;
-    font-family:'Unbounded',sans-serif;
+    font-family:'Roboto','Noto Sans KR',sans-serif;
     font-size:var(--fs,32px);
     font-weight:800;letter-spacing:-0.035em;line-height:1.02;
 }
@@ -243,11 +189,36 @@ body,.intro{
 }
 
 /* Approach one word and the rest step back */
-.menu-scatter:hover .mi.show{opacity:0.26}
-.menu-scatter .mi.show:hover{opacity:1;color:var(--teal);transform:scale(1.05)}
+.menu-screen[data-mode="scatter"] .menu-scatter:has(.mi:hover) .mi.show{opacity:0.26}
+.menu-screen[data-mode="scatter"] .menu-scatter .mi.show:hover{opacity:1;color:var(--teal);transform:scale(1.05)}
 .mi:hover .mi-t::after{transform:scaleX(1)}
 .mi:hover .mi-k{color:var(--teal)}
-.mi:hover .mi-s{color:var(--green-700,#125a30)}
+.mi:hover .mi-s{color:var(--accent)}
+
+/* ===== Docked: the scattered words gather into a column on the left ===== */
+.menu-screen[data-mode="preview"] .mi,
+.menu-screen[data-mode="locked"] .mi{
+    left:clamp(22px,3.2vw,44px);
+    top:calc(clamp(64px,10vh,104px) + var(--i) * clamp(54px,7.2vh,78px));
+    --fs:clamp(15px,1.45vw,21px)!important;
+    opacity:0.5;
+}
+.menu-screen[data-mode="preview"] .mi.on,
+.menu-screen[data-mode="locked"] .mi.on{
+    opacity:1;color:var(--teal);
+}
+.mi.on .mi-t::after{transform:scaleX(1)}
+.mi.on .mi-k{color:var(--teal)}
+.menu-screen[data-mode="preview"] .mi:hover,
+.menu-screen[data-mode="locked"] .mi:hover{opacity:1}
+/* the docked column sits over the photo, so give it a legible ground */
+.menu-screen[data-mode="preview"] .menu-scatter::before,
+.menu-screen[data-mode="locked"] .menu-scatter::before{
+    content:'';position:absolute;left:0;top:0;bottom:0;
+    width:var(--dock-w);
+    background:linear-gradient(90deg,rgba(255,255,255,0.86) 0%,rgba(255,255,255,0.5) 72%,transparent 100%);
+    pointer-events:none;
+}
 
 @media(hover:none){
     .menu-scatter:hover .mi.show{opacity:1}
@@ -264,13 +235,23 @@ body,.intro{
 
 /* ===== PANELS ===== */
 .panel{
-    position:fixed;inset:0;z-index:500;
+    position:fixed;top:0;right:0;bottom:0;left:0;z-index:500;
     background:#fff;color:#111;
     transform:translateX(100%);
-    transition:transform 0.55s cubic-bezier(0.4,0,0.15,1);
+    transition:transform 0.55s cubic-bezier(0.4,0,0.15,1),left 0.55s cubic-bezier(0.4,0,0.15,1);
     overflow-y:auto;overflow-x:hidden;
 }
 .panel.open{transform:translateX(0)}
+
+/* Preview: the page slides in beside the docked menu instead of over it */
+.panel.dock{
+    left:var(--dock-w);
+    box-shadow:-24px 0 60px rgba(10,44,32,0.13);
+}
+/* the docked column already lists the pages, so drop the duplicate bar */
+.panel.dock .panel-nav{display:none}
+.panel.dock .panel-back{opacity:0;pointer-events:none}
+.panel.dock.pinned .panel-back{opacity:1;pointer-events:auto}
 
 .panel-bar{
     position:sticky;top:0;z-index:10;
@@ -309,7 +290,7 @@ body,.intro{
     transition:color 0.25s ease;
 }
 .pn-en{
-    font-family:'Unbounded',sans-serif;
+    font-family:'Roboto','Noto Sans KR',sans-serif;
     font-size:clamp(11px,1.05vw,14px);
     font-weight:700;letter-spacing:-0.02em;
 }
@@ -504,10 +485,16 @@ body,.intro{
         position:relative;
         left:auto!important;top:auto!important;
         --fs:clamp(22px,7vw,34px)!important;
+        opacity:1!important;
     }
     .mi-s{font-size:10px}
     .menu-photo{opacity:0.34;transform:none}
     .menu-footer{padding:12px 20px 16px}
+    /* No hover here, so a tap opens the page over the full width */
+    .panel.dock{left:0;box-shadow:none}
+    .panel.dock .panel-nav{display:flex}
+    .panel.dock .panel-back{opacity:1;pointer-events:auto}
+    .menu-screen[data-mode] .menu-scatter::before{display:none}
 
     .panel-hero{height:40vh;min-height:240px}
     .panel-hero-over{padding:24px}
