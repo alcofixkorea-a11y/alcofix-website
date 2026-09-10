@@ -354,6 +354,12 @@
         btn.addEventListener('click', closePanels);
     });
 
+    var toMain = document.getElementById('toMain');
+    if (toMain) {
+        toMain.addEventListener('click', closePanels);
+        toMain.addEventListener('mouseenter', cancelClose);
+    }
+
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && document.querySelector('.panel.open')) closePanels();
     });

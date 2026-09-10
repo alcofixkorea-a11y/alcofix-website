@@ -1,6 +1,6 @@
 /* ===== RESET & BASE ===== */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;font-family:'Roboto','Noto Sans KR',sans-serif;background:#fff;color:#0d2f21}
+html,body{height:100%;overflow:hidden;font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;background:#fff;color:#0d2f21}
 /* Korean wraps at word boundaries, never mid-word */
 body{word-break:keep-all;overflow-wrap:break-word}
 img{display:block;max-width:100%}
@@ -59,7 +59,7 @@ body,.intro{background:var(--paper)}
 .lt-cube.show{opacity:1;transform:translateX(0) rotate(0) scale(1)}
 .lt{
     display:inline-block;
-    font-family:'Roboto','Noto Sans KR',sans-serif;
+    font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
     font-size:clamp(40px,9vw,104px);
     font-weight:900;
     color:var(--accent);
@@ -85,7 +85,7 @@ body,.intro{background:var(--paper)}
 /* Slogan */
 .slogan-wrap{text-align:center}
 .slogan-en{
-    font-family:'Roboto','Noto Sans KR',sans-serif;
+    font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
     font-size:clamp(24px,4vw,50px);
     font-weight:800;letter-spacing:-0.01em;
     background:linear-gradient(100deg,var(--accent) 0%,var(--teal) 62%,var(--teal-bright) 100%);
@@ -130,7 +130,7 @@ body,.intro{background:var(--paper)}
 }
 .menu-logo{height:clamp(38px,3.6vw,52px);opacity:0.95}
 .menu-tag{
-    font-family:'Roboto','Noto Sans KR',sans-serif;
+    font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
     font-size:11px;font-weight:400;letter-spacing:2px;
     color:var(--ink-soft);
 }
@@ -180,7 +180,7 @@ body,.intro{background:var(--paper)}
 }
 .mi-t{
     position:relative;display:inline-block;
-    font-family:'Roboto','Noto Sans KR',sans-serif;
+    font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
     font-size:var(--fs,32px);
     font-weight:800;letter-spacing:-0.035em;line-height:1.02;
 }
@@ -237,6 +237,27 @@ body,.intro{background:var(--paper)}
 @media(prefers-reduced-motion:reduce){
     .mi,.menu-photo{transition-duration:0.01ms}
 }
+
+/* Way back out of a page — only meaningful once one is showing */
+.to-main{
+    position:absolute;z-index:4;
+    left:clamp(22px,3.2vw,44px);
+    bottom:clamp(58px,8vh,84px);
+    display:inline-flex;align-items:center;gap:8px;
+    padding:9px 18px 9px 13px;
+    border:1px solid rgba(13,47,33,0.16);border-radius:999px;
+    background:rgba(255,255,255,0.82);
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    color:var(--accent);
+    font-size:12.5px;font-weight:600;letter-spacing:-0.2px;
+    opacity:0;pointer-events:none;transform:translateY(6px);
+    transition:opacity 0.45s ease,transform 0.45s ease,background 0.25s,border-color 0.25s,color 0.25s;
+}
+.to-main svg{width:15px;height:15px;transition:transform 0.25s ease}
+.menu-screen[data-mode="preview"] .to-main,
+.menu-screen[data-mode="locked"] .to-main{opacity:1;pointer-events:auto;transform:translateY(0)}
+.to-main:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.to-main:hover svg{transform:translateX(-3px)}
 
 .menu-footer{
     position:relative;z-index:3;flex:none;
@@ -301,7 +322,7 @@ body,.intro{background:var(--paper)}
     transition:color 0.25s ease;
 }
 .pn-en{
-    font-family:'Roboto','Noto Sans KR',sans-serif;
+    font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
     font-size:clamp(11px,1.05vw,14px);
     font-weight:700;letter-spacing:-0.02em;
 }
