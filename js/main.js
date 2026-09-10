@@ -22,9 +22,13 @@
 
     function startIntro() {
         logoPhase.classList.add('active');
+
+        var cube = logoPhase.querySelector('.lt-cube');
+        if (cube) schedule(function(){ cube.classList.add('show'); }, 260);
+
         var letters = logoPhase.querySelectorAll('.lt');
         letters.forEach(function(l, i) {
-            schedule(function(){ l.classList.add('show'); }, 400 + i * 140);
+            schedule(function(){ l.classList.add('show'); }, 520 + i * 140);
         });
 
         schedule(function() {
