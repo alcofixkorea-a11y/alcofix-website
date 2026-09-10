@@ -295,7 +295,7 @@
     function scheduleClose() {
         if (pinned) return;
         clearTimeout(exitTimer);
-        exitTimer = setTimeout(closePanels, 450);
+        exitTimer = setTimeout(closePanels, 380);
     }
     function cancelClose() { clearTimeout(exitTimer); }
 
