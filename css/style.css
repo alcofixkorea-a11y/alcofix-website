@@ -46,10 +46,11 @@ body,.intro{background:var(--paper)}
 }
 .intro-phase.active{opacity:1}
 
-/* Logo — the official artwork exactly as designed, simply faded in */
+/* Logo — the official artwork exactly as designed, simply faded in.
+   Same width as the Empower Your Everyday line that follows (10.54 x its font size). */
 .intro-logo{
     display:block;
-    width:clamp(260px,52vw,720px);height:auto;
+    width:calc(clamp(24px,4vw,50px) * 10.54);height:auto;
     opacity:0;transform:translateY(12px);
     transition:opacity 0.9s ease,transform 1s cubic-bezier(0.2,0.8,0.3,1);
 }
@@ -88,9 +89,12 @@ body:has(.menu-screen.active) .deco{opacity:1;transition-duration:1.2s}
 .deco-marquee{transition:opacity 0.5s ease}
 body:has(.menu-screen[data-mode="preview"]) .deco-marquee,
 body:has(.menu-screen[data-mode="locked"]) .deco-marquee{opacity:0}
+/* translucent, with its left edge melting into the white page */
 .deco-card{
-    position:absolute;top:0;right:0;bottom:0;left:50%;z-index:1;
-    overflow:hidden;background:#1a1a1c;
+    position:absolute;top:0;right:0;bottom:0;left:42%;z-index:1;
+    overflow:hidden;opacity:0.4;
+    -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 30%);
+            mask-image:linear-gradient(90deg,transparent 0%,#000 30%);
 }
 .deco-card img{
     width:100%;height:100%;object-fit:cover;object-position:50% 45%;
@@ -906,11 +910,4 @@ body.doc{overflow:auto;background:#fff}
 .panel.open .ne-plus + .ne-word b::after{transition-delay:1.4s}
 @media(prefers-reduced-motion:reduce){
     .ne-word i,.ne-word b::after{transition:none}
-}
-
-/* Text that sits on the photograph turns light (desktop only — phones hide the photo) */
-.menu-tag,.foot-copy{transition:color 0.4s ease}
-@media(min-width:769px){
-    .menu-screen[data-mode="scatter"] .menu-tag,
-    .menu-screen[data-mode="scatter"] .foot-copy{color:rgba(255,255,255,0.82)}
 }
