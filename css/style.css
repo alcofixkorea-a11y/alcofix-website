@@ -101,11 +101,8 @@ body:has(.menu-screen[data-mode="locked"]) .deco-marquee{opacity:0}
     opacity:0;transition:opacity 0.7s ease;
     animation:decoZoom 18s ease-in-out infinite alternate;
 }
-/* hovering a menu word crossfades to that page image.
-   Generated visuals are light and show in full; photographs stay translucent so the words keep the lead. */
+/* hovering a menu word crossfades to that page photo, kept translucent so the words keep the lead */
 .deco-card img.is-on{opacity:0.42}
-.deco-card img.is-on[data-key="business"],
-.deco-card img.is-on[data-key="vision"]{opacity:1}
 @keyframes decoZoom{from{transform:scale(1.02)}to{transform:scale(1.1)}}
 
 .deco-marquee{position:absolute;z-index:0;left:0;right:0;bottom:clamp(20px,3vh,36px);overflow:hidden}
@@ -866,16 +863,17 @@ body.doc{overflow:auto;background:#fff}
 .panel.open{z-index:510}
 .panel-bar{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center}
 .panel-back{justify-self:start}
-.panel-nav{flex:none;justify-content:center;gap:2px;padding:3px;border:1px solid var(--line)}
-.pn{align-items:center;text-align:center;padding:7px clamp(12px,1.3vw,20px) 8px;transition:background 0.25s ease,color 0.25s ease}
+/* plain text links, no boxes: the current page is simply the darkest */
+.panel-nav{flex:none;justify-content:center;gap:clamp(28px,3.4vw,56px);padding:0;border:0}
+.pn{align-items:center;text-align:center;padding:8px 0;transition:color 0.25s ease}
 .pn::after{display:none}
-.pn-en{font-size:clamp(12px,0.95vw,14px);font-weight:600}
-.pn:hover{background:var(--surface);color:var(--ink)}
-.pn.active{background:var(--ink);color:#fff}
-.pn.active .pn-ko{opacity:0.7}
+.pn-en{font-size:clamp(13px,1vw,15px);font-weight:600}
+.pn:hover{color:var(--ink)}
+.pn.active{color:var(--ink)}
+.pn.active .pn-en{font-weight:700}
 @media(max-width:900px){
     .panel-bar{display:flex}
-    .panel-nav{flex:1;min-width:0;justify-content:flex-start;border:0;padding:0}
+    .panel-nav{flex:1;min-width:0;justify-content:flex-start;gap:24px}
 }
 
 /* ===== Vision — slogan pinned on the left, the story scrolls on the right ===== */
