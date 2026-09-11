@@ -213,6 +213,39 @@
         if (e.key === 'Escape' && document.querySelector('.panel.open')) closePanels();
     });
 
+    /* Vision: blocks rise in as they scroll into view, and the counter follows along */
+    var vs = document.querySelector('.vs');
+    var vPanel = document.getElementById('panel-vision');
+    if (vs && vPanel && 'IntersectionObserver' in window) {
+        var vBar = vPanel.querySelector('.panel-bar');
+        var vCount = vs.querySelector('.vs-count b');
+        var setBarHeight = function() {
+            if (vBar) vPanel.style.setProperty('--bar-h', vBar.offsetHeight + 'px');
+        };
+        setBarHeight();
+        window.addEventListener('resize', setBarHeight);
+
+        vs.classList.add('reveal');
+        var vObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('in');
+                if (vCount) vCount.textContent = entry.target.dataset.n;
+            });
+        }, { root: vPanel, threshold: 0.35 });
+        vs.querySelectorAll('.vs-item').forEach(function(item) { vObserver.observe(item); });
+
+        // Safety net: if the observer has not fired shortly after the page opens, just show everything
+        new MutationObserver(function() {
+            if (!vPanel.classList.contains('open')) return;
+            setTimeout(function() {
+                if (!vs.querySelector('.vs-item.in')) {
+                    vs.querySelectorAll('.vs-item').forEach(function(item) { item.classList.add('in'); });
+                }
+            }, 1600);
+        }).observe(vPanel, { attributes: true, attributeFilter: ['class'] });
+    }
+
     var form = document.getElementById('cForm');
     if (form) {
         form.addEventListener('submit', function(e) {

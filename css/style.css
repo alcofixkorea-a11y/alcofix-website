@@ -929,3 +929,56 @@ body.doc{overflow:auto;background:#fff}
 .biz-ph em{font-style:normal;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-soft)}
 .biz-ph span{font-size:clamp(26px,3vw,40px);font-weight:600;letter-spacing:-0.045em;line-height:1.05;text-transform:uppercase}
 @media(max-width:768px){.biz-ph{height:200px}}
+
+/* ===== Vision — slogan pinned on the left, the story scrolls on the right ===== */
+.vs{display:grid;grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr)}
+.vs-left{
+    position:sticky;top:var(--bar-h,65px);align-self:start;
+    height:calc(100vh - var(--bar-h,65px));
+    display:flex;flex-direction:column;
+    padding:clamp(40px,5vw,72px) clamp(24px,4vw,64px);
+    border-right:1px solid var(--line);
+}
+.vs-eb,.vs-k{font-size:11px;font-weight:600;letter-spacing:0.22em;color:var(--ink-soft)}
+.vs-title{
+    margin-top:clamp(18px,2vw,28px);
+    font-size:clamp(40px,5.6vw,92px);font-weight:600;
+    letter-spacing:-0.06em;line-height:0.96;color:var(--ink);
+}
+.vs-lead{margin-top:auto;font-size:clamp(16px,1.6vw,21px);line-height:1.6;letter-spacing:-0.02em;color:var(--ink)}
+.vs-lead b{font-weight:700}
+.vs-count{margin-top:clamp(16px,2vw,24px);font-size:12px;letter-spacing:0.12em;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.vs-count b{font-weight:600;color:var(--ink)}
+
+.vs-right{
+    display:flex;flex-direction:column;gap:clamp(64px,9vw,120px);
+    padding:clamp(40px,5vw,72px) clamp(24px,4vw,64px) clamp(80px,14vh,160px);
+}
+.vs-photo{margin:0;overflow:hidden;background:var(--surface)}
+.vs-photo img{width:100%;aspect-ratio:16/10;object-fit:cover;transition:transform 1.2s cubic-bezier(0.2,0.7,0.3,1)}
+.vs-item:hover .vs-photo img{transform:scale(1.03)}
+.vs-k{display:block;margin-top:24px}
+.vs-h{margin-top:10px;font-size:clamp(22px,2.2vw,30px);font-weight:700;letter-spacing:-0.04em;color:var(--ink)}
+.vs-item p{margin-top:12px;font-size:15px;line-height:1.85;color:#3f3f46}
+.vs-values{list-style:none;margin-top:16px;border-top:1px solid var(--line)}
+.vs-values li{
+    display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;align-items:baseline;
+    padding:14px 0;border-bottom:1px solid var(--line);
+    font-size:15px;color:#3f3f46;
+}
+.vs-values b{font-size:17px;font-weight:700;letter-spacing:-0.03em;color:var(--ink)}
+.vs-markets{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.vs-markets span{padding:7px 12px;border:1px solid var(--line);font-size:13px;color:var(--ink)}
+
+/* each block rises in as it reaches the reader (only once the script is running) */
+.vs.reveal .vs-item{opacity:0;transform:translateY(28px);transition:opacity 0.8s ease,transform 0.9s cubic-bezier(0.2,0.7,0.3,1)}
+.vs.reveal .vs-item.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+    .vs.reveal .vs-item{opacity:1;transform:none;transition:none}
+}
+@media(max-width:900px){
+    .vs{grid-template-columns:1fr}
+    .vs-left{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+    .vs-lead{margin-top:28px}
+    .vs-count{display:none}
+}
