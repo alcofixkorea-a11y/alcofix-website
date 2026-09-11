@@ -7,7 +7,7 @@ img{display:block;max-width:100%}
 a{text-decoration:none;color:inherit}
 button{font-family:inherit;cursor:pointer}
 
-/* Monochrome system — the corporate site borrows no product or logo colour */
+/* Neutral system — the logo and photographs bring the only colour */
 :root{
     --paper:#ffffff;
     --surface:#f4f4f5;
@@ -112,24 +112,19 @@ body,.intro{background:var(--paper)}
     opacity:0;transition:opacity 0.6s ease;
 }
 body:has(.menu-screen.active[data-mode="scatter"]) .deco{opacity:1;transition-duration:1.2s}
+/* sized by the room between the header and the marquee, kept 4:5 */
 .deco-card{
-    position:absolute;margin:0;
-    right:clamp(24px,5.5vw,88px);top:clamp(92px,14vh,140px);
-    width:clamp(250px,24vw,380px);
-    background:var(--surface);
+    position:absolute;
+    right:clamp(24px,5.5vw,88px);
+    top:clamp(88px,12vh,120px);
+    bottom:clamp(170px,21vh,230px);
+    aspect-ratio:4/5;max-width:40vw;
+    overflow:hidden;background:#1a1a1c;
 }
-.deco-photo{display:block;overflow:hidden}
-.deco-photo img{
-    width:100%;aspect-ratio:4/5;object-fit:cover;
-    filter:grayscale(1) contrast(1.05);
+.deco-card img{
+    width:100%;height:100%;object-fit:cover;
     animation:decoZoom 18s ease-in-out infinite alternate;
 }
-.deco-card figcaption{
-    display:flex;justify-content:space-between;gap:12px;
-    padding:12px 14px 13px;
-    font-size:12px;letter-spacing:-0.01em;color:var(--ink);
-}
-.deco-card figcaption span:last-child{color:var(--faint)}
 @keyframes decoZoom{from{transform:scale(1.02)}to{transform:scale(1.1)}}
 
 .deco-marquee{position:absolute;left:0;right:0;bottom:clamp(20px,3vh,36px);overflow:hidden}
@@ -150,7 +145,7 @@ body:has(.menu-screen.active[data-mode="scatter"]) .deco{opacity:1;transition-du
 }
 @keyframes decoSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){
-    .deco-photo img,.deco-track{animation:none}
+    .deco-card img,.deco-track{animation:none}
 }
 
 /* ===== MENU SCREEN ===== */
@@ -194,8 +189,6 @@ body:has(.menu-screen.active[data-mode="scatter"]) .deco{opacity:1;transition-du
     background:linear-gradient(120deg,rgba(255,255,255,0.93) 0%,rgba(255,255,255,0.76) 46%,rgba(250,250,250,0.62) 100%);
 }
 .menu-photo.lit{opacity:1;transform:scale(1)}
-/* decorative photos stay monochrome; photos inside the pages keep their colour */
-.menu-photo{filter:grayscale(1)}
 
 .mi{
     position:absolute;
@@ -308,14 +301,12 @@ body:has(.menu-screen.active[data-mode="scatter"]) .deco{opacity:1;transition-du
     font-size:12px;color:var(--ink-soft);
 }
 .foot-ig{
-    display:inline-flex;align-items:center;justify-content:center;
-    width:30px;height:30px;flex:none;
-    border:1px solid rgba(17,17,19,0.16);border-radius:50%;
-    color:var(--ink-mid);
-    transition:background 0.25s,border-color 0.25s,color 0.25s;
+    display:inline-flex;flex:none;
+    width:40px;height:40px;
+    transition:transform 0.25s cubic-bezier(0.2,0.7,0.3,1),filter 0.25s;
 }
-.foot-ig svg{width:15px;height:15px}
-.foot-ig:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+.foot-ig svg{width:100%;height:100%;display:block}
+.foot-ig:hover{transform:translateY(-2px) scale(1.06);filter:drop-shadow(0 6px 12px rgba(214,36,159,0.28))}
 .foot-links{display:inline-flex;align-items:center;gap:8px}
 .foot-links a{transition:color 0.25s}
 .foot-links a:hover{color:var(--ink)}
