@@ -95,6 +95,35 @@
         });
     }
 
+    /* ===== Core message follows the hovered page ===== */
+    var heroCopy = document.querySelector('.hero-copy');
+    var copyText = {};
+    if (heroCopy) {
+        copyText.main = {
+            eb: heroCopy.querySelector('.hero-eb').textContent,
+            h: heroCopy.querySelector('.hero-h').textContent
+        };
+        document.querySelectorAll('.mi[data-copy]').forEach(function(item) {
+            copyText[item.dataset.panel] = { eb: item.dataset.copyEb || copyText.main.eb, h: item.dataset.copy };
+        });
+    }
+    var copyKey = 'main';
+    var copyTimer = null;
+
+    function showCopy(key) {
+        if (!heroCopy) return;
+        if (!copyText[key]) key = 'main';
+        if (key === copyKey) return;
+        copyKey = key;
+        clearTimeout(copyTimer);
+        heroCopy.classList.add('is-out');
+        copyTimer = setTimeout(function() {
+            heroCopy.querySelector('.hero-eb').textContent = copyText[copyKey].eb;
+            heroCopy.querySelector('.hero-h').textContent = copyText[copyKey].h;
+            heroCopy.classList.remove('is-out');
+        }, 170);
+    }
+
     /* ===== Panels ===== */
     var pages = [
         { id: 'about',    en: 'We are ALCOFIX', ko: '기업 소개' },
@@ -217,6 +246,7 @@
         shown.forEach(function(p) { p.classList.add('leaving'); p.classList.remove('is-current'); });
 
         showDeco('main');
+        showCopy('main');
         menuScreen.dataset.mode = 'scatter';
         document.body.style.overflow = '';
 
@@ -259,17 +289,60 @@
         });
     });
 
+    var hoverReset = null;
     document.querySelectorAll('.mi').forEach(function(item) {
         if (canHover) {
-            item.addEventListener('mouseenter', function() { showDeco(this.dataset.panel); });
+            item.addEventListener('mouseenter', function() {
+                clearTimeout(hoverReset);
+                showDeco(this.dataset.panel);
+                showCopy(this.dataset.panel);
+            });
             item.addEventListener('mouseleave', function() {
-                if (!document.querySelector('.panel.open')) showDeco('main');
+                // a short pause, so gliding from one word to the next does not flash back to the main screen
+                clearTimeout(hoverReset);
+                hoverReset = setTimeout(function() {
+                    if (document.querySelector('.panel.open')) return;
+                    showDeco('main');
+                    showCopy('main');
+                }, 220);
             });
         }
         item.addEventListener('click', function(e) {
             e.preventDefault();
+            clearTimeout(hoverReset);
             openPanel(this.dataset.panel);
         });
+    });
+
+    /* ===== Footer band: shared by the main screen and the bottom of every page ===== */
+    var mainFoot = menuScreen.querySelector('.menu-footer');
+    if (mainFoot) {
+        panels.forEach(function(panel) { panel.appendChild(mainFoot.cloneNode(true)); });
+
+        // the drifting words and the page heights make room for the band
+        var setFootHeight = function() {
+            document.documentElement.style.setProperty('--foot-h', mainFoot.offsetHeight + 'px');
+        };
+        setFootHeight();
+        window.addEventListener('resize', setFootHeight);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(setFootHeight);
+    }
+
+    document.addEventListener('click', function(e) {
+        var contact = e.target.closest('.foot-contact');
+        if (contact) {
+            e.preventDefault();
+            var current = document.querySelector('.panel.is-current');
+            if (current && current.id === 'panel-contact') current.scrollTo({ top: 0, behavior: 'smooth' });
+            else openPanel('contact');
+            return;
+        }
+        var go = e.target.closest('.foot-go');
+        if (go) {
+            var select = go.parentNode.querySelector('.foot-select');
+            if (select && select.value) window.open(select.value, '_blank', 'noopener');
+            else if (select) select.focus();
+        }
     });
 
     document.querySelectorAll('.panel-back').forEach(function(btn) {
