@@ -39,32 +39,8 @@
 
 <!-- Main backdrop: one photograph + the words that define us -->
 <div class="deco" aria-hidden="true">
-    <div class="deco-card" id="decoCard"><img src="images/hero-morning.jpg" alt="" class="is-on" data-key="main"></div>
-    <!-- Data layer: illustrative readouts, decoration only -->
-    <div class="hud">
-        <div class="hud-card hud-hrv">
-            <div class="hud-top"><span class="hud-label">Heart Rate Variability</span><span class="hud-live"><i></i>Live</span></div>
-            <div class="hud-value"><b>62</b><small>ms</small><em>Stable</em></div>
-            <svg class="hud-chart" viewBox="0 0 240 64" preserveAspectRatio="none">
-                <defs><linearGradient id="hudFade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1AA7E0" stop-opacity="0.18"/><stop offset="1" stop-color="#1AA7E0" stop-opacity="0"/></linearGradient></defs>
-                <path class="hud-area" d="M0 44 C 18 18, 36 58, 58 36 S 98 28, 120 34 S 160 31, 182 33 S 220 32, 240 32 L 240 64 L 0 64 Z"/>
-                <path class="hud-line" pathLength="1" d="M0 44 C 18 18, 36 58, 58 36 S 98 28, 120 34 S 160 31, 182 33 S 220 32, 240 32"/>
-            </svg>
-        </div>
-        <div class="hud-card hud-sleep">
-            <span class="hud-label">Sleep Quality</span>
-            <div class="hud-ring">
-                <svg viewBox="0 0 56 56"><circle class="hud-ring-bg" cx="28" cy="28" r="22"/><circle class="hud-ring-fg" cx="28" cy="28" r="22"/></svg>
-                <b>86<small>%</small></b>
-            </div>
-            <span class="hud-note">Deep sleep 1h 42m</span>
-        </div>
-        <div class="hud-card hud-meta">
-            <div class="hud-top"><span class="hud-label">Metabolic Balance</span><em class="hud-tag">Balanced</em></div>
-            <div class="hud-bars"><i style="--h:44%;--d:0.5s"></i><i style="--h:58%;--d:0.56s"></i><i style="--h:50%;--d:0.62s"></i><i style="--h:62%;--d:0.68s"></i><i style="--h:57%;--d:0.74s"></i><i style="--h:60%;--d:0.8s"></i><i style="--h:59%;--d:0.86s"></i></div>
-            <div class="hud-axis"><span>Mon</span><span>Sun</span></div>
-        </div>
-    </div>
+    <div class="deco-card" id="decoCard"></div>
+    <img src="images/logo.png" class="deco-logo" alt="">
     <div class="deco-marquee">
         <div class="deco-track">
             <span>Hangover Cure</span><i></i><span>Health</span><i></i><span>Alcohol Total Solution</span><i></i>
@@ -77,8 +53,7 @@
 <!-- ===== MENU SCREEN ===== -->
 <div class="menu-screen" id="menuScreen">
     <header class="menu-header">
-        <img src="images/logo.png" class="menu-logo" alt="ALCOFIX">
-        <span class="menu-tag">Empower Your Everyday</span>
+        <h1 class="sr-only">ALCOFIX</h1>
     </header>
     <nav class="menu-scatter" id="menuNav">
         <a class="mi" data-panel="about" data-img="images/bg-about.jpg"
