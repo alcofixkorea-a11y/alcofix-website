@@ -12,6 +12,14 @@
     <link rel="stylesheet" as="style" crossorigin
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="css/style.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
 </head>
 <body>
 
@@ -43,8 +51,8 @@
     </div>
 </div>
 
-<!-- Network canvas (shared backdrop) -->
-<canvas class="net-canvas" id="netCanvas"></canvas>
+<!-- 3D DNA helix (menu backdrop) -->
+<canvas class="helix-canvas" id="helixCanvas" aria-hidden="true"></canvas>
 
 <!-- Full-bleed photo that answers whichever menu item is hovered -->
 <div class="menu-photo" id="menuPhoto"></div>
@@ -57,31 +65,31 @@
     </header>
     <nav class="menu-scatter" id="menuNav">
         <a class="mi" data-panel="about" data-img="images/bg-about.jpg"
-           style="--i:0;--x:6%;--y:19%;--fs:clamp(24px,4.2vw,58px)">
+           style="--i:0;--x:5%;--y:9%;--fs:clamp(24px,4.2vw,58px)">
             <span class="mi-k">01</span>
             <span class="mi-t">We are ALCOFIX</span>
             <span class="mi-s">기업 소개</span>
         </a>
         <a class="mi" data-panel="product" data-img="images/bg-product.jpg"
-           style="--i:1;--x:53%;--y:9%;--fs:clamp(19px,3vw,41px)">
+           style="--i:1;--x:28%;--y:30%;--fs:clamp(19px,3vw,41px)">
             <span class="mi-k">02</span>
             <span class="mi-t">Our Product</span>
             <span class="mi-s">제품 소개</span>
         </a>
         <a class="mi" data-panel="vision" data-img="images/bg-vision.jpg"
-           style="--i:2;--x:70%;--y:45%;--fs:clamp(18px,2.8vw,38px)">
+           style="--i:2;--x:7%;--y:47%;--fs:clamp(18px,2.8vw,38px)">
             <span class="mi-k">03</span>
             <span class="mi-t">Our Vision</span>
             <span class="mi-s">비전</span>
         </a>
         <a class="mi" data-panel="business" data-img="images/bg-business.jpg"
-           style="--i:3;--x:20%;--y:55%;--fs:clamp(21px,3.4vw,47px)">
+           style="--i:3;--x:19%;--y:64%;--fs:clamp(21px,3.4vw,47px)">
             <span class="mi-k">04</span>
             <span class="mi-t">Business Area</span>
             <span class="mi-s">사업 분야</span>
         </a>
         <a class="mi" data-panel="contact" data-img="images/bg-contact.jpg"
-           style="--i:4;--x:47%;--y:78%;--fs:clamp(17px,2.6vw,35px)">
+           style="--i:4;--x:36%;--y:83%;--fs:clamp(17px,2.6vw,35px)">
             <span class="mi-k">05</span>
             <span class="mi-t">Contact Us</span>
             <span class="mi-s">문의하기</span>
@@ -115,10 +123,16 @@
         <span class="panel-label">We are ALCOFIX</span>
     </div>
     <div class="panel-body">
-        <div class="panel-hero">
+        <div class="panel-hero hero-name">
             <img src="images/bg-about.jpg" alt="" class="panel-hero-img">
             <div class="panel-hero-over">
-                <h2>We are<br><b>ALCOFIX</b></h2>
+                <span class="p-eyebrow">WE ARE ALCOFIX</span>
+                <h2 class="name-eq" aria-label="ALCOHOL + FIX = ALCOFIX">
+                    <span class="ne-word"><b>ALCO</b><i>HOL</i></span>
+                    <span class="ne-plus">+</span>
+                    <span class="ne-word"><b>FIX</b></span>
+                </h2>
+                <p class="ne-sub">We <b>fix</b> what <b>alcohol</b> leaves behind.</p>
             </div>
         </div>
         <div class="panel-inner">
@@ -166,6 +180,7 @@
                 <span class="fd-eyebrow">FOUNDER</span>
                 <div class="fd-grid">
                     <div class="fd-head">
+                        <img src="images/founder.jpg" class="fd-photo" alt="김성진 대표이사" width="216" height="288" loading="lazy">
                         <h3 class="fd-name">김성진<span>대표이사</span></h3>
                         <p class="fd-line">소재 발굴부터 기능성 검증, 제형 개발, 품질관리, 임상 연계까지 <b>전 주기를 직접 수행해온 연구자</b>입니다.</p>
                         <p class="fd-edu">대전대학교 생명과학과 미생물 전공</p>
@@ -446,5 +461,6 @@
 </section>
 
 <script src="js/main.js"></script>
+<script type="module" src="js/helix.js"></script>
 </body>
 </html>

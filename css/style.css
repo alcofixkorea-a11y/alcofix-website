@@ -22,7 +22,7 @@ button{font-family:inherit;cursor:pointer}
     --dock-w:clamp(230px,29vw,380px);
 }
 
-/* Plain white ground — the network canvas is the only thing on it */
+/* Plain white ground — the 3D helix is the only thing on it */
 body,.intro{background:var(--paper)}
 .menu-screen{background:transparent}
 
@@ -104,14 +104,15 @@ body,.intro{background:var(--paper)}
     transition:opacity 0.8s ease,transform 0.8s ease;
 }
 
-/* Network canvas — glowing nodes + arcs behind everything */
-.net-canvas{
+/* 3D DNA helix — rests on the right while the words scatter on the left */
+.helix-canvas{
     position:fixed;inset:0;z-index:50;
     width:100%;height:100%;
     pointer-events:none;
-    opacity:0;transition:opacity 1.2s ease;
+    background:radial-gradient(ellipse 46% 70% at 74% 50%,rgba(0,168,143,0.07) 0%,rgba(0,168,143,0) 100%);
+    opacity:0;transition:opacity 0.8s ease;
 }
-.net-canvas.show{opacity:1}
+.helix-canvas.show{opacity:1;transition-duration:1.6s}
 
 /* ===== MENU SCREEN ===== */
 .menu-screen{
@@ -141,7 +142,7 @@ body,.intro{background:var(--paper)}
     min-height:0;
 }
 
-/* Full-bleed photo, sitting under the network canvas (z 50) */
+/* Full-bleed photo shown while a page is open (the helix fades out then) */
 .menu-photo{
     position:fixed;inset:0;z-index:40;
     background-size:cover;background-position:center;background-repeat:no-repeat;
@@ -461,6 +462,12 @@ body,.intro{background:var(--paper)}
     display:grid;grid-template-columns:minmax(0,0.72fr) minmax(0,1fr);
     gap:clamp(28px,4vw,56px);
 }
+.fd-photo{
+    width:clamp(128px,12vw,164px);height:auto;aspect-ratio:3/4;
+    object-fit:cover;border-radius:14px;
+    background:#eef2f0;margin-bottom:22px;
+    box-shadow:0 10px 28px rgba(13,47,33,0.1);
+}
 .fd-name{
     display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
     font-size:clamp(22px,2.6vw,30px);font-weight:700;
@@ -675,6 +682,7 @@ body,.intro{background:var(--paper)}
     }
     .mi-s{font-size:10px}
     .menu-photo{opacity:0.34;transform:none}
+    .helix-canvas.show{opacity:0.5}
     .menu-footer{padding:12px 20px 16px}
     /* No hover here, so a tap opens the page over the full width */
     .panel.dock{left:0;box-shadow:none}
@@ -687,6 +695,7 @@ body,.intro{background:var(--paper)}
     .panel-hero-over h2{font-size:28px}
 
     .fd-grid{grid-template-columns:1fr;gap:26px}
+    .fd-photo{width:120px;margin-bottom:18px}
     .fd-body .fd-sub:nth-of-type(2){margin-top:28px}
 
     .roadmap{grid-template-columns:repeat(2,1fr);gap:10px}
@@ -857,4 +866,39 @@ body.doc{overflow:auto;background:#fff}
     .facility{grid-template-columns:1fr;gap:18px}
     .facility-photo{max-width:none}
     .facility-body{padding:0 4px 6px}
+}
+
+/* About hero — the name taken apart: ALCO(HOL) + FIX */
+.hero-name .panel-hero-over{
+    background:linear-gradient(180deg,rgba(4,22,15,0.04) 0%,rgba(4,22,15,0.3) 48%,rgba(4,22,15,0.74) 100%);
+}
+.hero-name .p-eyebrow{font-size:12px;font-weight:600;letter-spacing:3.5px;opacity:0.82;margin-bottom:16px}
+.hero-name .panel-hero-over .name-eq{
+    display:flex;align-items:baseline;flex-wrap:wrap;gap:0 0.24em;
+    font-size:clamp(36px,6.4vw,92px);
+    font-weight:800;line-height:1;letter-spacing:-0.035em;
+}
+.ne-word{display:inline-flex;align-items:baseline}
+.ne-word b{position:relative;font-weight:800}
+.ne-word b::after{
+    content:'';position:absolute;left:0.03em;right:0.03em;bottom:-0.13em;
+    height:max(3px,0.055em);border-radius:2px;
+    background:var(--teal-bright);
+    transform:scaleX(0);transform-origin:left;
+    transition:transform 0.7s cubic-bezier(0.2,0.7,0.3,1);
+}
+.ne-word i{font-style:normal;font-weight:800;transition:opacity 0.9s ease,font-weight 0.9s ease}
+.ne-plus{font-weight:300;color:var(--teal-bright)}
+.ne-sub{
+    margin-top:clamp(18px,2.2vw,28px);
+    font-size:clamp(15px,1.6vw,20px);font-weight:400;letter-spacing:-0.2px;
+    color:rgba(255,255,255,0.88);
+}
+.ne-sub b{font-weight:700;color:#fff}
+/* once the page has slid in, HOL steps back and the two halves light up */
+.panel.open .ne-word i{font-weight:250;opacity:0.34;transition-delay:1s}
+.panel.open .ne-word b::after{transform:scaleX(1);transition-delay:1.2s}
+.panel.open .ne-plus + .ne-word b::after{transition-delay:1.4s}
+@media(prefers-reduced-motion:reduce){
+    .ne-word i,.ne-word b::after{transition:none}
 }
