@@ -39,7 +39,7 @@
 
 <!-- Main backdrop: one photograph + the words that define us -->
 <div class="deco" aria-hidden="true">
-    <div class="deco-card"><img src="images/main-card.jpg" alt=""></div>
+    <div class="deco-card" id="decoCard"><img src="images/main-card.jpg" alt="" class="is-on" data-key="main"></div>
     <div class="deco-marquee">
         <div class="deco-track">
             <span>Hangover Cure</span><i></i><span>Health</span><i></i><span>Alcohol Total Solution</span><i></i>
@@ -48,8 +48,6 @@
     </div>
 </div>
 
-<!-- Full-bleed photo that answers whichever menu item is hovered -->
-<div class="menu-photo" id="menuPhoto"></div>
 
 <!-- ===== MENU SCREEN ===== -->
 <div class="menu-screen" id="menuScreen">
@@ -366,6 +364,40 @@
         <span class="panel-label">Our Vision</span>
     </div>
     <div class="panel-body">
+        <!-- Slogan pinned on the left; the story scrolls past on the right -->
+        <div class="vs">
+            <div class="vs-left">
+                <span class="vs-eb">OUR VISION</span>
+                <h2 class="vs-title">Empower<br>Your<br>Everyday</h2>
+                <p class="vs-lead">건강한 음주문화를 선도하는<br><b>알코올 토탈 솔루션 기업</b></p>
+                <span class="vs-count" aria-hidden="true"><b>01</b> / 03</span>
+            </div>
+            <div class="vs-right">
+                <article class="vs-item" data-n="01">
+                    <figure class="vs-photo"><img src="images/vision-01.jpg" alt="지도 위에 놓인 나침반" loading="lazy"></figure>
+                    <span class="vs-k">01 — MISSION</span>
+                    <h3 class="vs-h">미션</h3>
+                    <p>원천기술 기반의 혁신적 솔루션으로 음주 전후 발생하는 사회적·신체적 문제를 해결하고, 모든 사람의 일상에 활력을 더합니다.</p>
+                </article>
+                <article class="vs-item" data-n="02">
+                    <figure class="vs-photo"><img src="images/vision-02.jpg" alt="별이 가득한 밤하늘 아래의 망원경" loading="lazy"></figure>
+                    <span class="vs-k">02 — CORE VALUE</span>
+                    <h3 class="vs-h">핵심가치</h3>
+                    <ul class="vs-values">
+                        <li><b>혁신</b><span>과학적 근거에 기반한 혁신</span></li>
+                        <li><b>신뢰</b><span>독자적 기술력으로 입증한 신뢰</span></li>
+                        <li><b>도전</b><span>글로벌 시장을 향한 도전</span></li>
+                    </ul>
+                </article>
+                <article class="vs-item" data-n="03">
+                    <figure class="vs-photo"><img src="images/vision-03.jpg" alt="빛나는 선으로 연결된 지구" loading="lazy"></figure>
+                    <span class="vs-k">03 — GLOBAL</span>
+                    <h3 class="vs-h">글로벌</h3>
+                    <p>베트남, 인도네시아, 중국, 일본 등 아시아 시장을 중심으로 글로벌 진출을 본격화하며, 알코올 토탈 솔루션의 새로운 기준을 만들어갑니다.</p>
+                    <div class="vs-markets"><span>Vietnam</span><span>Indonesia</span><span>China</span><span>Japan</span></div>
+                </article>
+            </div>
+        </div>
     </div>
 </section>
 
