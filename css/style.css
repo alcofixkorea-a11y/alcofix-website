@@ -866,7 +866,7 @@ body.doc{overflow:auto;background:#fff}
 .panel-bar{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center}
 .panel-back{justify-self:start}
 /* plain text links, no boxes: the current page is simply the darkest */
-.panel-nav{flex:none;justify-content:center;gap:clamp(28px,3.4vw,56px);padding:0;border:0}
+.panel-nav{flex:none;justify-content:center;gap:clamp(56px,6vw,110px);padding:0;border:0}
 .pn{align-items:center;text-align:center;padding:8px 0;transition:color 0.25s ease}
 .pn::after{display:none}
 .pn-en{font-size:clamp(13px,1vw,15px);font-weight:600}
@@ -875,7 +875,7 @@ body.doc{overflow:auto;background:#fff}
 .pn.active .pn-en{font-weight:700}
 @media(max-width:900px){
     .panel-bar{display:flex}
-    .panel-nav{flex:1;min-width:0;justify-content:flex-start;gap:24px}
+    .panel-nav{flex:1;min-width:0;justify-content:flex-start;gap:36px}
 }
 
 /* ===== Vision — slogan pinned on the left, the story scrolls on the right ===== */
