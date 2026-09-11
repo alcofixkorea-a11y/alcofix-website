@@ -573,32 +573,7 @@ body,.intro{background:var(--paper)}
 
 .sub-title{font-size:17px;font-weight:700;margin:52px 0 24px;color:#111;letter-spacing:-0.3px}
 
-/* How to take it — three steps strung on one line, no boxes */
-.steps{
-    list-style:none;position:relative;
-    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-    padding-top:4px;
-}
-.steps::before{
-    content:"";position:absolute;left:0;right:0;top:11px;height:1px;
-    background:linear-gradient(90deg,var(--teal) 0%,rgba(0,168,143,0.35) 60%,rgba(0,168,143,0.08) 100%);
-}
-.step{position:relative;padding:34px clamp(12px,2vw,28px) 0 0}
-.step::before{
-    content:"";position:absolute;left:0;top:0;
-    width:15px;height:15px;border-radius:50%;
-    background:#fff;border:2px solid var(--teal);box-sizing:border-box;
-}
-.step:first-child::before{background:var(--teal)}
-.step-k{font-size:10.5px;font-weight:700;letter-spacing:2.2px;color:var(--teal)}
-.step-t{
-    display:flex;align-items:baseline;gap:6px;
-    margin-top:10px;
-    font-size:clamp(24px,2.9vw,36px);font-weight:800;
-    color:var(--ink);letter-spacing:-1px;line-height:1.1;
-}
-.step-t em{font-style:normal;font-size:0.5em;font-weight:600;letter-spacing:0;color:var(--ink-soft)}
-.step-d{display:block;margin-top:8px;font-size:13px;color:#8a938f}
+
 
 /* Buy link */
 .buy{
@@ -794,14 +769,7 @@ body.doc{overflow:auto;background:#fff}
     .partner-row li{height:58px}
 }
 
-@media(max-width:768px){
-    .steps{grid-template-columns:1fr;gap:26px;padding:0 0 0 30px}
-    .steps::before{left:7px;right:auto;top:6px;bottom:6px;width:1px;height:auto;
-        background:linear-gradient(180deg,var(--teal) 0%,rgba(0,168,143,0.35) 60%,rgba(0,168,143,0.08) 100%)}
-    .step{padding:0}
-    .step::before{left:-30px;top:2px}
-    .step-t{margin-top:6px}
-}
+
 
 /* Product hero is a bright scene: title sits on the empty wall, top-left, in ink */
 .panel-hero-light .panel-hero-img{object-position:50% 64%}
@@ -813,23 +781,48 @@ body.doc{overflow:auto;background:#fff}
 .panel-hero-light .p-eyebrow{color:var(--accent);opacity:1;font-weight:700}
 .panel-hero-light .panel-hero-over h2{font-weight:800;color:var(--accent);letter-spacing:-1px}
 
-/* How to take it: the moment in a photo, the steps on a line beside it */
-.use{
-    display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);
-    gap:clamp(28px,4.4vw,64px);align-items:center;
+
+
+/* How to take it — one photograph per moment, the step written onto it */
+.ritual{
+    list-style:none;
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:clamp(10px,1.4vw,18px);
 }
-.use-photo{margin:0;aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:#eef2f0}
-.use-photo img{width:100%;height:100%;object-fit:cover}
-.use .steps{grid-template-columns:1fr;gap:30px;padding:0 0 0 32px}
-.use .steps::before{
-    left:7px;right:auto;top:6px;bottom:6px;width:1px;height:auto;
-    background:linear-gradient(180deg,var(--teal) 0%,rgba(0,168,143,0.35) 60%,rgba(0,168,143,0.08) 100%);
+.rt{
+    position:relative;isolation:isolate;
+    aspect-ratio:3/4;border-radius:16px;overflow:hidden;
+    background:#e9eeec;
 }
-.use .step{padding:0}
-.use .step::before{left:-32px;top:2px}
-.use .step-t{margin-top:6px}
+.rt img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    transition:transform 0.9s cubic-bezier(0.2,0.7,0.3,1);
+}
+.rt:hover img{transform:scale(1.045)}
+.rt-over{
+    position:absolute;left:0;right:0;bottom:0;
+    display:flex;flex-direction:column;
+    padding:72px clamp(18px,2vw,26px) clamp(18px,2vw,26px);
+    background:linear-gradient(180deg,rgba(6,28,20,0) 0%,rgba(6,28,20,0.5) 45%,rgba(6,28,20,0.84) 100%);
+    color:#fff;
+}
+.rt-k{
+    font-size:clamp(30px,3.2vw,44px);font-weight:800;line-height:1;letter-spacing:-1.5px;
+    color:rgba(255,255,255,0.42);font-variant-numeric:tabular-nums;
+}
+.rt-t{
+    display:flex;align-items:baseline;gap:6px;margin-top:10px;
+    font-size:clamp(20px,2.2vw,28px);font-weight:800;letter-spacing:-0.6px;line-height:1.15;
+}
+.rt-t em{font-style:normal;font-size:0.56em;font-weight:600;letter-spacing:0;color:rgba(255,255,255,0.72)}
+.rt-d{margin-top:6px;font-size:13px;color:rgba(255,255,255,0.8)}
 @media(max-width:768px){
-    .use{grid-template-columns:1fr;gap:26px}
-    .use .steps{padding-left:30px}
-    .use .step::before{left:-30px}
+    .ritual{
+        grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:76%;
+        overflow-x:auto;scroll-snap-type:x mandatory;
+        scroll-padding-inline:24px;
+        margin:0 -24px;padding:0 24px 4px;scrollbar-width:none;
+    }
+    .ritual::-webkit-scrollbar{display:none}
+    .rt{scroll-snap-align:start}
 }
