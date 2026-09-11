@@ -826,3 +826,35 @@ body.doc{overflow:auto;background:#fff}
     .ritual::-webkit-scrollbar{display:none}
     .rt{scroll-snap-align:start}
 }
+
+/* Manufacturing facility — small source photo, so it stays at or below native width */
+.facility{
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:clamp(24px,4vw,56px);align-items:center;
+    margin-top:clamp(48px,6vw,76px);
+    padding:clamp(16px,2vw,26px);
+    background:#f6f9f8;border:1px solid rgba(13,47,33,0.07);border-radius:18px;
+}
+.facility-photo{margin:0;width:100%;max-width:536px;border-radius:12px;overflow:hidden;background:#e4ebe8}
+.facility-photo img{width:100%;height:auto}
+.facility-body{padding-right:clamp(0px,1.5vw,16px)}
+.facility-k{font-size:10.5px;font-weight:700;letter-spacing:2.2px;color:var(--teal)}
+.facility-t{
+    margin-top:10px;
+    font-size:clamp(20px,2.3vw,28px);font-weight:800;
+    letter-spacing:-0.6px;line-height:1.32;color:var(--ink);
+}
+.facility-t b{font-weight:800;color:var(--accent)}
+.facility-d{margin-top:14px;font-size:14.5px;line-height:1.85;color:#5c6661}
+.facility-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.facility-chips span{
+    padding:6px 14px;border-radius:999px;
+    border:1px solid rgba(27,107,49,0.28);background:#fff;
+    font-size:12px;font-weight:700;letter-spacing:1px;color:var(--accent);
+}
+.facility-src{margin-top:14px;font-size:12px;color:#98a19d}
+@media(max-width:768px){
+    .facility{grid-template-columns:1fr;gap:18px}
+    .facility-photo{max-width:none}
+    .facility-body{padding:0 4px 6px}
+}
