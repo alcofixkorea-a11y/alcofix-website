@@ -945,3 +945,37 @@ body.doc{overflow:auto;background:#fff}
 .slogan-en{letter-spacing:0.02em;font-size:calc(clamp(24px,4vw,50px) * 0.7613)}
 .mi-t{letter-spacing:-0.02em}
 .foot-copy{letter-spacing:0.06em}
+
+/* ===== Core message, set on the clear sky of the main photo ===== */
+.hero-copy{
+    position:absolute;z-index:3;
+    left:56%;right:clamp(24px,4vw,64px);top:clamp(96px,14vh,150px);
+    pointer-events:none;
+}
+.hero-eb{font-size:12px;font-weight:600;letter-spacing:0.24em;color:var(--ink-mid)}
+.hero-h{
+    margin-top:12px;
+    font-size:clamp(22px,2.4vw,38px);font-weight:700;
+    line-height:1.32;letter-spacing:-0.03em;color:var(--ink);
+}
+@media(max-width:768px){
+    .hero-copy{left:24px;right:24px;top:84px}
+    .hero-h{font-size:20px}
+}
+
+/* ===== Menu hover: every word stays dark; the hovered one is underlined ===== */
+.menu-screen[data-mode="scatter"] .menu-scatter:has(.mi:hover) .mi.show{opacity:1}
+.menu-screen[data-mode="scatter"] .menu-scatter .mi.show:hover{transform:none}
+.mi-t::after{background:var(--ink);height:3px;bottom:-0.12em}
+
+/* ===== Page bar: the logo sits top-left on every page and leads back to the main screen ===== */
+.panel-back{
+    width:auto;height:auto;padding:4px 0;
+    border:0;border-radius:0;background:none;
+    transition:opacity 0.25s ease;
+}
+.panel-back img{display:block;height:clamp(30px,2.6vw,40px);width:auto}
+.panel-back:hover{background:none;border:0;opacity:0.7}
+@media(max-width:900px){
+    .panel-back img{height:28px}
+}
