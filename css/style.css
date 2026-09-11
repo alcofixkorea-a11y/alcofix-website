@@ -18,8 +18,6 @@ button{font-family:inherit;cursor:pointer}
     --faint:#a1a1aa;
     --outline:#d4d4d8;
     --font:'Geist','Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
-
-    --dock-w:clamp(230px,29vw,380px);
 }
 
 /* Plain white ground */
@@ -87,7 +85,6 @@ body,.intro{background:var(--paper)}
 }
 body:has(.menu-screen.active) .deco{opacity:1;transition-duration:1.2s}
 .deco-marquee{transition:opacity 0.5s ease}
-body:has(.menu-screen[data-mode="preview"]) .deco-marquee,
 body:has(.menu-screen[data-mode="locked"]) .deco-marquee{opacity:0}
 /* translucent, with its left edge melting into the white page */
 .deco-card{
@@ -216,58 +213,12 @@ body:has(.menu-screen[data-mode="locked"]) .deco-marquee{opacity:0}
 .mi:hover .mi-k{color:var(--ink)}
 .mi:hover .mi-s{color:var(--ink)}
 
-/* ===== Docked: the scattered words gather into a column on the left ===== */
-.menu-screen[data-mode="preview"] .mi,
-.menu-screen[data-mode="locked"] .mi{
-    left:clamp(22px,3.2vw,44px);
-    top:calc(clamp(64px,10vh,104px) + var(--i) * clamp(54px,7.2vh,78px));
-    --fs:clamp(15px,1.45vw,21px)!important;
-    opacity:0.5;
-}
-.menu-screen[data-mode="preview"] .mi.on,
-.menu-screen[data-mode="locked"] .mi.on{
-    opacity:1;color:var(--ink);
-}
-.mi.on .mi-t::after{transform:scaleX(1)}
-.mi.on .mi-k{color:var(--ink)}
-.menu-screen[data-mode="preview"] .mi:hover,
-.menu-screen[data-mode="locked"] .mi:hover{opacity:1}
-/* the docked column sits over the photo, so give it a legible ground */
-.menu-screen[data-mode="preview"] .menu-scatter::before,
-.menu-screen[data-mode="locked"] .menu-scatter::before{
-    content:'';position:absolute;left:0;top:0;bottom:0;
-    width:var(--dock-w);
-    background:linear-gradient(90deg,rgba(255,255,255,0.86) 0%,rgba(255,255,255,0.5) 72%,transparent 100%);
-    pointer-events:none;
-}
-
 @media(hover:none){
     .menu-scatter:hover .mi.show{opacity:1}
 }
 @media(prefers-reduced-motion:reduce){
     .mi,.menu-photo{transition-duration:0.01ms}
 }
-
-/* Way back out of a page — only meaningful once one is showing */
-.to-main{
-    position:absolute;z-index:4;
-    left:clamp(22px,3.2vw,44px);
-    bottom:clamp(58px,8vh,84px);
-    display:inline-flex;align-items:center;gap:8px;
-    padding:9px 18px 9px 13px;
-    border:1px solid rgba(17,17,19,0.16);border-radius:0;
-    background:rgba(255,255,255,0.82);
-    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-    color:var(--ink);
-    font-size:12.5px;font-weight:600;letter-spacing:-0.2px;
-    opacity:0;pointer-events:none;transform:translateY(6px);
-    transition:opacity 0.45s ease,transform 0.45s ease,background 0.25s,border-color 0.25s,color 0.25s;
-}
-.to-main svg{width:15px;height:15px;transition:transform 0.25s ease}
-.menu-screen[data-mode="preview"] .to-main,
-.menu-screen[data-mode="locked"] .to-main{opacity:1;pointer-events:auto;transform:translateY(0)}
-.to-main:hover{background:var(--ink);border-color:var(--ink);color:#fff}
-.to-main:hover svg{transform:translateX(-3px)}
 
 .menu-footer{
     position:relative;z-index:3;flex:none;
@@ -298,15 +249,6 @@ body:has(.menu-screen[data-mode="locked"]) .deco-marquee{opacity:0}
 }
 .panel.open{transform:translateX(0)}
 
-/* Preview: the page slides in beside the docked menu instead of over it */
-.panel.dock{
-    left:var(--dock-w);
-    box-shadow:-24px 0 60px rgba(0,0,0,0.13);
-}
-/* the docked column already lists the pages, so drop the duplicate bar */
-.panel.dock .panel-nav{display:none}
-.panel.dock .panel-back{opacity:0;pointer-events:none}
-.panel.dock.pinned .panel-back{opacity:1;pointer-events:auto}
 
 .panel-bar{
     position:sticky;top:0;z-index:10;
@@ -693,11 +635,6 @@ body:has(.menu-screen[data-mode="locked"]) .deco-marquee{opacity:0}
     .deco-marquee{bottom:64px}
     .deco-track span{font-size:24vw}
     .menu-footer{padding:12px 20px 16px}
-    /* No hover here, so a tap opens the page over the full width */
-    .panel.dock{left:0;box-shadow:none}
-    .panel.dock .panel-nav{display:flex}
-    .panel.dock .panel-back{opacity:1;pointer-events:auto}
-    .menu-screen[data-mode] .menu-scatter::before{display:none}
 
     .panel-hero{height:40vh;min-height:240px}
     .panel-hero-over{padding:24px}
@@ -930,55 +867,18 @@ body.doc{overflow:auto;background:#fff}
 .biz-ph span{font-size:clamp(26px,3vw,40px);font-weight:600;letter-spacing:-0.045em;line-height:1.05;text-transform:uppercase}
 @media(max-width:768px){.biz-ph{height:200px}}
 
-/* ===== Vision — slogan pinned on the left, the story scrolls on the right ===== */
-.vs{display:grid;grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr)}
-.vs-left{
-    position:sticky;top:var(--bar-h,65px);align-self:start;
-    height:calc(100vh - var(--bar-h,65px));
-    display:flex;flex-direction:column;
-    padding:clamp(40px,5vw,72px) clamp(24px,4vw,64px);
-    border-right:1px solid var(--line);
-}
-.vs-eb,.vs-k{font-size:11px;font-weight:600;letter-spacing:0.22em;color:var(--ink-soft)}
-.vs-title{
-    margin-top:clamp(18px,2vw,28px);
-    font-size:clamp(40px,5.6vw,92px);font-weight:600;
-    letter-spacing:-0.06em;line-height:0.96;color:var(--ink);
-}
-.vs-lead{margin-top:auto;font-size:clamp(16px,1.6vw,21px);line-height:1.6;letter-spacing:-0.02em;color:var(--ink)}
-.vs-lead b{font-weight:700}
-.vs-count{margin-top:clamp(16px,2vw,24px);font-size:12px;letter-spacing:0.12em;color:var(--ink-soft);font-variant-numeric:tabular-nums}
-.vs-count b{font-weight:600;color:var(--ink)}
-
-.vs-right{
-    display:flex;flex-direction:column;gap:clamp(64px,9vw,120px);
-    padding:clamp(40px,5vw,72px) clamp(24px,4vw,64px) clamp(80px,14vh,160px);
-}
-.vs-photo{margin:0;overflow:hidden;background:var(--surface)}
-.vs-photo img{width:100%;aspect-ratio:16/10;object-fit:cover;transition:transform 1.2s cubic-bezier(0.2,0.7,0.3,1)}
-.vs-item:hover .vs-photo img{transform:scale(1.03)}
-.vs-k{display:block;margin-top:24px}
-.vs-h{margin-top:10px;font-size:clamp(22px,2.2vw,30px);font-weight:700;letter-spacing:-0.04em;color:var(--ink)}
-.vs-item p{margin-top:12px;font-size:15px;line-height:1.85;color:#3f3f46}
-.vs-values{list-style:none;margin-top:16px;border-top:1px solid var(--line)}
-.vs-values li{
-    display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;align-items:baseline;
-    padding:14px 0;border-bottom:1px solid var(--line);
-    font-size:15px;color:#3f3f46;
-}
-.vs-values b{font-size:17px;font-weight:700;letter-spacing:-0.03em;color:var(--ink)}
-.vs-markets{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.vs-markets span{padding:7px 12px;border:1px solid var(--line);font-size:13px;color:var(--ink)}
-
-/* each block rises in as it reaches the reader (only once the script is running) */
-.vs.reveal .vs-item{opacity:0;transform:translateY(28px);transition:opacity 0.8s ease,transform 0.9s cubic-bezier(0.2,0.7,0.3,1)}
-.vs.reveal .vs-item.in{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){
-    .vs.reveal .vs-item{opacity:1;transform:none;transition:none}
-}
+/* ===== Page bar — back on the left, the five pages centred at the top ===== */
+.panel.open{z-index:510}
+.panel-bar{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center}
+.panel-back{justify-self:start}
+.panel-nav{flex:none;justify-content:center;gap:2px;padding:3px;border:1px solid var(--line)}
+.pn{align-items:center;text-align:center;padding:7px clamp(12px,1.3vw,20px) 8px;transition:background 0.25s ease,color 0.25s ease}
+.pn::after{display:none}
+.pn-en{font-size:clamp(12px,0.95vw,14px);font-weight:600}
+.pn:hover{background:var(--surface);color:var(--ink)}
+.pn.active{background:var(--ink);color:#fff}
+.pn.active .pn-ko{opacity:0.7}
 @media(max-width:900px){
-    .vs{grid-template-columns:1fr}
-    .vs-left{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}
-    .vs-lead{margin-top:28px}
-    .vs-count{display:none}
+    .panel-bar{display:flex}
+    .panel-nav{flex:1;min-width:0;justify-content:flex-start;border:0;padding:0}
 }

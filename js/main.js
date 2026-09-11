@@ -15,24 +15,25 @@
         return t;
     }
 
+    /* Short intro: logo, slogan, then the menu — about three and a half seconds */
     function startIntro() {
         logoPhase.classList.add('active');
 
         var logo = logoPhase.querySelector('.intro-logo');
-        if (logo) schedule(function(){ logo.classList.add('show'); }, 260);
+        if (logo) schedule(function(){ logo.classList.add('show'); }, 120);
 
         schedule(function() {
             logoPhase.classList.remove('active');
             sloganPhase.classList.add('active');
             schedule(function() {
                 sloganPhase.querySelector('.slogan-en').classList.add('show');
-            }, 200);
+            }, 120);
             schedule(function() {
                 sloganPhase.querySelector('.slogan-ko').classList.add('show');
-            }, 600);
-        }, 2400);
+            }, 380);
+        }, 1400);
 
-        schedule(showMenu, 5400);
+        schedule(showMenu, 3000);
     }
 
     function revealMenu() {
@@ -49,7 +50,7 @@
     }
 
     function showMenu() {
-        intro.style.transition = 'opacity 0.7s ease';
+        intro.style.transition = 'opacity 0.5s ease';
         intro.style.opacity = '0';
         skipBtn.style.transition = 'opacity 0.3s';
         skipBtn.style.opacity = '0';
@@ -63,9 +64,9 @@
             items.forEach(function(item, i) {
                 setTimeout(function() {
                     item.classList.add('show');
-                }, 100 + i * 110);
+                }, 80 + i * 90);
             });
-        }, 700);
+        }, 500);
     }
 
     function skipIntro() {
@@ -89,12 +90,10 @@
         { id: 'contact',  en: 'Contact Us',     ko: '문의하기' }
     ];
 
-    /* Hover previews a page beside the docked menu; a click pins it there.
-       Touch devices have no hover, so there the first tap pins straight away. */
+    /* Hovering a word only tints the backdrop with its photo;
+       a click slides the page in from the right, over the whole screen. */
     var canHover = window.matchMedia('(hover: hover)').matches;
     var menuPhoto = document.getElementById('menuPhoto');
-    var pinned = false;
-    var exitTimer = null;
 
     function paintPhoto(item) {
         if (!menuPhoto || !item) return;
@@ -105,50 +104,34 @@
         menuPhoto.classList.add('lit');
     }
 
-    function openPanel(id, pin) {
-        clearTimeout(exitTimer);
-        if (pin) pinned = true;
+    function clearPhoto() {
+        if (menuPhoto) menuPhoto.classList.remove('lit');
+    }
 
-        var item = document.querySelector('.mi[data-panel="' + id + '"]');
-        paintPhoto(item);
-
-        document.querySelectorAll('.mi').forEach(function(m) {
-            m.classList.toggle('on', m.dataset.panel === id);
-        });
+    function openPanel(id) {
+        paintPhoto(document.querySelector('.mi[data-panel="' + id + '"]'));
 
         document.querySelectorAll('.panel').forEach(function(p) {
             var on = p.id === 'panel-' + id;
-            p.classList.toggle('dock', canHover);
-            p.classList.toggle('pinned', pinned);
             p.classList.toggle('open', on);
             if (!on) p.scrollTop = 0;
         });
 
-        menuScreen.dataset.mode = pinned ? 'locked' : 'preview';
+        menuScreen.dataset.mode = 'locked';
         document.body.style.overflow = 'hidden';
     }
 
     function closePanels() {
-        clearTimeout(exitTimer);
-        pinned = false;
         document.querySelectorAll('.panel').forEach(function(p) {
-            p.classList.remove('open', 'pinned');
+            p.classList.remove('open');
             p.scrollTop = 0;
         });
-        document.querySelectorAll('.mi').forEach(function(m) { m.classList.remove('on'); });
-        if (menuPhoto) menuPhoto.classList.remove('lit');
+        clearPhoto();
         menuScreen.dataset.mode = 'scatter';
         document.body.style.overflow = '';
     }
 
-    function scheduleClose() {
-        if (pinned) return;
-        clearTimeout(exitTimer);
-        exitTimer = setTimeout(closePanels, 430);
-    }
-    function cancelClose() { clearTimeout(exitTimer); }
-
-    /* Give every panel the same category bar, current page marked */
+    /* Every page gets the same bar: back on the left, the five pages centred */
     document.querySelectorAll('.panel').forEach(function(panel) {
         var current = panel.id.replace('panel-', '');
         var bar = panel.querySelector('.panel-bar');
@@ -159,10 +142,12 @@
 
         var nav = document.createElement('nav');
         nav.className = 'panel-nav';
+        nav.setAttribute('aria-label', '페이지 선택');
         pages.forEach(function(pg) {
             var a = document.createElement('a');
             a.className = 'pn' + (pg.id === current ? ' active' : '');
             a.dataset.go = pg.id;
+            a.href = '#' + pg.id;
             if (pg.id === current) a.setAttribute('aria-current', 'page');
             a.innerHTML = '<span class="pn-en">' + pg.en + '</span>' +
                           '<span class="pn-ko">' + pg.ko + '</span>';
@@ -172,79 +157,32 @@
 
         nav.addEventListener('click', function(e) {
             var link = e.target.closest('.pn');
-            if (!link || link.classList.contains('active')) return;
-            openPanel(link.dataset.go, true);
+            if (!link) return;
+            e.preventDefault();
+            if (!link.classList.contains('active')) openPanel(link.dataset.go);
         });
-
-        // Reading the page keeps the preview alive
-        panel.addEventListener('mouseenter', cancelClose);
-        panel.addEventListener('mouseleave', scheduleClose);
     });
 
     document.querySelectorAll('.mi').forEach(function(item) {
         if (canHover) {
-            item.addEventListener('mouseenter', function() {
-                openPanel(this.dataset.panel, pinned);
+            item.addEventListener('mouseenter', function() { paintPhoto(this); });
+            item.addEventListener('mouseleave', function() {
+                if (!document.querySelector('.panel.open')) clearPhoto();
             });
         }
         item.addEventListener('click', function(e) {
             e.preventDefault();
-            openPanel(this.dataset.panel, true);
+            openPanel(this.dataset.panel);
         });
     });
-
-    var menuNav = document.getElementById('menuNav');
-    if (menuNav && canHover) {
-        menuNav.addEventListener('mouseenter', cancelClose);
-        menuNav.addEventListener('mouseleave', scheduleClose);
-    }
 
     document.querySelectorAll('.panel-back').forEach(function(btn) {
         btn.addEventListener('click', closePanels);
     });
 
-    var toMain = document.getElementById('toMain');
-    if (toMain) {
-        toMain.addEventListener('click', closePanels);
-        toMain.addEventListener('mouseenter', cancelClose);
-    }
-
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && document.querySelector('.panel.open')) closePanels();
     });
-
-    /* Vision: blocks rise in as they scroll into view, and the counter follows along */
-    var vs = document.querySelector('.vs');
-    var vPanel = document.getElementById('panel-vision');
-    if (vs && vPanel && 'IntersectionObserver' in window) {
-        var vBar = vPanel.querySelector('.panel-bar');
-        var vCount = vs.querySelector('.vs-count b');
-        var setBarHeight = function() {
-            if (vBar) vPanel.style.setProperty('--bar-h', vBar.offsetHeight + 'px');
-        };
-        setBarHeight();
-        window.addEventListener('resize', setBarHeight);
-
-        vs.classList.add('reveal');
-        var vObserver = new IntersectionObserver(function(entries) {
-            entries.forEach(function(entry) {
-                if (!entry.isIntersecting) return;
-                entry.target.classList.add('in');
-                if (vCount) vCount.textContent = entry.target.dataset.n;
-            });
-        }, { root: vPanel, threshold: 0.35 });
-        vs.querySelectorAll('.vs-item').forEach(function(item) { vObserver.observe(item); });
-
-        // Safety net: if the observer has not fired shortly after the page opens, just show everything
-        new MutationObserver(function() {
-            if (!vPanel.classList.contains('open')) return;
-            setTimeout(function() {
-                if (!vs.querySelector('.vs-item.in')) {
-                    vs.querySelectorAll('.vs-item').forEach(function(item) { item.classList.add('in'); });
-                }
-            }, 1600);
-        }).observe(vPanel, { attributes: true, attributeFilter: ['class'] });
-    }
 
     var form = document.getElementById('cForm');
     if (form) {
