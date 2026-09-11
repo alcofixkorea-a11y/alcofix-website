@@ -18,13 +18,8 @@
     function startIntro() {
         logoPhase.classList.add('active');
 
-        var cube = logoPhase.querySelector('.lt-cube');
-        if (cube) schedule(function(){ cube.classList.add('show'); }, 260);
-
-        var letters = logoPhase.querySelectorAll('.lt');
-        letters.forEach(function(l, i) {
-            schedule(function(){ l.classList.add('show'); }, 520 + i * 140);
-        });
+        var logo = logoPhase.querySelector('.intro-logo');
+        if (logo) schedule(function(){ logo.classList.add('show'); }, 260);
 
         schedule(function() {
             logoPhase.classList.remove('active');
