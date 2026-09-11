@@ -17,6 +17,8 @@ button{font-family:inherit;cursor:pointer}
     --line:rgba(17,17,19,0.1);
     --faint:#a1a1aa;
     --outline:#d4d4d8;
+    --cyan:#1AA7E0;          /* precision accent: lines, rings, live dots */
+    --cyan-ink:#0B7FB0;      /* the same hue, dark enough for small text */
     --font:'Geist','Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
 }
 
@@ -89,7 +91,7 @@ body:has(.menu-screen[data-mode="locked"]) .deco-marquee{opacity:0}
 /* translucent, with its left edge melting into the white page */
 .deco-card{
     position:absolute;top:0;right:0;bottom:0;left:42%;z-index:1;
-    overflow:hidden;opacity:0.4;
+    overflow:hidden;
     -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 30%);
             mask-image:linear-gradient(90deg,transparent 0%,#000 30%);
 }
@@ -99,8 +101,12 @@ body:has(.menu-screen[data-mode="locked"]) .deco-marquee{opacity:0}
     opacity:0;transition:opacity 0.7s ease;
     animation:decoZoom 18s ease-in-out infinite alternate;
 }
-/* hovering a menu word crossfades to that page photo */
-.deco-card img.is-on{opacity:1}
+/* hovering a menu word crossfades to that page image.
+   Generated visuals are light and show in full; photographs stay translucent so the words keep the lead. */
+.deco-card img.is-on{opacity:0.42}
+.deco-card img.is-on[data-key="main"],
+.deco-card img.is-on[data-key="business"],
+.deco-card img.is-on[data-key="vision"]{opacity:1}
 @keyframes decoZoom{from{transform:scale(1.02)}to{transform:scale(1.1)}}
 
 .deco-marquee{position:absolute;z-index:0;left:0;right:0;bottom:clamp(20px,3vh,36px);overflow:hidden}
@@ -116,7 +122,7 @@ body:has(.menu-screen[data-mode="locked"]) .deco-marquee{opacity:0}
 }
 .deco-track i{
     flex:none;width:clamp(12px,1.1vw,18px);aspect-ratio:1;border-radius:50%;
-    border:1px solid var(--outline);
+    border:1px solid var(--cyan);
     margin:0 clamp(26px,3.2vw,56px);
 }
 @keyframes decoSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -186,7 +192,7 @@ body:has(.menu-screen[data-mode="locked"]) .deco-marquee{opacity:0}
 .mi-t::after{
     content:'';position:absolute;
     left:0;bottom:-0.1em;
-    width:100%;height:2px;background:var(--ink);
+    width:100%;height:2px;background:var(--cyan);
     transform:scaleX(0);transform-origin:left;
     transition:transform 0.45s cubic-bezier(0.2,0.7,0.3,1);
 }
@@ -923,3 +929,66 @@ body.doc{overflow:auto;background:#fff}
     .vs-lead{margin-top:28px}
     .vs-count{display:none}
 }
+
+/* ===== Hero data layer — Bio-Metrics & Peak Performance =====
+   Layers, back to front: hero visual (z1) → glass data cards (z2) → menu words (menu screen, z100).
+   Cards live only in the right half, so they never sit under the words. */
+.hud{position:absolute;inset:0;z-index:2;pointer-events:none;transition:opacity 0.5s ease}
+body:has(.menu-scatter .mi:hover) .hud{opacity:0.12}
+.hud-card{
+    position:absolute;
+    padding:14px 16px 13px;
+    background:rgba(255,255,255,0.6);
+    border:1px solid rgba(255,255,255,0.85);
+    box-shadow:0 1px 0 rgba(15,23,42,0.04),0 20px 44px rgba(15,23,42,0.08);
+    -webkit-backdrop-filter:blur(16px) saturate(1.15);
+            backdrop-filter:blur(16px) saturate(1.15);
+    color:var(--ink);font-variant-numeric:tabular-nums;
+    opacity:0;transform:translateY(14px);
+    transition:opacity 0.8s ease,transform 0.9s cubic-bezier(0.2,0.7,0.3,1);
+}
+body:has(.menu-screen.active) .hud-card{opacity:1;transform:none}
+body:has(.menu-screen.active) .hud-sleep{transition-delay:0.15s}
+body:has(.menu-screen.active) .hud-meta{transition-delay:0.3s}
+.hud-hrv{right:clamp(28px,6vw,110px);top:clamp(110px,17vh,170px);width:clamp(220px,18vw,280px)}
+.hud-sleep{left:calc(50% + clamp(24px,4vw,64px));top:44vh;width:clamp(190px,14vw,220px)}
+/* sits just above the drifting words: their bottom offset + their line height + a gap */
+.hud-meta{right:clamp(40px,8vw,140px);bottom:calc(clamp(20px,3vh,36px) + clamp(64px,9.4vw,168px) * 1.08 + 24px);width:clamp(210px,16vw,250px)}
+.hud-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.hud-label{font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mid)}
+.hud-live{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan-ink)}
+.hud-live i{position:relative;width:6px;height:6px;border-radius:50%;background:var(--cyan)}
+.hud-live i::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--cyan);animation:hudPulse 2.2s ease-out infinite}
+.hud-value{display:flex;align-items:baseline;margin-top:6px}
+.hud-value b{font-size:30px;font-weight:600;letter-spacing:-0.04em;line-height:1}
+.hud-value small{margin-left:3px;font-size:12px;color:var(--ink-soft)}
+.hud-value em{margin-left:auto;font-style:normal;font-size:11px;font-weight:600;letter-spacing:0.08em;color:var(--cyan-ink)}
+.hud-chart{display:block;width:100%;height:56px;margin-top:8px;overflow:visible}
+.hud-area{fill:url(#hudFade)}
+.hud-line{fill:none;stroke:var(--cyan);stroke-width:1.6;stroke-dasharray:1;stroke-dashoffset:1}
+body:has(.menu-screen.active) .hud-line{animation:hudDraw 2.2s 0.4s cubic-bezier(0.3,0.6,0.2,1) forwards}
+.hud-ring{display:flex;align-items:center;gap:12px;margin-top:10px}
+.hud-ring svg{width:56px;height:56px;transform:rotate(-90deg)}
+.hud-ring-bg{fill:none;stroke:rgba(17,17,19,0.08);stroke-width:4}
+.hud-ring-fg{fill:none;stroke:var(--cyan);stroke-width:4;stroke-dasharray:138.2;stroke-dashoffset:138.2}
+body:has(.menu-screen.active) .hud-ring-fg{animation:hudRing 1.8s 0.6s cubic-bezier(0.3,0.6,0.2,1) forwards}
+.hud-ring b{font-size:26px;font-weight:600;letter-spacing:-0.04em}
+.hud-ring b small{margin-left:2px;font-size:12px;color:var(--ink-soft)}
+.hud-note{display:block;margin-top:8px;font-size:11px;color:var(--ink-mid)}
+.hud-tag{font-style:normal;font-size:10px;font-weight:600;letter-spacing:0.08em;color:var(--cyan-ink)}
+.hud-bars{display:flex;align-items:flex-end;gap:6px;height:48px;margin-top:12px}
+.hud-bars i{flex:1;height:var(--h);background:rgba(17,17,19,0.14);transform-origin:bottom;transform:scaleY(0);transition:transform 0.9s cubic-bezier(0.2,0.7,0.3,1);transition-delay:var(--d,0s)}
+.hud-bars i:last-child{background:var(--cyan)}
+body:has(.menu-screen.active) .hud-bars i{transform:scaleY(1)}
+.hud-axis{display:flex;justify-content:space-between;margin-top:6px;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft)}
+@keyframes hudDraw{to{stroke-dashoffset:0}}
+@keyframes hudRing{to{stroke-dashoffset:19.3}}
+@keyframes hudPulse{from{transform:scale(0.6);opacity:1}to{transform:scale(1.8);opacity:0}}
+@media(prefers-reduced-motion:reduce){
+    .hud-card,.hud-bars i{transition:none}
+    .hud-line{stroke-dashoffset:0;animation:none!important}
+    .hud-ring-fg{stroke-dashoffset:19.3;animation:none!important}
+    .hud-live i::after{animation:none}
+}
+@media(max-height:680px){.hud-meta{display:none}}
+@media(max-width:768px){.hud{display:none}}

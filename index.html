@@ -39,7 +39,32 @@
 
 <!-- Main backdrop: one photograph + the words that define us -->
 <div class="deco" aria-hidden="true">
-    <div class="deco-card" id="decoCard"><img src="images/main-card.jpg" alt="" class="is-on" data-key="main"></div>
+    <div class="deco-card" id="decoCard"><img src="images/hero-morning.jpg" alt="" class="is-on" data-key="main"></div>
+    <!-- Data layer: illustrative readouts, decoration only -->
+    <div class="hud">
+        <div class="hud-card hud-hrv">
+            <div class="hud-top"><span class="hud-label">Heart Rate Variability</span><span class="hud-live"><i></i>Live</span></div>
+            <div class="hud-value"><b>62</b><small>ms</small><em>Stable</em></div>
+            <svg class="hud-chart" viewBox="0 0 240 64" preserveAspectRatio="none">
+                <defs><linearGradient id="hudFade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1AA7E0" stop-opacity="0.18"/><stop offset="1" stop-color="#1AA7E0" stop-opacity="0"/></linearGradient></defs>
+                <path class="hud-area" d="M0 44 C 18 18, 36 58, 58 36 S 98 28, 120 34 S 160 31, 182 33 S 220 32, 240 32 L 240 64 L 0 64 Z"/>
+                <path class="hud-line" pathLength="1" d="M0 44 C 18 18, 36 58, 58 36 S 98 28, 120 34 S 160 31, 182 33 S 220 32, 240 32"/>
+            </svg>
+        </div>
+        <div class="hud-card hud-sleep">
+            <span class="hud-label">Sleep Quality</span>
+            <div class="hud-ring">
+                <svg viewBox="0 0 56 56"><circle class="hud-ring-bg" cx="28" cy="28" r="22"/><circle class="hud-ring-fg" cx="28" cy="28" r="22"/></svg>
+                <b>86<small>%</small></b>
+            </div>
+            <span class="hud-note">Deep sleep 1h 42m</span>
+        </div>
+        <div class="hud-card hud-meta">
+            <div class="hud-top"><span class="hud-label">Metabolic Balance</span><em class="hud-tag">Balanced</em></div>
+            <div class="hud-bars"><i style="--h:44%;--d:0.5s"></i><i style="--h:58%;--d:0.56s"></i><i style="--h:50%;--d:0.62s"></i><i style="--h:62%;--d:0.68s"></i><i style="--h:57%;--d:0.74s"></i><i style="--h:60%;--d:0.8s"></i><i style="--h:59%;--d:0.86s"></i></div>
+            <div class="hud-axis"><span>Mon</span><span>Sun</span></div>
+        </div>
+    </div>
     <div class="deco-marquee">
         <div class="deco-track">
             <span>Hangover Cure</span><i></i><span>Health</span><i></i><span>Alcohol Total Solution</span><i></i>
@@ -68,19 +93,19 @@
             <span class="mi-t">Our Product</span>
             <span class="mi-s">제품 소개</span>
         </a>
-        <a class="mi" data-panel="vision" data-img="images/bg-vision-global.jpg"
+        <a class="mi" data-panel="vision" data-img="images/hover-vision.jpg"
            style="--i:2;--x:7%;--y:40%;--fs:clamp(18px,2.8vw,38px)">
             <span class="mi-k">03</span>
             <span class="mi-t">Our Vision</span>
             <span class="mi-s">비전</span>
         </a>
-        <a class="mi" data-panel="business" data-img="images/bg-business-herb.jpg"
+        <a class="mi" data-panel="business" data-img="images/hover-business.jpg"
            style="--i:3;--x:16%;--y:55%;--fs:clamp(21px,3.4vw,47px)">
             <span class="mi-k">04</span>
             <span class="mi-t">Business Area</span>
             <span class="mi-s">사업 분야</span>
         </a>
-        <a class="mi" data-panel="contact" data-img="images/bg-contact-handshake.jpg"
+        <a class="mi" data-panel="contact" data-img="images/hover-contact.jpg"
            style="--i:4;--x:30%;--y:70%;--fs:clamp(17px,2.6vw,35px)">
             <span class="mi-k">05</span>
             <span class="mi-t">Contact Us</span>
@@ -414,7 +439,7 @@
             <h2 class="biz-title">BUSINESS AREA</h2>
             <div class="grid-2 gap-24 mt-48">
                 <div class="biz-card">
-                    <img src="images/biz-health-herb.jpg" alt="전시회에 진열된 천연 약재 원료">
+                    <div class="biz-ph" aria-hidden="true"><em>Core business</em><span>Health Functional<br>Food</span></div>
                     <div class="biz-info">
                         <h3>건강기능식품</h3>
                         <p>과학적으로 검증된 원료와 독자적 배합 기술로 일상 속 건강을 지키는 기능성 제품을 개발합니다.</p>
