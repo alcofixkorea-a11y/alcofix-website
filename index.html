@@ -11,15 +11,10 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="stylesheet" as="style" crossorigin
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
     <link rel="stylesheet" href="css/style.css">
-    <script type="importmap">
-    {
-        "imports": {
-            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-        }
-    }
-    </script>
 </head>
 <body>
 
@@ -31,7 +26,7 @@
     <!-- Phase 1: Logo -->
     <div class="intro-phase" id="logoPhase">
         <div class="logo-anim">
-            <img src="images/logo-cube.png" class="lt-cube" alt="">
+            <img src="images/logo-cube-mono.png" class="lt-cube" alt="">
             <span class="lt" style="--d:0">A</span>
             <span class="lt" style="--d:1">L</span>
             <span class="lt" style="--d:2">C</span>
@@ -51,8 +46,19 @@
     </div>
 </div>
 
-<!-- 3D DNA helix (menu backdrop) -->
-<canvas class="helix-canvas" id="helixCanvas" aria-hidden="true"></canvas>
+<!-- Main backdrop: one photograph + the words that define us -->
+<div class="deco" aria-hidden="true">
+    <figure class="deco-card">
+        <span class="deco-photo"><img src="images/main-card.jpg" alt=""></span>
+        <figcaption><span>ALCOFIX</span><span>Sejong, Korea — Est. 2025</span></figcaption>
+    </figure>
+    <div class="deco-marquee">
+        <div class="deco-track">
+            <span>Hangover Cure</span><i></i><span>Health</span><i></i><span>Alcohol Total Solution</span><i></i>
+            <span>Hangover Cure</span><i></i><span>Health</span><i></i><span>Alcohol Total Solution</span><i></i>
+        </div>
+    </div>
+</div>
 
 <!-- Full-bleed photo that answers whichever menu item is hovered -->
 <div class="menu-photo" id="menuPhoto"></div>
@@ -60,36 +66,36 @@
 <!-- ===== MENU SCREEN ===== -->
 <div class="menu-screen" id="menuScreen">
     <header class="menu-header">
-        <img src="images/logo.png" class="menu-logo" alt="ALCOFIX">
+        <img src="images/logo-mono.png" class="menu-logo" alt="ALCOFIX">
         <span class="menu-tag">Empower Your Everyday</span>
     </header>
     <nav class="menu-scatter" id="menuNav">
         <a class="mi" data-panel="about" data-img="images/bg-about.jpg"
-           style="--i:0;--x:5%;--y:9%;--fs:clamp(24px,4.2vw,58px)">
+           style="--i:0;--x:5%;--y:6%;--fs:clamp(24px,4.2vw,58px)">
             <span class="mi-k">01</span>
             <span class="mi-t">We are ALCOFIX</span>
             <span class="mi-s">기업 소개</span>
         </a>
         <a class="mi" data-panel="product" data-img="images/bg-product.jpg"
-           style="--i:1;--x:28%;--y:30%;--fs:clamp(19px,3vw,41px)">
+           style="--i:1;--x:28%;--y:24%;--fs:clamp(19px,3vw,41px)">
             <span class="mi-k">02</span>
             <span class="mi-t">Our Product</span>
             <span class="mi-s">제품 소개</span>
         </a>
         <a class="mi" data-panel="vision" data-img="images/bg-vision.jpg"
-           style="--i:2;--x:7%;--y:47%;--fs:clamp(18px,2.8vw,38px)">
+           style="--i:2;--x:7%;--y:40%;--fs:clamp(18px,2.8vw,38px)">
             <span class="mi-k">03</span>
             <span class="mi-t">Our Vision</span>
             <span class="mi-s">비전</span>
         </a>
         <a class="mi" data-panel="business" data-img="images/bg-business.jpg"
-           style="--i:3;--x:19%;--y:64%;--fs:clamp(21px,3.4vw,47px)">
+           style="--i:3;--x:19%;--y:55%;--fs:clamp(21px,3.4vw,47px)">
             <span class="mi-k">04</span>
             <span class="mi-t">Business Area</span>
             <span class="mi-s">사업 분야</span>
         </a>
         <a class="mi" data-panel="contact" data-img="images/bg-contact.jpg"
-           style="--i:4;--x:36%;--y:83%;--fs:clamp(17px,2.6vw,35px)">
+           style="--i:4;--x:36%;--y:70%;--fs:clamp(17px,2.6vw,35px)">
             <span class="mi-k">05</span>
             <span class="mi-t">Contact Us</span>
             <span class="mi-s">문의하기</span>
@@ -461,6 +467,5 @@
 </section>
 
 <script src="js/main.js"></script>
-<script type="module" src="js/helix.js"></script>
 </body>
 </html>
