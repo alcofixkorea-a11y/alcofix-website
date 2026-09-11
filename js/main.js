@@ -104,30 +104,127 @@
         { id: 'contact',  en: 'Contact Us',     ko: '문의하기' }
     ];
 
-    /* Hovering a word only changes the photo; a click slides the page in from the right */
+    /* Hovering a word only changes the photo; a click opens the page.
+       Moving between pages: the current content clears away while the top bar stays,
+       then the next page fades in and its content rises. Nothing slides sideways. */
     var canHover = window.matchMedia('(hover: hover)').matches;
+    var panels = document.querySelectorAll('.panel');
+    var CLEAR_MS = 250;         // .panel.leaving content fade
+    var FADE_MS = 450;          // .panel opacity fade, with a little room
+    var timers = [];
+    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+    function clearLater() { timers.forEach(clearTimeout); timers = []; }
+
+    /* Page content rises into place as it comes into view, again on every visit */
+    var REVEAL = '.panel-inner > :not(section):not(ol):not(ul):not(.grid-2):not(.grid-3):not(.contact-grid),' +
+                 '.panel-inner > section > *, .panel-inner > ol > li, .panel-inner > ul > li,' +
+                 '.panel-inner > .grid-2 > *, .panel-inner > .grid-3 > *, .panel-inner .contact-grid > *';
+    var canReveal = 'IntersectionObserver' in window &&
+                    !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (canReveal) {
+        panels.forEach(function(panel) {
+            panel.querySelectorAll(REVEAL).forEach(function(el) {
+                var i = Array.prototype.indexOf.call(el.parentNode.children, el);
+                el.classList.add('rv');
+                el.style.setProperty('--rv-d', (i % 4) * 80 + 'ms');
+            });
+            panel._rv = new IntersectionObserver(function(entries, obs) {
+                entries.forEach(function(entry) {
+                    if (!entry.isIntersecting || !panel.classList.contains('open')) return;
+                    // what is on screen when the page opens waits for the page to appear first
+                    var wait = Math.max(0, 300 - (Date.now() - (panel._openedAt || 0)));
+                    entry.target.style.setProperty('--rv-base', wait + 'ms');
+                    entry.target.classList.add('in');
+                    obs.unobserve(entry.target);
+                });
+            }, { root: panel, rootMargin: '0px 0px -6% 0px' });
+        });
+    }
+
+    function armReveals(panel) {
+        panel._openedAt = Date.now();
+        if (!panel._rv) return;
+        panel.querySelectorAll('.rv:not(.in)').forEach(function(el) {
+            panel._rv.unobserve(el);
+            panel._rv.observe(el);
+        });
+        // Safety net: if the browser never reports what is in view, simply show the page
+        clearTimeout(panel._rvSafety);
+        panel._rvSafety = setTimeout(function() {
+            if (panel.classList.contains('open') && !panel.querySelector('.rv.in')) {
+                panel.querySelectorAll('.rv').forEach(function(el) { el.classList.add('in'); });
+            }
+        }, 1500);
+    }
+
+    function setActiveLink(panel, id) {
+        panel.querySelectorAll('.pn').forEach(function(link) {
+            var on = link.dataset.go === id;
+            link.classList.toggle('active', on);
+            if (on) link.setAttribute('aria-current', 'page');
+            else link.removeAttribute('aria-current');
+        });
+    }
+
+    // Put a page away once it can no longer be seen: back to the top, content ready to rise again
+    function resetPanel(panel) {
+        panel.classList.remove('open', 'is-current', 'leaving');
+        panel.scrollTop = 0;
+        setActiveLink(panel, panel.id.replace('panel-', ''));
+        panel.querySelectorAll('.rv.in').forEach(function(el) { el.classList.remove('in'); });
+    }
+
+    function showPanel(panel) {
+        panel.scrollTop = 0;
+        panel.classList.add('open', 'is-current');
+        armReveals(panel);
+    }
 
     function openPanel(id) {
+        var target = document.getElementById('panel-' + id);
+        if (!target) return;
+        clearLater();
+
+        var prev = document.querySelector('.panel.is-current');
+        panels.forEach(function(p) { if (p !== prev) resetPanel(p); });
+        if (prev === target) {
+            target.classList.remove('leaving');
+            setActiveLink(target, id);
+            return;
+        }
+
         showDeco(id);
-
-        document.querySelectorAll('.panel').forEach(function(p) {
-            var on = p.id === 'panel-' + id;
-            p.classList.toggle('open', on);
-            if (!on) p.scrollTop = 0;
-        });
-
         menuScreen.dataset.mode = 'locked';
         document.body.style.overflow = 'hidden';
+
+        if (!prev) { showPanel(target); return; }
+
+        // the bar stays where it is; the underline moves to the chosen page while the content clears
+        prev.classList.add('leaving');
+        setActiveLink(prev, id);
+        later(function() {
+            prev.classList.remove('is-current');
+            showPanel(target);
+            later(function() { resetPanel(prev); }, FADE_MS);
+        }, CLEAR_MS);
     }
 
     function closePanels() {
-        document.querySelectorAll('.panel').forEach(function(p) {
-            p.classList.remove('open');
-            p.scrollTop = 0;
-        });
+        clearLater();
+        var shown = Array.prototype.slice.call(document.querySelectorAll('.panel.open'));
+        panels.forEach(function(p) { if (shown.indexOf(p) < 0) resetPanel(p); });
+        shown.forEach(function(p) { p.classList.add('leaving'); p.classList.remove('is-current'); });
+
         showDeco('main');
         menuScreen.dataset.mode = 'scatter';
         document.body.style.overflow = '';
+
+        // content clears first, then the empty page fades away to the main screen
+        later(function() {
+            shown.forEach(function(p) { p.classList.remove('open'); });
+            later(function() { shown.forEach(resetPanel); }, FADE_MS);
+        }, CLEAR_MS);
     }
 
     /* Every page gets the same bar: back on the left, the five pages centred */

@@ -980,3 +980,85 @@ body.doc{overflow:auto;background:#fff}
 @media(max-width:900px){
     .panel-back img{height:34px}
 }
+
+/* ===== Page bar words in capitals ===== */
+.pn-en{text-transform:uppercase;letter-spacing:0.02em}
+
+/* ===== Core message on a single line ===== */
+.hero-h{font-size:clamp(16px,1.45vw,22px);white-space:nowrap}
+@media(max-width:768px){
+    .hero-h{font-size:17px;white-space:normal}
+}
+
+/* ===== Store link sits right under the product intro ===== */
+#panel-product .buy{margin-top:8px;margin-bottom:8px}
+
+/* ===== Core message: one line on the logo's row, at the right edge ===== */
+.hero-copy{
+    left:auto;right:clamp(24px,3.5vw,48px);top:clamp(30px,3.6vh,40px);
+    display:flex;align-items:baseline;gap:16px;
+}
+.hero-h{margin-top:0}
+.menu-screen.active .hero-copy{animation:pgRise 1s cubic-bezier(0.2,0.7,0.2,1) 0.3s both}
+@media(max-width:1100px){
+    .hero-copy .hero-eb{display:none}
+}
+@media(max-width:768px){
+    .hero-copy{left:24px;right:24px;top:84px;display:block}
+    .hero-copy .hero-eb{display:block}
+    .hero-h{margin-top:10px;font-size:clamp(13px,4vw,17px);white-space:nowrap}
+}
+
+/* ===== Page bar: below 1320px the nav moves right so it never runs into the logo ===== */
+.panel-back img{max-width:none}
+@media(min-width:901px) and (max-width:1320px){
+    .panel-bar{grid-template-columns:auto minmax(0,1fr)}
+    .panel-nav{justify-self:end;gap:clamp(28px,3.4vw,56px)}
+}
+/* a thin line draws under the page you hover, and stays under the page you are on */
+.pn{position:relative}
+.pn::after{
+    display:block;content:'';position:absolute;left:0;right:auto;bottom:0;
+    width:0;height:1.5px;background:var(--ink);transform:none;
+    transition:width 0.35s cubic-bezier(0.2,0.7,0.2,1);
+}
+.pn:hover::after,.pn.active::after{width:100%}
+
+/* ===== Page transitions: pages fade in place and their content rises — nothing slides sideways ===== */
+@keyframes pgRise{from{opacity:0;translate:0 40px}}
+@keyframes pgFade{from{opacity:0}}
+@keyframes pgClear{to{opacity:0}}
+@keyframes pgSettle{from{scale:1.12;filter:blur(6px)}}
+.panel{
+    transform:none;
+    opacity:0;visibility:hidden;
+    transition:opacity 0.35s ease,visibility 0s linear 0.35s;
+}
+.panel.open{
+    opacity:1;visibility:visible;z-index:505;
+    transition:opacity 0.35s ease,visibility 0s;
+}
+/* the page you are going to always sits above the page you are leaving */
+.panel.is-current{z-index:510}
+/* the white page and its bar arrive first, then the content fades up into it */
+.panel.open .panel-body{animation:pgFade 0.7s cubic-bezier(0.2,0.7,0.2,1) 0.2s both}
+/* leaving: the content clears away, the bar stays put */
+.panel.leaving .panel-body{animation:pgClear 0.25s ease both}
+/* the cover photo settles from slightly close and soft; the words above it rise one after another */
+.panel.open .panel-hero-img{animation:pgSettle 2.4s cubic-bezier(0.2,0.7,0.2,1) 0.2s both}
+.panel.open .panel-hero-over > *,
+.panel.open .vs-left > *{animation:pgRise 1s cubic-bezier(0.2,0.7,0.2,1) 0.32s both}
+.panel.open .panel-hero-over > :nth-child(2),.panel.open .vs-left > :nth-child(2){animation-delay:0.42s}
+.panel.open .panel-hero-over > :nth-child(3),.panel.open .vs-left > :nth-child(3){animation-delay:0.52s}
+.panel.open .panel-hero-over > :nth-child(4),.panel.open .vs-left > :nth-child(4){animation-delay:0.62s}
+/* content further down waits, then rises as it scrolls into view */
+.panel .rv:not(.in){opacity:0}
+.panel .rv.in{animation:pgRise 0.9s cubic-bezier(0.2,0.7,0.2,1) calc(var(--rv-base,0ms) + var(--rv-d,0ms)) both}
+/* the name play in the About cover resets only after the page has faded away */
+.panel:not(.open) .ne-word i,.panel:not(.open) .ne-word b::after{transition-delay:0.6s}
+@media(prefers-reduced-motion:reduce){
+    .panel,.panel.open{transition:none}
+    .panel.open .panel-body,.panel.leaving .panel-body,
+    .panel.open .panel-hero-img,.panel.open .panel-hero-over > *,.panel.open .vs-left > *,
+    .menu-screen.active .hero-copy{animation:none}
+}
