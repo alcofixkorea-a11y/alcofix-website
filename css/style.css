@@ -939,3 +939,9 @@ body.doc{overflow:auto;background:#fff}
 @media(max-width:768px){
     .menu-scatter{justify-content:center;padding:0 24px 20px}
 }
+
+/* ===== Main page: English words in capitals ===== */
+.slogan-en,.mi-t,.foot-copy{text-transform:uppercase}
+.slogan-en{letter-spacing:0.02em;font-size:calc(clamp(24px,4vw,50px) * 0.7613)}
+.mi-t{letter-spacing:-0.02em}
+.foot-copy{letter-spacing:0.06em}
