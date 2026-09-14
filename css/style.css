@@ -1320,3 +1320,26 @@ body.doc{overflow:auto;background:#fff}
 @media(max-width:768px){
     .vs-pillars{grid-template-columns:1fr}
 }
+
+/* ===== About and Product share the Vision layout ===== */
+/* one split for every page, so the dividing line never moves between pages */
+.panel .vs{grid-template-columns:minmax(0,0.8fr) minmax(0,1.2fr)}
+/* normal reading rhythm inside About and Product (Vision keeps its spaced blocks) */
+.vs-page .vs-right > .subpage:not([hidden]){display:block}
+@media(max-width:900px){
+    .panel .vs{grid-template-columns:1fr}
+}
+.vs-page .vs-left{gap:0}
+.vs-side-photo{flex:1 1 auto;min-height:0;margin:clamp(18px,2.2vw,28px) 0 0;overflow:hidden;background:var(--surface)}
+.vs-side-photo img{width:100%;height:100%;object-fit:cover}
+.vs-page .vs-lead{margin-top:clamp(18px,2vw,26px)}
+.vs-page .vs-title{font-size:clamp(40px,4.8vw,80px)}
+/* the right column keeps its content comfortably inside */
+.vs-page .vs-right > .subtabs{margin-bottom:clamp(36px,4vw,56px)}
+.vs-page .roadmap{grid-template-columns:repeat(2,minmax(0,1fr))}
+/* cards wrap into two rows here, so the connecting lines between them go */
+.vs-page .rm-step + .rm-step::before{display:none}
+@media(max-width:900px){
+    .vs-side-photo{flex:none;aspect-ratio:16/9}
+    .vs-page .roadmap{grid-template-columns:1fr}
+}
