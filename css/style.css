@@ -1321,25 +1321,45 @@ body.doc{overflow:auto;background:#fff}
     .vs-pillars{grid-template-columns:1fr}
 }
 
-/* ===== About and Product share the Vision layout ===== */
-/* one split for every page, so the dividing line never moves between pages */
-.panel .vs{grid-template-columns:minmax(0,0.8fr) minmax(0,1.2fr)}
-/* normal reading rhythm inside About and Product (Vision keeps its spaced blocks) */
-.vs-page .vs-right > .subpage:not([hidden]){display:block}
-@media(max-width:900px){
-    .panel .vs{grid-template-columns:1fr}
+/* ===== One tone across every page: About, Product and Contact speak Vision's language =====
+   uppercase spaced labels, tight bold headings, black rules, flat cards with a heavy top line */
+.p-eyebrow,.fd-eyebrow,.facility-k,.fd-sub,.expo-place,.fg label{
+    font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-soft);opacity:1;
 }
-.vs-page .vs-left{gap:0}
-.vs-side-photo{flex:1 1 auto;min-height:0;margin:clamp(18px,2.2vw,28px) 0 0;overflow:hidden;background:var(--surface)}
-.vs-side-photo img{width:100%;height:100%;object-fit:cover}
-.vs-page .vs-lead{margin-top:clamp(18px,2vw,26px)}
-.vs-page .vs-title{font-size:clamp(40px,4.8vw,80px)}
-/* the right column keeps its content comfortably inside */
-.vs-page .vs-right > .subtabs{margin-bottom:clamp(36px,4vw,56px)}
-.vs-page .roadmap{grid-template-columns:repeat(2,minmax(0,1fr))}
-/* cards wrap into two rows here, so the connecting lines between them go */
-.vs-page .rm-step + .rm-step::before{display:none}
-@media(max-width:900px){
-    .vs-side-photo{flex:none;aspect-ratio:16/9}
-    .vs-page .roadmap{grid-template-columns:1fr}
+.panel-hero-over .p-eyebrow{color:rgba(255,255,255,0.82)}
+.panel-hero-light .p-eyebrow{color:var(--ink-mid)}
+.panel-hero-over h2{font-weight:700;letter-spacing:-0.045em}
+.p-lead{font-size:clamp(22px,2.3vw,32px);font-weight:600;line-height:1.45;letter-spacing:-0.035em;color:var(--ink)}
+.p-lead b{font-weight:800}
+.p-body,.road-close,.facility-d,.biz-info p,.fd-line{font-size:16px;line-height:1.85;color:#3f3f46}
+.road-intro,.sub-title,.expo-title,.contact-title,.biz-title{
+    font-size:clamp(22px,2.2vw,30px);font-weight:700;letter-spacing:-0.04em;color:var(--ink);
 }
+.facility-t,.soon-name,.fd-name,.biz-info h3{font-weight:700;letter-spacing:-0.04em}
+.expo-title b,.facility-t b{font-weight:700}
+.road-close{font-size:clamp(18px,1.7vw,22px);letter-spacing:-0.03em}
+/* sections open on a black rule */
+.founder,.expo,.partners,.biz-area{border-top:1px solid var(--ink)}
+.subpage > section:first-child{border-top:0}
+/* flat cards with a heavy top line, like the mission pillars */
+.rm-step,.expo-item,.facility,.biz-card{background:var(--surface);border:0;border-top:2px solid var(--ink)}
+.biz-card:hover{transform:none}
+.buy:hover{transform:none;box-shadow:none}
+/* the product on sale stands out in black, like the mission statement */
+.rm-now{background:var(--ink);border-top-color:var(--ink)}
+.rm-now .rm-name{color:#fff}
+.rm-now .rm-desc{color:rgba(255,255,255,0.62)}
+.rm-now .rm-badge{background:#fff;color:var(--ink)}
+.rm-now .rm-media img{filter:drop-shadow(0 8px 18px rgba(0,0,0,0.35))}
+.biz-card:not(.biz-soon) .biz-ph{background:var(--ink);color:#fff}
+.biz-card:not(.biz-soon) .biz-ph em{color:rgba(255,255,255,0.55)}
+/* checklist reads as numbered lines instead of stars */
+.check-list{counter-reset:ck;border-top:1px solid var(--ink)}
+.check-list li{counter-increment:ck;font-size:16px;font-weight:500;color:var(--ink);border-bottom-color:var(--line)}
+.check-list li::before{content:counter(ck,decimal-leading-zero);min-width:28px;font-size:12px;font-weight:600;letter-spacing:0.12em;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+/* step numbers drawn in outline, like the roadmap years */
+.rt-k{color:transparent;-webkit-text-stroke:1px #fff;opacity:1}
+.expo-name{letter-spacing:-0.03em}
+.ingr span{font-size:14px;font-weight:600;color:var(--ink)}
+/* Korean form labels stay readable: a lighter spacing than the English labels */
+.fg label{letter-spacing:0.06em}

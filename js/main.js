@@ -164,7 +164,7 @@
         return p + ' > :not(section):not(ol):not(ul):not(.grid-2):not(.grid-3):not(.contact-grid):not(.subpage):not(.subtabs):not(.subtabs-anchor):not(.vs-item),' +
                p + ' > section > *, ' + p + ' > ol > li, ' + p + ' > ul > li, ' + p + ' > .grid-2 > *, ' + p + ' > .grid-3 > *';
     }
-    var REVEAL = revealIn('.panel-inner') + ',' + revealIn('.subpage') + ',' + revealIn('.vs-page > .vs-right') + ', .panel-inner .contact-grid > *';
+    var REVEAL = revealIn('.panel-inner') + ',' + revealIn('.subpage') + ', .panel-inner .contact-grid > *';
     var canReveal = 'IntersectionObserver' in window &&
                     !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
