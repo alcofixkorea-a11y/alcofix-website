@@ -1351,8 +1351,6 @@ body.doc{overflow:auto;background:#fff}
 .check-list{counter-reset:ck;border-top:1px solid var(--ink)}
 .check-list li{counter-increment:ck;font-size:16px;font-weight:500;color:var(--ink);border-bottom-color:var(--line)}
 .check-list li::before{content:counter(ck,decimal-leading-zero);min-width:28px;font-size:12px;font-weight:600;letter-spacing:0.12em;color:var(--ink-soft);font-variant-numeric:tabular-nums}
-/* step numbers drawn in outline, like the roadmap years */
-.rt-k{color:transparent;-webkit-text-stroke:1px #fff;opacity:1}
 .expo-name{letter-spacing:-0.03em}
 .ingr span{font-size:14px;font-weight:600;color:var(--ink)}
 /* Korean form labels stay readable: a lighter spacing than the English labels */
