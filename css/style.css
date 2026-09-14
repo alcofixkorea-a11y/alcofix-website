@@ -1131,3 +1131,7 @@ body.doc{overflow:auto;background:#fff}
     .facility-flip .facility-photo{order:2;justify-self:end}
     .facility-flip .facility-body{padding-right:0;padding-left:clamp(0px,1.5vw,16px)}
 }
+
+/* ===== Certification marks under the manufacturing note ===== */
+.facility-marks{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.facility-marks img{display:block;height:clamp(64px,6vw,84px);width:auto;padding:6px;background:#fff;border:1px solid rgba(17,17,19,0.12)}
