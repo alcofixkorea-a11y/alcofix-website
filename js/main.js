@@ -88,11 +88,27 @@
         });
     }
 
+    var decoKey = 'main';
     function showDeco(key) {
-        var target = decoImgs[key] || decoImgs.main;
-        Object.keys(decoImgs).forEach(function(k) {
-            if (decoImgs[k]) decoImgs[k].classList.toggle('is-on', decoImgs[k] === target);
+        decoKey = decoImgs[key] ? key : 'main';
+        var target = decoImgs[decoKey];
+        if (!decoCard) return;
+        decoCard.querySelectorAll('img').forEach(function(img) {
+            img.classList.toggle('is-on', img === target);
         });
+    }
+
+    /* ===== Main photo: the main photographs take turns while nobody is hovering a menu word ===== */
+    var mainSlides = decoCard ? Array.prototype.slice.call(decoCard.querySelectorAll('img[data-key="main"]')) : [];
+    if (mainSlides.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        setInterval(function() {
+            if (decoKey !== 'main' || document.hidden) return;
+            // only photographs that actually loaded join the rotation
+            var ready = mainSlides.filter(function(img) { return img.complete && img.naturalWidth > 0; });
+            if (ready.length < 2) return;
+            decoImgs.main = ready[(ready.indexOf(decoImgs.main) + 1) % ready.length];
+            showDeco('main');
+        }, 7000);
     }
 
     /* ===== Core message follows the hovered page ===== */
