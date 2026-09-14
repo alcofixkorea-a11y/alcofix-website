@@ -1196,3 +1196,26 @@ body.doc{overflow:auto;background:#fff}
     .soon{grid-template-columns:1fr}
     .soon-visual{min-height:220px}
 }
+
+/* ===== Vision: the brand name and the slogan, taken apart ===== */
+.vs-type{
+    margin:0;aspect-ratio:16/10;
+    display:flex;align-items:center;justify-content:center;gap:0.22em;
+    background:var(--ink);color:#fff;
+    font-size:clamp(38px,5vw,80px);font-weight:600;letter-spacing:-0.05em;line-height:1;
+}
+.vs-type span{display:inline-flex;align-items:baseline;color:rgba(255,255,255,0.34)}
+.vs-type b{font-weight:600;color:#fff}
+.vs-type i{font-style:normal;font-weight:300;color:#fff}
+.vs-quote{margin-top:10px!important;font-size:15px;font-style:italic;color:var(--ink-mid)!important}
+.vs-words{list-style:none;margin-top:18px;border-top:1px solid var(--line)}
+.vs-words li{
+    display:grid;grid-template-columns:clamp(104px,11vw,150px) minmax(0,1fr);gap:16px;align-items:baseline;
+    padding:18px 0;border-bottom:1px solid var(--line);
+}
+.vs-words b{font-size:clamp(18px,1.7vw,24px);font-weight:600;letter-spacing:-0.03em;text-transform:uppercase;color:var(--ink)}
+.vs-words span,.vs-values span{font-size:15px;line-height:1.75;color:#3f3f46}
+.vs-words em,.vs-values em{display:block;margin-bottom:3px;font-style:normal;font-weight:700;color:var(--ink)}
+@media(max-width:768px){
+    .vs-words li{grid-template-columns:92px minmax(0,1fr);gap:12px}
+}
