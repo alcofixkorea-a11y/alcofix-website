@@ -1199,10 +1199,10 @@ body.doc{overflow:auto;background:#fff}
 
 /* ===== Vision: the brand name and the slogan, taken apart ===== */
 .vs-type{
-    margin:0;aspect-ratio:16/10;
+    margin:0;aspect-ratio:16/7;
     display:flex;align-items:center;justify-content:center;gap:0.22em;
     background:var(--ink);color:#fff;
-    font-size:clamp(38px,5vw,80px);font-weight:600;letter-spacing:-0.05em;line-height:1;
+    font-size:clamp(30px,3.6vw,58px);font-weight:600;letter-spacing:-0.05em;line-height:1;
 }
 .vs-type span{display:inline-flex;align-items:baseline;color:rgba(255,255,255,0.34)}
 .vs-type b{font-weight:600;color:#fff}
@@ -1345,14 +1345,8 @@ body.doc{overflow:auto;background:#fff}
 .rm-step,.expo-item,.facility,.biz-card{background:var(--surface);border:0;border-top:2px solid var(--ink)}
 .biz-card:hover{transform:none}
 .buy:hover{transform:none;box-shadow:none}
-/* the product on sale stands out in black, like the mission statement */
-.rm-now{background:var(--ink);border-top-color:var(--ink)}
-.rm-now .rm-name{color:#fff}
-.rm-now .rm-desc{color:rgba(255,255,255,0.62)}
-.rm-now .rm-badge{background:#fff;color:var(--ink)}
-.rm-now .rm-media img{filter:drop-shadow(0 8px 18px rgba(0,0,0,0.35))}
-.biz-card:not(.biz-soon) .biz-ph{background:var(--ink);color:#fff}
-.biz-card:not(.biz-soon) .biz-ph em{color:rgba(255,255,255,0.55)}
+/* the product on sale keeps its original light card, marked by a darker top line */
+.rm-now{background:#ececee;border-top-color:var(--ink)}
 /* checklist reads as numbered lines instead of stars */
 .check-list{counter-reset:ck;border-top:1px solid var(--ink)}
 .check-list li{counter-increment:ck;font-size:16px;font-weight:500;color:var(--ink);border-bottom-color:var(--line)}
