@@ -1219,3 +1219,64 @@ body.doc{overflow:auto;background:#fff}
 @media(max-width:768px){
     .vs-words li{grid-template-columns:92px minmax(0,1fr);gap:12px}
 }
+
+/* ===== Vision as tabs: the tab bar heads the right-hand column ===== */
+.vs-right:has(> .subtabs){gap:0}
+/* both columns may shrink below their content, so the tab bar scrolls instead of widening the page */
+.vs > *{min-width:0}
+.vs-right > .subpage:not([hidden]){display:flex;flex-direction:column;gap:clamp(48px,6vw,88px)}
+/* the name, read like a dictionary entry */
+.vs-dict{padding:clamp(24px,3vw,36px);background:var(--surface)}
+.vs-dict-head{display:flex;align-items:baseline;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--ink)}
+.vs-dict-head b{font-size:clamp(28px,3vw,40px);font-weight:600;letter-spacing:-0.04em;color:var(--ink)}
+.vs-dict-head span{font-size:14px;color:var(--ink-mid)}
+.vs-dict-list{list-style:none;counter-reset:d}
+.vs-dict-list li{
+    counter-increment:d;
+    display:grid;grid-template-columns:24px clamp(84px,9vw,110px) minmax(0,1fr);gap:12px;align-items:baseline;
+    padding:16px 0;border-bottom:1px solid var(--line);font-size:15px;line-height:1.7;color:#3f3f46;
+}
+.vs-dict-list li:last-child{border-bottom:0;padding-bottom:0}
+.vs-dict-list li::before{content:counter(d) '.';font-size:13px;color:var(--ink-soft)}
+.vs-dict-list em{font-style:normal;font-weight:700;letter-spacing:0.02em;color:var(--ink)}
+/* the slogan in Korean, set large on a light ground */
+.vs-type-light{flex-direction:column;align-items:flex-start;justify-content:flex-end;gap:18px;padding:clamp(24px,3.4vw,44px);background:var(--surface);color:var(--ink)}
+.vs-type-light strong{font-size:clamp(34px,4.2vw,64px);font-weight:700;letter-spacing:-0.05em;line-height:1.12}
+.vs-type-light small{font-size:11px;font-weight:600;letter-spacing:0.24em;color:var(--ink-soft)}
+/* mission and vision as statements */
+.vs-statement{padding:clamp(28px,4vw,52px);background:var(--ink);color:#fff}
+.vs-statement span{font-size:11px;font-weight:600;letter-spacing:0.24em;color:rgba(255,255,255,0.5)}
+.vs-item .vs-statement p{margin-top:18px;font-size:clamp(22px,2.3vw,32px);font-weight:500;line-height:1.45;letter-spacing:-0.035em;color:rgba(255,255,255,0.7);text-wrap:balance}
+.vs-statement p b{font-weight:700;color:#fff}
+.vs-statement-light{background:var(--surface);color:var(--ink)}
+.vs-statement-light span{color:var(--ink-soft)}
+.vs-item .vs-statement-light p{color:var(--ink-mid)}
+.vs-statement-light p b{color:var(--ink)}
+/* what the total solution covers */
+.vs-moments{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:22px;border-top:1px solid var(--ink)}
+.vs-moments li{padding:18px 16px 20px;border-right:1px solid var(--line)}
+.vs-moments li:first-child{padding-left:0}
+.vs-moments li:last-child{border-right:0}
+.vm-k{font-size:10.5px;font-weight:600;letter-spacing:0.2em;color:var(--ink-soft)}
+.vs-moments b{display:block;margin-top:10px;font-size:clamp(17px,1.6vw,21px);font-weight:700;letter-spacing:-0.03em;color:var(--ink)}
+.vs-item .vs-moments p{margin-top:8px;font-size:14px;line-height:1.6}
+.vs-item .vs-note{margin-top:12px;font-size:12px;color:var(--faint)}
+/* core values: the word they come from, drawn in outline */
+.vs-cards{list-style:none;margin-top:22px;border-top:1px solid var(--ink)}
+.vs-cards li{
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(16px,3vw,36px);align-items:center;
+    padding:clamp(22px,3vw,34px) 0;border-bottom:1px solid var(--line);
+}
+.vc-word{
+    font-size:clamp(38px,4.4vw,70px);font-weight:600;letter-spacing:-0.06em;line-height:1;
+    color:transparent;-webkit-text-stroke:1.2px var(--ink);text-transform:uppercase;overflow-wrap:anywhere;
+}
+.vs-cards b{font-size:clamp(20px,1.9vw,26px);font-weight:700;letter-spacing:-0.03em;color:var(--ink)}
+.vs-cards em{display:block;margin-top:4px;font-style:normal;font-size:14px;font-weight:600;color:var(--ink-mid)}
+.vs-item .vs-cards p{margin-top:10px;font-size:14.5px;line-height:1.75}
+@media(max-width:768px){
+    .vs-moments{grid-template-columns:1fr}
+    .vs-moments li{padding:16px 0;border-right:0;border-bottom:1px solid var(--line)}
+    .vs-cards li{grid-template-columns:1fr;gap:12px}
+    .vs-dict-list li{grid-template-columns:20px 76px minmax(0,1fr)}
+}

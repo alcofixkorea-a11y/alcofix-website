@@ -162,7 +162,7 @@
 
     /* Page content rises into place as it comes into view, again on every visit */
     function revealIn(p) {
-        return p + ' > :not(section):not(ol):not(ul):not(.grid-2):not(.grid-3):not(.contact-grid):not(.subpage):not(.subtabs):not(.subtabs-anchor),' +
+        return p + ' > :not(section):not(ol):not(ul):not(.grid-2):not(.grid-3):not(.contact-grid):not(.subpage):not(.subtabs):not(.subtabs-anchor):not(.vs-item),' +
                p + ' > section > *, ' + p + ' > ol > li, ' + p + ' > ul > li, ' + p + ' > .grid-2 > *, ' + p + ' > .grid-3 > *';
     }
     var REVEAL = revealIn('.panel-inner') + ',' + revealIn('.subpage') + ', .panel-inner .contact-grid > *';
@@ -233,7 +233,8 @@
             setBar();
             setSub(panel, tab.dataset.sub);
             // on narrow screens keep the chosen tab in sight inside the bar
-            nav.scrollLeft = tab.offsetLeft - (nav.clientWidth - tab.offsetWidth) / 2;
+            nav.scrollLeft += tab.getBoundingClientRect().left - nav.getBoundingClientRect().left -
+                              (nav.clientWidth - tab.offsetWidth) / 2;
             // reading further down: bring the tabs back to the top of the view
             var anchor = panel.querySelector('.subtabs-anchor');
             if (anchor) {
