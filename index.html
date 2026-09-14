@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
-    <link rel="stylesheet" href="css/style.css?v=20260914-1430">
+    <link rel="stylesheet" href="css/style.css?v=20260914-1600">
 </head>
 <body>
 
@@ -144,9 +144,18 @@
             </div>
         </div>
         <div class="panel-inner">
+            <div class="subtabs-anchor" aria-hidden="true"></div>
+            <nav class="subtabs" role="tablist">
+                <button type="button" class="st active" role="tab" aria-selected="true" data-sub="overview"><span class="st-en">ABOUT</span><span class="st-ko">회사 개요</span></button>
+                <button type="button" class="st" role="tab" aria-selected="false" data-sub="business"><span class="st-en">BUSINESS</span><span class="st-ko">사업 현황</span></button>
+                <button type="button" class="st" role="tab" aria-selected="false" data-sub="founder"><span class="st-en">FOUNDER</span><span class="st-ko">대표자 소개</span></button>
+                <button type="button" class="st" role="tab" aria-selected="false" data-sub="partners"><span class="st-en">PARTNERS</span><span class="st-ko">협력사</span></button>
+            </nav>
+            <div class="subpage" role="tabpanel" data-sub="overview">
             <p class="p-lead">ALCOFIX는 음주 전후 발생하는 신체적·사회적 문제를 해결하기 위해 설립된<br><b>알코올 토탈 솔루션</b> 기업입니다.</p>
             <p class="p-body">과학적으로 검증된 독자적 원천기술과 배합으로 제품을 개발하고 있습니다. 베트남, 인도네시아, 중국, 일본 등 아시아 시장을 중심으로 알코올 토탈 솔루션 기업으로서<br>새로운 기준을 만들어가고 있습니다.</p>
-
+            </div>
+            <div class="subpage" role="tabpanel" data-sub="business" hidden>
             <p class="road-intro">우리는 알코올 토탈 솔루션 기업으로서</p>
             <ol class="roadmap">
                 <li class="rm-step rm-now">
@@ -216,7 +225,8 @@
                     </li>
                 </ul>
             </section>
-
+            </div>
+            <div class="subpage" role="tabpanel" data-sub="founder" hidden>
             <section class="founder">
                 <span class="fd-eyebrow">FOUNDER</span>
                 <div class="fd-grid">
@@ -258,7 +268,8 @@
                     </div>
                 </div>
             </section>
-
+            </div>
+            <div class="subpage" role="tabpanel" data-sub="partners" hidden>
             <section class="partners">
                 <span class="fd-eyebrow">PARTNERS</span>
                 <ul class="partner-row">
@@ -268,6 +279,7 @@
                     <li><img src="images/partner-udbio-t.png" alt="UD바이오"></li>
                 </ul>
             </section>
+            </div>
         </div>
     </div>
 </section>
@@ -282,11 +294,23 @@
         <div class="panel-hero panel-hero-light">
             <img src="images/prod-hero.jpg" alt="확깨유 제품과 물잔, 원료" class="panel-hero-img">
             <div class="panel-hero-over">
-                <span class="p-eyebrow">FIRST PRODUCT</span>
-                <h2>확깨유</h2>
+                <span class="p-eyebrow">OUR PRODUCT</span>
+                <h2>제품 라인업</h2>
             </div>
         </div>
         <div class="panel-inner">
+            <div class="subtabs-anchor" aria-hidden="true"></div>
+            <nav class="subtabs" role="tablist">
+                <button type="button" class="st active" role="tab" aria-selected="true" data-sub="hwak"><span class="st-en">FIRST PRODUCT</span><span class="st-ko">확깨유</span></button>
+                <button type="button" class="st" role="tab" aria-selected="false" data-sub="liquid"><span class="st-en">SECOND PRODUCT</span><span class="st-ko">고농축 액상형 숙취해소제</span></button>
+                <button type="button" class="st" role="tab" aria-selected="false" data-sub="probiotics"><span class="st-en">THIRD PRODUCT</span><span class="st-ko">복합 유산균</span></button>
+                <button type="button" class="st" role="tab" aria-selected="false" data-sub="mask"><span class="st-en">FOURTH PRODUCT</span><span class="st-ko">마스크팩</span></button>
+            </nav>
+            <div class="subpage" role="tabpanel" data-sub="hwak">
+                <div class="prod-head">
+                    <span class="facility-k">FIRST PRODUCT · 판매 중</span>
+                    <h3 class="soon-name">확깨유</h3>
+                </div>
             <p class="p-lead">전통 한방 원료와 현대 과학의 만남.<br>확깨유는 숙취 해소를 위한 혁신적 솔루션입니다.</p>
             <a class="buy" href="https://smartstore.naver.com/alcofixkorea/products/12747856417" target="_blank" rel="noopener">
                 <span>네이버 스마트스토어에서 구매하기</span>
@@ -362,7 +386,67 @@
                     </span>
                 </li>
             </ol>
-
+            </div>
+            <div class="subpage" role="tabpanel" data-sub="liquid" hidden>
+                <div class="soon">
+                    <div class="soon-visual" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2.7c3.6 4.4 6 7.6 6 10.4a6 6 0 0 1-12 0c0-2.8 2.4-6 6-10.4z"/><path d="M9.5 13.6a2.6 2.6 0 0 0 2.6 2.6"/></svg>
+                        <em>SECOND PRODUCT</em>
+                        <span>High-Concentration<br>Liquid Type</span>
+                    </div>
+                    <div class="soon-body">
+                        <span class="soon-badge">개발 예정</span>
+                        <h3 class="soon-name">고농축 액상형 숙취해소제</h3>
+                        <p class="soon-lead">확깨유의 한방 원료 연구를 바탕으로, 더 빠르고 강한 흡수를 목표로 개발하는 액상형 숙취해소제입니다.</p>
+                        <ul class="soon-points">
+                            <li><b>제형</b><span>고농축 액상형</span></li>
+                            <li><b>개발 목표</b><span>더 빠르고 강한 흡수</span></li>
+                            <li><b>연구 기반</b><span>확깨유 한방 원료 배합 연구</span></li>
+                        </ul>
+                        <p class="soon-note">개발 단계의 제품으로, 세부 사양과 출시 일정은 변경될 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="subpage" role="tabpanel" data-sub="probiotics" hidden>
+                <div class="soon">
+                    <div class="soon-visual" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><ellipse cx="9" cy="10" rx="4.2" ry="3"/><ellipse cx="15.4" cy="15" rx="3.4" ry="2.4"/><path d="M5.6 7.2 4.2 6M12.6 6.9 13.6 5.4M6.2 13.4 4.6 14.4M18.4 13.4l1.4-1M17.6 18.1l1 1.2"/></svg>
+                        <em>THIRD PRODUCT</em>
+                        <span>Complex<br>Probiotics</span>
+                    </div>
+                    <div class="soon-body">
+                        <span class="soon-badge">개발 예정</span>
+                        <h3 class="soon-name">복합 유산균</h3>
+                        <p class="soon-lead">음주 후 흐트러진 장내 환경의 회복을 돕기 위해 기획한 복합 유산균 제품입니다.</p>
+                        <ul class="soon-points">
+                            <li><b>제품 유형</b><span>복합 유산균</span></li>
+                            <li><b>개발 목표</b><span>음주 후 장내 환경 복원</span></li>
+                            <li><b>연구 기반</b><span>한방 소재·프로바이오틱스 발효 연구</span></li>
+                        </ul>
+                        <p class="soon-note">개발 단계의 제품으로, 세부 사양과 출시 일정은 변경될 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="subpage" role="tabpanel" data-sub="mask" hidden>
+                <div class="soon">
+                    <div class="soon-visual" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5.5 6.4C7.6 5.2 9.7 4.6 12 4.6s4.4.6 6.5 1.8c.4 3.1.1 5.9-1 8.3-1.2 2.6-3 4.2-5.5 4.7-2.5-.5-4.3-2.1-5.5-4.7-1.1-2.4-1.4-5.2-1-8.3z"/><path d="M9.6 10.2h.01M14.4 10.2h.01M10 14.2c1.3.8 2.7.8 4 0"/></svg>
+                        <em>FOURTH PRODUCT</em>
+                        <span>Recovery<br>Mask Pack</span>
+                    </div>
+                    <div class="soon-body">
+                        <span class="soon-badge">개발 예정</span>
+                        <h3 class="soon-name">마스크팩</h3>
+                        <p class="soon-lead">음주 다음 날 지친 피부를 위해, 천연 식물성 원료를 기반으로 준비하는 뷰티 제품입니다.</p>
+                        <ul class="soon-points">
+                            <li><b>제품 유형</b><span>마스크팩</span></li>
+                            <li><b>개발 목표</b><span>음주 후 무너진 피부 보완</span></li>
+                            <li><b>사업 분야</b><span>뷰티·코스메틱</span></li>
+                        </ul>
+                        <p class="soon-note">개발 단계의 제품으로, 세부 사양과 출시 일정은 변경될 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -475,6 +559,6 @@
     </div>
 </section>
 
-<script src="js/main.js?v=20260914-1430"></script>
+<script src="js/main.js?v=20260914-1600"></script>
 </body>
 </html>

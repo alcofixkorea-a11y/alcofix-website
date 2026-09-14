@@ -161,9 +161,11 @@
     function clearLater() { timers.forEach(clearTimeout); timers = []; }
 
     /* Page content rises into place as it comes into view, again on every visit */
-    var REVEAL = '.panel-inner > :not(section):not(ol):not(ul):not(.grid-2):not(.grid-3):not(.contact-grid),' +
-                 '.panel-inner > section > *, .panel-inner > ol > li, .panel-inner > ul > li,' +
-                 '.panel-inner > .grid-2 > *, .panel-inner > .grid-3 > *, .panel-inner .contact-grid > *';
+    function revealIn(p) {
+        return p + ' > :not(section):not(ol):not(ul):not(.grid-2):not(.grid-3):not(.contact-grid):not(.subpage):not(.subtabs):not(.subtabs-anchor),' +
+               p + ' > section > *, ' + p + ' > ol > li, ' + p + ' > ul > li, ' + p + ' > .grid-2 > *, ' + p + ' > .grid-3 > *';
+    }
+    var REVEAL = revealIn('.panel-inner') + ',' + revealIn('.subpage') + ', .panel-inner .contact-grid > *';
     var canReveal = 'IntersectionObserver' in window &&
                     !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -203,6 +205,55 @@
         }, 1500);
     }
 
+    /* ===== Pages within a page: tabs under the cover switch between sections ===== */
+    function setSub(panel, key) {
+        panel.querySelectorAll('.st').forEach(function(tab) {
+            var on = tab.dataset.sub === key;
+            tab.classList.toggle('active', on);
+            tab.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        panel.querySelectorAll('.subpage').forEach(function(sub) { sub.hidden = sub.dataset.sub !== key; });
+    }
+    function resetSubs(panel) {
+        var first = panel.querySelector('.st');
+        if (first) setSub(panel, first.dataset.sub);
+    }
+    panels.forEach(function(panel) {
+        var nav = panel.querySelector('.subtabs');
+        if (!nav) return;
+        var bar = panel.querySelector('.panel-bar');
+        var setBar = function() {
+            if (bar && bar.offsetHeight) panel.style.setProperty('--bar-h', bar.offsetHeight + 'px');
+        };
+        setBar();
+        window.addEventListener('resize', setBar);
+        nav.addEventListener('click', function(e) {
+            var tab = e.target.closest('.st');
+            if (!tab || tab.classList.contains('active')) return;
+            setBar();
+            setSub(panel, tab.dataset.sub);
+            // on narrow screens keep the chosen tab in sight inside the bar
+            nav.scrollLeft = tab.offsetLeft - (nav.clientWidth - tab.offsetWidth) / 2;
+            // reading further down: bring the tabs back to the top of the view
+            var anchor = panel.querySelector('.subtabs-anchor');
+            if (anchor) {
+                var top = anchor.getBoundingClientRect().top - panel.getBoundingClientRect().top +
+                          panel.scrollTop - (bar ? bar.offsetHeight : 0);
+                if (panel.scrollTop > top) panel.scrollTop = top;
+            }
+            // the new section rises in, just like a page opening
+            var shown = panel.querySelector('.subpage[data-sub="' + tab.dataset.sub + '"]');
+            if (shown && panel._rv) {
+                shown.querySelectorAll('.rv').forEach(function(el) {
+                    el.classList.remove('in');
+                    el.style.setProperty('--rv-base', '0ms');
+                    panel._rv.unobserve(el);
+                    panel._rv.observe(el);
+                });
+            }
+        });
+    });
+
     function setActiveLink(panel, id) {
         panel.querySelectorAll('.pn').forEach(function(link) {
             var on = link.dataset.go === id;
@@ -217,6 +268,7 @@
         panel.classList.remove('open', 'is-current', 'leaving');
         panel.scrollTop = 0;
         setActiveLink(panel, panel.id.replace('panel-', ''));
+        resetSubs(panel);
         panel.querySelectorAll('.rv.in').forEach(function(el) { el.classList.remove('in'); });
     }
 
