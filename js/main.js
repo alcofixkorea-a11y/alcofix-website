@@ -145,7 +145,6 @@
         { id: 'about',    en: 'We are ALCOFIX', ko: '기업 소개' },
         { id: 'product',  en: 'Our Product',    ko: '제품 소개' },
         { id: 'vision',   en: 'Our Vision',     ko: '비전' },
-        { id: 'business', en: 'Business Area',  ko: '사업 분야' },
         { id: 'contact',  en: 'Contact Us',     ko: '문의하기' }
     ];
 

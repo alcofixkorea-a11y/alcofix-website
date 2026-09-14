@@ -1280,3 +1280,43 @@ body.doc{overflow:auto;background:#fff}
     .vs-cards li{grid-template-columns:1fr;gap:12px}
     .vs-dict-list li{grid-template-columns:20px 76px minmax(0,1fr)}
 }
+
+/* ===== Main menu: four heavier words, spaced to fill the column ===== */
+.mi-t{font-weight:700}
+.menu-scatter{gap:clamp(28px,5vh,56px)}
+@media(max-width:768px){
+    .menu-scatter{gap:clamp(20px,3.6vh,34px)}
+}
+
+/* ===== About uses the full width of the screen ===== */
+#panel-about .panel-inner{max-width:1440px}
+.biz-area{margin-bottom:clamp(8px,1vw,16px)}
+
+/* ===== Products in development: a photograph in place of the grey card ===== */
+.soon-photo{position:relative;margin:0;min-height:clamp(300px,34vw,460px);overflow:hidden;background:var(--surface)}
+.soon-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+@media(max-width:768px){
+    .soon-photo{min-height:240px}
+}
+
+/* ===== Vision: mission and vision, readable and fuller ===== */
+.vs-item .vs-big{margin-top:12px;font-size:clamp(28px,3vw,44px);font-weight:700;letter-spacing:-0.045em;line-height:1.22;color:var(--ink);text-wrap:balance}
+.vs-item .vs-body{margin-top:18px;font-size:16px;line-height:1.85;color:#3f3f46}
+.vs-pillars{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(10px,1.4vw,18px);margin-top:28px}
+.vs-pillars li{padding:22px 20px 24px;background:var(--surface);border-top:2px solid var(--ink)}
+.vp-n{font-size:12px;font-weight:600;letter-spacing:0.12em;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.vs-pillars b{display:block;margin-top:14px;font-size:clamp(17px,1.5vw,20px);font-weight:700;letter-spacing:-0.03em;color:var(--ink)}
+.vs-item .vs-pillars p{margin-top:8px;font-size:14px;line-height:1.7;color:#52525b}
+.vs-road{list-style:none;margin-top:22px}
+.vs-road li{
+    display:grid;grid-template-columns:clamp(72px,8vw,100px) minmax(0,1fr);gap:clamp(16px,2.4vw,28px);align-items:baseline;
+    padding:20px 0;border-bottom:1px solid var(--line);
+}
+.vs-road li:first-child{border-top:1px solid var(--ink)}
+.vr-y{font-size:clamp(22px,2.2vw,30px);font-weight:600;letter-spacing:-0.04em;color:var(--ink);font-variant-numeric:tabular-nums}
+.vs-road li:not(:first-child) .vr-y{color:transparent;-webkit-text-stroke:1px var(--ink)}
+.vs-road b{font-size:clamp(17px,1.5vw,20px);font-weight:700;letter-spacing:-0.03em;color:var(--ink)}
+.vs-item .vs-road p{margin-top:4px;font-size:14px;line-height:1.6;color:#52525b}
+@media(max-width:768px){
+    .vs-pillars{grid-template-columns:1fr}
+}
