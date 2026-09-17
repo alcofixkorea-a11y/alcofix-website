@@ -474,3 +474,34 @@
     startIntro();
 
 })();
+
+/* ===== 확깨유를 나타내는 숫자: click a number to open its story ===== */
+(function(){
+    'use strict';
+    document.querySelectorAll('.kf').forEach(function(kf) {
+        var tabs = Array.prototype.slice.call(kf.querySelectorAll('.kf-num'));
+        function choose(tab, focus) {
+            tabs.forEach(function(t) {
+                var on = t === tab;
+                t.classList.toggle('active', on);
+                t.setAttribute('aria-selected', on ? 'true' : 'false');
+                t.tabIndex = on ? 0 : -1;
+            });
+            kf.querySelectorAll('.kf-panel').forEach(function(p) { p.hidden = p.dataset.kf !== tab.dataset.kf; });
+            if (focus) tab.focus();
+        }
+        tabs.forEach(function(t, i) { t.tabIndex = i ? -1 : 0; });
+        kf.addEventListener('click', function(e) {
+            var tab = e.target.closest('.kf-num');
+            if (tab) choose(tab);
+        });
+        kf.addEventListener('keydown', function(e) {
+            var i = tabs.indexOf(document.activeElement);
+            if (i < 0) return;
+            var next = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : null;
+            if (next === null) return;
+            e.preventDefault();
+            choose(tabs[(next + tabs.length) % tabs.length], true);
+        });
+    });
+})();

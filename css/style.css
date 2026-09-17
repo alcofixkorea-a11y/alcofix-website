@@ -1355,3 +1355,62 @@ body.doc{overflow:auto;background:#fff}
 .ingr span{font-size:14px;font-weight:600;color:var(--ink)}
 /* Korean form labels stay readable: a lighter spacing than the English labels */
 .fg label{letter-spacing:0.06em}
+
+/* ===== 확깨유를 나타내는 숫자: big numbers, the chosen one opens its story below ===== */
+.kf{margin:clamp(36px,4vw,56px) 0}
+.kf-nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--ink);border-bottom:1px solid var(--line)}
+.kf-num{
+    position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:10px;
+    padding:clamp(18px,2vw,26px) clamp(14px,1.6vw,22px);
+    border:0;border-right:1px solid var(--line);background:none;
+    text-align:left;color:var(--ink);cursor:pointer;
+}
+.kf-num:last-child{border-right:0}
+.kf-num::before{
+    content:'';position:absolute;left:0;right:0;top:-1px;height:3px;background:var(--ink);
+    transform:scaleX(0);transform-origin:left;transition:transform 0.45s cubic-bezier(0.2,0.7,0.2,1);
+}
+.kf-num.active::before{transform:scaleX(1)}
+.kf-n{
+    font-size:clamp(52px,6.2vw,104px);font-weight:700;letter-spacing:-0.06em;line-height:0.92;
+    color:transparent;-webkit-text-stroke:1.2px var(--ink);transition:color 0.3s ease;
+}
+.kf-n em{font-style:normal;font-size:0.34em;margin-left:0.08em;letter-spacing:-0.02em}
+.kf-num:hover .kf-n,.kf-num.active .kf-n{color:var(--ink)}
+.kf-l{font-size:14px;font-weight:600;color:var(--ink-mid)}
+.kf-num.active .kf-l{color:var(--ink)}
+/* a small plus tells people the number opens; it turns into a minus when open */
+.kf-plus{position:absolute;top:clamp(16px,1.8vw,22px);right:clamp(14px,1.6vw,20px);width:14px;height:14px}
+.kf-plus::before,.kf-plus::after{content:'';position:absolute;left:0;right:0;top:50%;height:1.5px;margin-top:-0.75px;background:var(--ink-soft);transition:transform 0.3s ease,background 0.3s ease}
+.kf-plus::after{transform:rotate(90deg)}
+.kf-num.active .kf-plus::before,.kf-num.active .kf-plus::after{background:var(--ink)}
+.kf-num.active .kf-plus::after{transform:rotate(0deg)}
+.kf-num:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.kf-panel{
+    display:grid;grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr);gap:clamp(20px,3vw,44px);align-items:center;
+    margin-top:14px;padding:clamp(16px,2vw,24px);background:var(--surface);
+    animation:pgRise 0.6s cubic-bezier(0.2,0.7,0.2,1) both;
+}
+.kf-panel[hidden]{display:none}
+.kf-photo{margin:0;aspect-ratio:16/10;overflow:hidden;background:#e4e4e7}
+.kf-photo img{width:100%;height:100%;object-fit:cover}
+.kf-k{display:block;font-size:11px;font-weight:600;letter-spacing:0.22em;color:var(--ink-soft)}
+.kf-t{margin-top:10px;font-size:clamp(22px,2.2vw,30px);font-weight:700;letter-spacing:-0.04em;line-height:1.3;color:var(--ink)}
+.kf-d{margin-top:12px;font-size:16px;line-height:1.85;color:#3f3f46}
+@media(max-width:768px){
+    .kf-nums{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .kf-num:nth-child(2){border-right:0}
+    .kf-num:nth-child(-n+2){border-bottom:1px solid var(--line)}
+    .kf-panel{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+    .kf-panel{animation:none}
+    .kf-num::before,.kf-n{transition:none}
+}
+
+/* ===== Wider reading area: less empty space on the left and right ===== */
+.panel-inner,#panel-about .panel-inner{max-width:1680px;padding-left:clamp(20px,3vw,48px);padding-right:clamp(20px,3vw,48px)}
+.vs-left,.vs-right{padding-left:clamp(20px,3vw,48px);padding-right:clamp(20px,3vw,48px)}
+@media(max-width:1024px){
+    .panel-inner,#panel-about .panel-inner{padding-left:20px;padding-right:20px}
+}

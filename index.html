@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap">
-    <link rel="stylesheet" href="css/style.css?v=20260915-1200">
+    <link rel="stylesheet" href="css/style.css?v=20260917-1630">
 </head>
 <body>
 
@@ -333,12 +333,62 @@
                 <img src="images/prod-g2.jpg" alt="확깨유 스틱 파우치" class="img-round">
                 <img src="images/prod-g3.jpg" alt="확깨유 스틱을 뜯는 손" class="img-round">
             </div>
-            <ul class="check-list">
-                <li>독자적 원료 배합 기술</li>
-                <li>100% 천연 소재 기반</li>
-                <li>3mm 초소형 환</li>
-                <li>HACCP·GMP 기준 시설 생산</li>
-            </ul>
+            <div class="kf">
+                <div class="kf-nums" role="tablist" aria-label="확깨유를 나타내는 숫자">
+                    <button type="button" class="kf-num active" role="tab" id="kf-tab-100" aria-selected="true" aria-controls="kf-100" data-kf="100">
+                        <span class="kf-plus" aria-hidden="true"></span>
+                        <span class="kf-n">100<em>%</em></span>
+                        <span class="kf-l">천연 한방원료</span>
+                    </button>
+                    <button type="button" class="kf-num" role="tab" id="kf-tab-3" aria-selected="false" aria-controls="kf-3" data-kf="3">
+                        <span class="kf-plus" aria-hidden="true"></span>
+                        <span class="kf-n">3<em>mm</em></span>
+                        <span class="kf-l">초소형 환 · 1포 3g</span>
+                    </button>
+                    <button type="button" class="kf-num" role="tab" id="kf-tab-0" aria-selected="false" aria-controls="kf-0" data-kf="0">
+                        <span class="kf-plus" aria-hidden="true"></span>
+                        <span class="kf-n">0<em>%</em></span>
+                        <span class="kf-l">부형제 · 첨가제</span>
+                    </button>
+                    <button type="button" class="kf-num" role="tab" id="kf-tab-17" aria-selected="false" aria-controls="kf-17" data-kf="17">
+                        <span class="kf-plus" aria-hidden="true"></span>
+                        <span class="kf-n">17<em>종</em></span>
+                        <span class="kf-l">한방원료</span>
+                    </button>
+                </div>
+                <div class="kf-panel" role="tabpanel" id="kf-100" aria-labelledby="kf-tab-100" data-kf="100">
+                    <figure class="kf-photo"><img src="images/kf-natural.jpg" alt="말린 한방원료 줄기와 가지" loading="lazy"></figure>
+                    <div class="kf-body">
+                        <span class="kf-k">100% NATURAL</span>
+                        <h3 class="kf-t">100% 천연 한방원료 사용</h3>
+                        <p class="kf-d">자연에서 얻은 한방원료만을 사용해 만들었습니다. 원료 본연의 힘을 그대로 담았습니다.</p>
+                    </div>
+                </div>
+                <div class="kf-panel" role="tabpanel" id="kf-3" aria-labelledby="kf-tab-3" data-kf="3" hidden>
+                    <figure class="kf-photo"><img src="images/prod-hwan.jpg" alt="손끝에 올린 3mm 확깨유 환" loading="lazy"></figure>
+                    <div class="kf-body">
+                        <span class="kf-k">3MM MICRO PILL</span>
+                        <h3 class="kf-t">3mm 초소형 환, 1포 3g</h3>
+                        <p class="kf-d">원물압착기술로 3mm 크기의 작은 환으로 빚어 부담 없이 삼킬 수 있습니다. 한 포 3g, 물과 함께 간편하게 섭취하세요.</p>
+                    </div>
+                </div>
+                <div class="kf-panel" role="tabpanel" id="kf-0" aria-labelledby="kf-tab-0" data-kf="0" hidden>
+                    <figure class="kf-photo"><img src="images/kf-zero.jpg" alt="확깨유 스틱에서 쏟아진 환" loading="lazy"></figure>
+                    <div class="kf-body">
+                        <span class="kf-k">ZERO ADDITIVES</span>
+                        <h3 class="kf-t">부형제 및 첨가제 0% 사용</h3>
+                        <p class="kf-d">모양을 잡기 위한 부형제나 첨가제를 넣지 않고, 한방원료 본연의 성분에 집중했습니다.</p>
+                    </div>
+                </div>
+                <div class="kf-panel" role="tabpanel" id="kf-17" aria-labelledby="kf-tab-17" data-kf="17" hidden>
+                    <figure class="kf-photo"><img src="images/prod-g1.jpg" alt="확깨유 패키지와 한방원료" loading="lazy"></figure>
+                    <div class="kf-body">
+                        <span class="kf-k">17 HERBAL INGREDIENTS</span>
+                        <h3 class="kf-t">17종 한방원료 사용</h3>
+                        <p class="kf-d">헛개나무·겨우살이·오리나무를 비롯한 17종의 한방원료를 독자적 배합 기술로 조합했습니다.</p>
+                    </div>
+                </div>
+            </div>
 
             <section class="facility facility-flip">
                 <figure class="facility-photo">
@@ -579,6 +629,6 @@
     </div>
 </section>
 
-<script src="js/main.js?v=20260915-1200"></script>
+<script src="js/main.js?v=20260917-1630"></script>
 </body>
 </html>
