@@ -1,2 +1,7 @@
 .claude/
 images/*-b64.txt
+# built by tools/build-pages.js during deploy
+/about/
+/product/
+/vision/
+/contact/

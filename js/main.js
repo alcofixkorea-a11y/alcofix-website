@@ -148,6 +148,26 @@
         { id: 'contact',  en: 'Contact Us',     ko: '문의하기' }
     ];
 
+    /* ===== Page addresses: every page has its own link (about/, product/, vision/, contact/) ===== */
+    var ROOT = document.body.dataset.root || './';
+    var pageIds = pages.map(function(p) { return p.id; });
+    function pageUrl(id) { return new URL(ROOT + (id ? id + '/' : ''), location.href).href; }
+    function pageFromLocation() {
+        var base = new URL(ROOT, location.href).pathname;
+        var rest = location.pathname.indexOf(base) === 0 ? location.pathname.slice(base.length) : '';
+        rest = rest.replace(/index\.html$/, '').replace(/\/$/, '');
+        if (pageIds.indexOf(rest) >= 0) return rest;
+        // older links such as alcofix.co.kr/#product
+        var hash = location.hash.slice(1);
+        return (!rest && pageIds.indexOf(hash) >= 0) ? hash : '';
+    }
+    var PAGE_TITLES = { '': 'ALCOFIX 알코픽스 | 건강한 음주문화를 선도하는 알코올 토탈 솔루션 기업', about: '기업소개 | ALCOFIX 알코픽스', product: '제품소개 | ALCOFIX 알코픽스', vision: '비전 | ALCOFIX 알코픽스', contact: '문의하기 | ALCOFIX 알코픽스' };
+    function remember(id) {
+        document.title = PAGE_TITLES[id] || PAGE_TITLES[''];
+        var url = pageUrl(id);
+        if (location.href !== url && window.history && history.pushState) history.pushState({ page: id }, '', url);
+    }
+
     /* Hovering a word only changes the photo; a click opens the page.
        Moving between pages: the current content clears away while the top bar stays,
        then the next page fades in and its content rises. Nothing slides sideways. */
@@ -161,7 +181,7 @@
 
     /* Page content rises into place as it comes into view, again on every visit */
     function revealIn(p) {
-        return p + ' > :not(section):not(ol):not(ul):not(.grid-2):not(.grid-3):not(.contact-grid):not(.subpage):not(.subtabs):not(.subtabs-anchor):not(.vs-item),' +
+        return p + ' > :not(section):not(ol):not(ul):not(.grid-2):not(.grid-3):not(.contact-grid):not(.subpage):not(.subtabs):not(.subtabs-anchor),' +
                p + ' > section > *, ' + p + ' > ol > li, ' + p + ' > ul > li, ' + p + ' > .grid-2 > *, ' + p + ' > .grid-3 > *';
     }
     var REVEAL = revealIn('.panel-inner') + ',' + revealIn('.subpage') + ', .panel-inner .contact-grid > *';
@@ -213,6 +233,10 @@
         });
         panel.querySelectorAll('.subpage').forEach(function(sub) { sub.hidden = sub.dataset.sub !== key; });
     }
+    function selectSubFromHash(panel) {
+        var key = location.hash.slice(1);
+        if (panel && key && panel.querySelector('.st[data-sub="' + key + '"]')) setSub(panel, key);
+    }
     function resetSubs(panel) {
         var first = panel.querySelector('.st');
         if (first) setSub(panel, first.dataset.sub);
@@ -231,6 +255,11 @@
             if (!tab || tab.classList.contains('active')) return;
             setBar();
             setSub(panel, tab.dataset.sub);
+            // the chosen tab goes into the address, so this exact section can be shared
+            var clean = location.href.split('#')[0];
+            if (window.history && history.replaceState) {
+                history.replaceState(history.state, '', tab === nav.querySelector('.st') ? clean : clean + '#' + tab.dataset.sub);
+            }
             // on narrow screens keep the chosen tab in sight inside the bar
             nav.scrollLeft += tab.getBoundingClientRect().left - nav.getBoundingClientRect().left -
                               (nav.clientWidth - tab.offsetWidth) / 2;
@@ -278,9 +307,11 @@
         armReveals(panel);
     }
 
-    function openPanel(id) {
+    function openPanel(id, fromHistory) {
         var target = document.getElementById('panel-' + id);
         if (!target) return;
+        if (fromHistory !== true) remember(id);
+        else document.title = PAGE_TITLES[id];
         clearLater();
 
         var prev = document.querySelector('.panel.is-current');
@@ -307,7 +338,9 @@
         }, CLEAR_MS);
     }
 
-    function closePanels() {
+    function closePanels(fromHistory) {
+        if (fromHistory !== true) remember('');
+        else document.title = PAGE_TITLES[''];
         clearLater();
         var shown = Array.prototype.slice.call(document.querySelectorAll('.panel.open'));
         panels.forEach(function(p) { if (shown.indexOf(p) < 0) resetPanel(p); });
@@ -341,7 +374,7 @@
             var a = document.createElement('a');
             a.className = 'pn' + (pg.id === current ? ' active' : '');
             a.dataset.go = pg.id;
-            a.href = '#' + pg.id;
+            a.href = pageUrl(pg.id);
             if (pg.id === current) a.setAttribute('aria-current', 'page');
             a.innerHTML = '<span class="pn-en">' + pg.en + '</span>' +
                           '<span class="pn-ko">' + pg.ko + '</span>';
@@ -359,6 +392,7 @@
 
     var hoverReset = null;
     document.querySelectorAll('.mi').forEach(function(item) {
+        item.href = pageUrl(item.dataset.panel);
         if (canHover) {
             item.addEventListener('mouseenter', function() {
                 clearTimeout(hoverReset);
@@ -386,6 +420,7 @@
     var mainFoot = menuScreen.querySelector('.menu-footer');
     if (mainFoot) {
         panels.forEach(function(panel) { panel.appendChild(mainFoot.cloneNode(true)); });
+        document.querySelectorAll('.foot-contact').forEach(function(a) { a.href = pageUrl('contact'); });
 
         // the drifting words and the page heights make room for the band
         var setFootHeight = function() {
@@ -421,57 +456,83 @@
         if (e.key === 'Escape' && document.querySelector('.panel.open')) closePanels();
     });
 
-    /* ===== Vision: blocks rise in as they scroll into view, and the counter follows along ===== */
-    var vs = document.querySelector('.vs');
-    var vPanel = document.getElementById('panel-vision');
-    if (vs && vPanel && 'IntersectionObserver' in window) {
-        var vBar = vPanel.querySelector('.panel-bar');
-        var vCount = vs.querySelector('.vs-count b');
-        var setBarHeight = function() {
-            if (vBar) vPanel.style.setProperty('--bar-h', vBar.offsetHeight + 'px');
-        };
-        setBarHeight();
-        window.addEventListener('resize', setBarHeight);
+    /* ===== Back and forward buttons move between pages ===== */
+    window.addEventListener('popstate', function() {
+        var id = pageFromLocation();
+        if (id) {
+            openPanel(id, true);
+            selectSubFromHash(document.getElementById('panel-' + id));
+        } else if (document.querySelector('.panel.open')) {
+            closePanels(true);
+        }
+    });
 
-        vs.classList.add('reveal');
-        var vObserver = new IntersectionObserver(function(entries) {
-            entries.forEach(function(entry) {
-                if (!entry.isIntersecting) return;
-                entry.target.classList.add('in');
-                if (vCount) vCount.textContent = entry.target.dataset.n;
-            });
-        }, { root: vPanel, threshold: 0.35 });
-        vs.querySelectorAll('.vs-item').forEach(function(item) { vObserver.observe(item); });
-
-        // Safety net: if the observer has not fired shortly after the page opens, just show everything
-        new MutationObserver(function() {
-            if (!vPanel.classList.contains('open')) return;
-            setBarHeight();
-            setTimeout(function() {
-                if (!vs.querySelector('.vs-item.in')) {
-                    vs.querySelectorAll('.vs-item').forEach(function(item) { item.classList.add('in'); });
-                }
-            }, 1600);
-        }).observe(vPanel, { attributes: true, attributeFilter: ['class'] });
-    }
-
+    /* ===== Contact form: sent straight to the company mailbox ===== */
+    var FORM_ENDPOINT = 'https://formsubmit.co/ajax/alcofixkorea@gmail.com';
     var form = document.getElementById('cForm');
     if (form) {
+        var formStatus = form.querySelector('.form-status');
+        var sendBtn = form.querySelector('.btn-send');
+        var say = function(kind, html) {
+            formStatus.className = 'form-status is-' + kind;
+            formStatus.innerHTML = html;
+        };
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+            if (!form.checkValidity()) { form.reportValidity(); return; }
             var fd = new FormData(form);
-            var subj = encodeURIComponent('[알코픽스 문의] ' + fd.get('type') + ' - ' + fd.get('name'));
-            var body = encodeURIComponent(
-                '이름/회사명: ' + fd.get('name') +
-                '\n이메일: ' + fd.get('email') +
-                '\n문의 유형: ' + fd.get('type') +
-                '\n\n' + fd.get('message')
-            );
-            window.open('mailto:alcofixkorea@gmail.com?subject=' + subj + '&body=' + body, '_self');
+            if (fd.get('_honey')) return;       // filled in only by bots
+            sendBtn.disabled = true;
+            sendBtn.textContent = '보내는 중…';
+            say('wait', '문의를 보내고 있습니다.');
+            fetch(FORM_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({
+                    '이름/회사명': fd.get('name'),
+                    '이메일': fd.get('email'),
+                    '문의 유형': fd.get('type'),
+                    '문의 내용': fd.get('message'),
+                    '개인정보 동의': '동의함',
+                    _subject: '[알코픽스 홈페이지 문의] ' + fd.get('type') + ' - ' + fd.get('name'),
+                    _replyto: fd.get('email'),
+                    _template: 'table',
+                    _captcha: 'false'
+                })
+            })
+                .then(function(r) { return r.json().catch(function() { return {}; }); })
+                .then(function(res) {
+                    if (String(res.success) !== 'true') throw new Error(res.message || 'not sent');
+                    form.reset();
+                    say('ok', '문의가 접수되었습니다. 확인 후 입력하신 이메일로 답변드리겠습니다.');
+                })
+                .catch(function() {
+                    say('error', '문의를 보내지 못했습니다. 잠시 후 다시 시도하시거나 ' +
+                        '<a href="mailto:alcofixkorea@gmail.com">alcofixkorea@gmail.com</a>으로 보내주세요.');
+                })
+                .then(function() {
+                    sendBtn.disabled = false;
+                    sendBtn.textContent = '문의하기';
+                });
         });
     }
 
-    startIntro();
+    /* ===== Start: a page address opens that page directly, the home address plays the intro ===== */
+    var startPage = document.body.dataset.page || pageFromLocation();
+    if (startPage) {
+        document.documentElement.classList.add('no-motion');
+        skipIntro();
+        openPanel(startPage, true);
+        selectSubFromHash(document.getElementById('panel-' + startPage));
+        if (window.history && history.replaceState) {
+            history.replaceState({ page: startPage }, '', document.body.dataset.page ? location.href : pageUrl(startPage));
+        }
+        requestAnimationFrame(function() {
+            requestAnimationFrame(function() { document.documentElement.classList.remove('no-motion'); });
+        });
+    } else {
+        startIntro();
+    }
 
 })();
 

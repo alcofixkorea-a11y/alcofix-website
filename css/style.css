@@ -1414,3 +1414,39 @@ body.doc{overflow:auto;background:#fff}
 @media(max-width:1024px){
     .panel-inner,#panel-about .panel-inner{padding-left:20px;padding-right:20px}
 }
+
+/* ===== Footer band: company information ===== */
+.foot-biz{font-size:11px;line-height:1.5;color:#d4d4d8}
+@media(max-width:768px){
+    .foot-biz{font-size:10px}
+}
+
+/* ===== Contact form: consent, sending state, result ===== */
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.c-agree{display:flex;align-items:flex-start;gap:10px;margin:4px 0 22px;font-size:13.5px;line-height:1.6;color:#52525b;cursor:pointer}
+.c-agree input{flex:none;width:16px;height:16px;margin-top:3px;accent-color:var(--ink)}
+.c-agree a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.btn-send:disabled{opacity:0.6;cursor:wait}
+.form-status{min-height:1.6em;margin-top:14px;font-size:14px;line-height:1.6;color:var(--ink-mid)}
+.form-status.is-ok{color:var(--ink);font-weight:600}
+.form-status.is-error{color:#b91c1c}
+.form-status a{text-decoration:underline;text-underline-offset:3px}
+
+/* ===== Opening a page address directly: no fade on the first frame ===== */
+.no-motion .panel,.no-motion .menu-screen,.no-motion .deco{transition:none!important}
+
+/* ===== Vision in the same shape as About and Product: cover, tabs, then the story ===== */
+.hv-sub{margin-top:clamp(12px,1.4vw,18px);font-size:clamp(16px,1.6vw,21px);font-weight:500;color:rgba(255,255,255,0.9)}
+#panel-vision .subpage:not([hidden]){
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:clamp(40px,4vw,64px) clamp(28px,4vw,72px);align-items:start;
+}
+#panel-vision .subpage[data-sub="name"]:not([hidden]){align-items:center}
+#panel-vision .vs-item:has(.vs-road),#panel-vision .vs-item:has(.vs-cards){grid-column:1/-1}
+#panel-vision .vs-item > .vs-k:first-child{margin-top:0}
+#panel-vision .vs-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 clamp(24px,3vw,48px)}
+#panel-vision .vs-cards li{grid-template-columns:1fr;align-items:start}
+@media(max-width:900px){
+    #panel-vision .subpage:not([hidden]){grid-template-columns:1fr}
+    #panel-vision .vs-cards{grid-template-columns:1fr}
+}
