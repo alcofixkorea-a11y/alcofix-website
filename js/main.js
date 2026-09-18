@@ -88,6 +88,13 @@
         });
     }
 
+    // Moving between pages rewrites the address bar, and any photo fetched after that would
+    // read its relative path against the new address (images/use-1.jpg -> /product/images/use-1.jpg,
+    // which does not exist). Pin every photo to its full address while the first address still applies.
+    document.querySelectorAll('img[src]').forEach(function(img) {
+        img.setAttribute('src', img.src);
+    });
+
     var decoKey = 'main';
     function showDeco(key) {
         decoKey = decoImgs[key] ? key : 'main';
@@ -150,10 +157,13 @@
 
     /* ===== Page addresses: every page has its own link (about/, product/, vision/, contact/) ===== */
     var ROOT = document.body.dataset.root || './';
+    // the site's own address, worked out once. reading it from location.href later would stack
+    // the pages up as /product/about/vision/ , because moving between pages rewrites the address.
+    var SITE = new URL(ROOT, location.href).href;
     var pageIds = pages.map(function(p) { return p.id; });
-    function pageUrl(id) { return new URL(ROOT + (id ? id + '/' : ''), location.href).href; }
+    function pageUrl(id) { return new URL(id ? id + '/' : '', SITE).href; }
     function pageFromLocation() {
-        var base = new URL(ROOT, location.href).pathname;
+        var base = new URL(SITE).pathname;
         var rest = location.pathname.indexOf(base) === 0 ? location.pathname.slice(base.length) : '';
         rest = rest.replace(/index\.html$/, '').replace(/\/$/, '');
         if (pageIds.indexOf(rest) >= 0) return rest;
