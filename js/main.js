@@ -301,10 +301,29 @@
         panel.querySelectorAll('.rv.in').forEach(function(el) { el.classList.remove('in'); });
     }
 
+    // some browsers and security tools drop the deferred requests that loading="lazy" makes,
+    // which leaves broken photos behind. once a page is opened, fetch its photos the normal way.
+    function loadImages(panel) {
+        panel.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
+            img.loading = 'eager';
+            if (!img.complete || img.naturalWidth === 0) img.src = img.src;
+        });
+    }
+
+    // one silent retry if a photo still fails to arrive
+    document.addEventListener('error', function(e) {
+        var img = e.target;
+        if (!img || img.tagName !== 'IMG' || img.dataset.retried) return;
+        img.dataset.retried = '1';
+        var base = img.src.split('#')[0].split('?')[0];
+        setTimeout(function() { img.src = base + '?r=1'; }, 400);
+    }, true);
+
     function showPanel(panel) {
         panel.scrollTop = 0;
         panel.classList.add('open', 'is-current');
         armReveals(panel);
+        loadImages(panel);
     }
 
     function openPanel(id, fromHistory) {
@@ -518,6 +537,7 @@
     }
 
     /* ===== Start: a page address opens that page directly, the home address plays the intro ===== */
+    if (decoCard) loadImages(decoCard);
     var startPage = document.body.dataset.page || pageFromLocation();
     if (startPage) {
         document.documentElement.classList.add('no-motion');
