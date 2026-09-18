@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>사진 진단 | ALCOFIX</title>
+<style>
+    :root { color-scheme: light; }
+    body { margin: 0; padding: 16px; background: #fff; color: #111;
+           font: 15px/1.5 -apple-system, "Segoe UI", "Malgun Gothic", sans-serif; }
+    h1 { font-size: 19px; margin: 0 0 4px; }
+    p.lead { margin: 0 0 16px; color: #555; font-size: 13px; }
+    #summary { padding: 12px 14px; border: 2px solid #111; margin-bottom: 16px; font-weight: 700; }
+    h2 { font-size: 14px; margin: 20px 0 6px; letter-spacing: .04em; color: #555; }
+    table { border-collapse: collapse; width: 100%; font-size: 13px; }
+    th, td { border: 1px solid #ddd; padding: 5px 7px; text-align: left; }
+    th { background: #f4f4f4; font-weight: 600; }
+    td.s { text-align: center; width: 64px; font-weight: 700; }
+    .ok { color: #0a7d2b; }
+    .no { color: #c00; }
+    dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 3px 12px; font-size: 13px; }
+    dt { color: #666; }
+    dd { margin: 0; word-break: break-all; }
+</style>
+</head>
+<body>
+
+<h1>알코픽스 사진 진단</h1>
+<p class="lead">이 페이지는 사진이 왜 안 보이는지 확인하는 검사 화면입니다. 잠시 기다린 뒤 화면 전체를 캡처해 주세요.</p>
+
+<div id="summary">검사 중입니다…</div>
+
+<h2>사진별 결과</h2>
+<table>
+    <thead><tr><th>사진</th><th class="s">화면 표시</th><th class="s">내려받기</th></tr></thead>
+    <tbody id="rows"></tbody>
+</table>
+
+<h2>사용 중인 환경</h2>
+<dl id="env"></dl>
+
+<script>
+(function () {
+    var FILES = [
+        'prod-hero.jpg', 'prod-g1.jpg', 'prod-g2.jpg', 'prod-g3.jpg',
+        'kf-natural.jpg', 'prod-hwan.jpg', 'kf-zero.jpg',
+        'banner-2.jpg', 'banner-3.jpg', 'ingr-alder.jpg',
+        'facility-udbio.jpg', 'mark-haccp.png', 'mark-gmp.png',
+        'use-1.jpg', 'use-2.jpg', 'use-3.jpg',
+        'soon-liquid.jpg', 'soon-probiotics.jpg', 'soon-mask.jpg',
+        'hero-toast.jpg', 'logo.png'
+    ];
+
+    var rows = document.getElementById('rows');
+    var results = [];
+
+    // 1) can the browser DISPLAY it?  2) can it DOWNLOAD it?
+    // both fail  -> the network or a security program is blocking
+    // download ok, display fails -> an add-on (ad blocker etc.) is blocking
+    function tryShow(url) {
+        return new Promise(function (done) {
+            var img = new Image();
+            var t = setTimeout(function () { done('시간초과'); }, 12000);
+            img.onload = function () { clearTimeout(t); done(img.naturalWidth ? 'ok' : '빈파일'); };
+            img.onerror = function () { clearTimeout(t); done('실패'); };
+            img.src = url + '?d=' + Date.now();
+        });
+    }
+
+    function tryDownload(url) {
+        if (!window.fetch) return Promise.resolve('확인불가');
+        return fetch(url + '?f=' + Date.now(), { cache: 'no-store' })
+            .then(function (r) { return r.ok ? r.blob().then(function (b) { return b.size > 500 ? 'ok' : '빈파일'; }) : String(r.status); })
+            .catch(function () { return '실패'; });
+    }
+
+    function cell(v) {
+        return '<td class="s ' + (v === 'ok' ? 'ok">O' : 'no">X (' + v + ')') + '</td>';
+    }
+
+    function run(i) {
+        if (i >= FILES.length) return finish();
+        var name = FILES[i], url = 'images/' + name;
+        Promise.all([tryShow(url), tryDownload(url)]).then(function (r) {
+            results.push({ name: name, show: r[0], down: r[1] });
+            var tr = document.createElement('tr');
+            tr.innerHTML = '<td>' + name + '</td>' + cell(r[0]) + cell(r[1]);
+            rows.appendChild(tr);
+            run(i + 1);
+        });
+    }
+
+    function finish() {
+        var badShow = results.filter(function (r) { return r.show !== 'ok'; });
+        var badDown = results.filter(function (r) { return r.down !== 'ok'; });
+        var box = document.getElementById('summary'), msg;
+
+        if (!badShow.length && !badDown.length) {
+            msg = '사진 ' + results.length + '장 모두 정상입니다. 이 기기에서는 문제가 없습니다.';
+        } else if (badShow.length && !badDown.length) {
+            msg = '사진 ' + badShow.length + '장이 화면에만 안 나옵니다. 내려받기는 되므로 '
+                + '브라우저 확장프로그램(광고 차단 등)이 막고 있을 가능성이 큽니다.';
+        } else {
+            msg = '사진 ' + badDown.length + '장이 아예 도착하지 않습니다. '
+                + '인터넷 연결, 회사 네트워크, 또는 백신·보안 프로그램이 막고 있을 가능성이 큽니다.';
+        }
+        box.textContent = msg;
+    }
+
+    // environment
+    var env = document.getElementById('env');
+    function add(k, v) {
+        env.insertAdjacentHTML('beforeend', '<dt>' + k + '</dt><dd>' + v + '</dd>');
+    }
+    function supports(type) {
+        var c = document.createElement('canvas');
+        return c.toDataURL && c.toDataURL('image/' + type).indexOf('image/' + type) === 5 ? '지원' : '미지원';
+    }
+    add('검사 시각', new Date().toLocaleString('ko-KR'));
+    add('주소', location.href.split('?')[0]);
+    add('화면 크기', window.innerWidth + ' x ' + window.innerHeight);
+    add('WebP 형식', supports('webp'));
+    add('데이터 절약 모드', (navigator.connection && navigator.connection.saveData) ? '켜짐' : '꺼짐 또는 없음');
+    add('브라우저 정보', navigator.userAgent);
+
+    run(0);
+})();
+</script>
+
+</body>
+</html>
