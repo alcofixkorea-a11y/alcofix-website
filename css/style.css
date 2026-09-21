@@ -1650,3 +1650,44 @@ body.doc{overflow:auto;background:#fff}
     font-size:14px;line-height:1.85;color:#5a5a63;
 }
 .qa p a{color:var(--cyan-ink);text-decoration:underline;text-underline-offset:2px}
+
+/* ===== Certification marks, on their own ===== */
+.certs{
+    margin-top:clamp(48px,6vw,80px);
+    padding-top:clamp(32px,4vw,48px);
+    border-top:1px solid rgba(17,17,19,0.12);
+}
+.certs-t{
+    font-size:clamp(20px,2.4vw,28px);font-weight:700;
+    color:var(--ink);letter-spacing:-0.6px;margin-bottom:10px;
+}
+.certs-d{font-size:14px;line-height:1.85;color:#76767e;max-width:62ch}
+
+/* ===== Product information panel ===== */
+.spec{
+    margin-top:clamp(48px,6vw,80px);
+    padding-top:clamp(32px,4vw,48px);
+    border-top:1px solid rgba(17,17,19,0.12);
+}
+.spec-t{
+    font-size:clamp(20px,2.4vw,28px);font-weight:700;
+    color:var(--ink);letter-spacing:-0.6px;margin-bottom:8px;
+}
+.spec-note{font-size:13px;color:var(--ink-soft);margin-bottom:22px}
+.spec-list{
+    display:grid;gap:1px;grid-template-columns:repeat(2,minmax(0,1fr));
+    background:var(--line);border:1px solid var(--line);
+}
+.sp{
+    display:grid;grid-template-columns:clamp(110px,12vw,150px) minmax(0,1fr);
+    gap:clamp(12px,1.6vw,20px);
+    background:var(--paper);padding:14px clamp(14px,1.6vw,20px);
+}
+.sp-wide{grid-column:1 / -1}
+.sp dt{font-size:13px;font-weight:700;color:var(--ink)}
+.sp dd{font-size:13.5px;line-height:1.8;color:#5a5a63}
+
+@media (max-width:900px){
+    .spec-list{grid-template-columns:1fr}
+    .sp{grid-template-columns:1fr;gap:4px}
+}
