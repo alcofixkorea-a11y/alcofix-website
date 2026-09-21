@@ -9,7 +9,7 @@ const ORIGIN = 'https://alcofix.co.kr/';
 
 const PAGES = [
     { id: 'about', title: '기업소개 | ALCOFIX 알코픽스',
-      desc: '주식회사 알코픽스(ALCOFIX Inc.) 기업소개 — 건강한 음주문화를 선도하는 알코올 토탈 솔루션 기업의 사업 현황, 대표자, 협력사를 소개합니다.' },
+      desc: '주식회사 알코픽스(ALCOFIX Inc.) 기업소개 — 건강한 음주문화를 선도하는 알코올 토탈 솔루션 기업의 사업 현황, 연혁, 소식, 대표자를 소개합니다.' },
     { id: 'product', title: '제품소개 | ALCOFIX 알코픽스',
       desc: '17종 한방원료로 만든 3mm 환형 숙취해소제 확깨유와 개발 중인 알코픽스 제품 라인업을 소개합니다.' },
     { id: 'vision', title: '비전 | ALCOFIX 알코픽스',
@@ -38,7 +38,7 @@ for (const pg of PAGES) {
     h = setAttr(h, /(<meta name="twitter:title" content=")[^"]*(")/, pg.title, 'twitter:title');
     h = setAttr(h, /(<meta name="twitter:description" content=")[^"]*(")/, pg.desc, 'twitter:description');
     // one folder down: files one level up, and the page to open
-    h = h.replace(/((?:src|href|data-img)=")(?=(?:images|css|js)\/|privacy\.html|terms\.html)/g, '$1../');
+    h = h.replace(/((?:src|href|data-img)=")(?=(?:images|css|js|files)\/|privacy\.html|terms\.html)/g, '$1../');
     h = h.replace(/<body([^>]*)data-root="\.\/"/, '<body$1data-root="../" data-page="' + pg.id + '"');
     if (!h.includes('data-page="' + pg.id + '"')) throw new Error('body data-root missing');
     fs.mkdirSync(path.join(SITE, pg.id), { recursive: true });
