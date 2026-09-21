@@ -94,6 +94,11 @@
     document.querySelectorAll('img[src]').forEach(function(img) {
         img.setAttribute('src', img.src);
     });
+    // the same goes for links to files, such as the brochures
+    document.querySelectorAll('a[href]').forEach(function(a) {
+        var href = a.getAttribute('href');
+        if (href && href.charAt(0) !== '#') a.setAttribute('href', a.href);
+    });
 
     var decoKey = 'main';
     function showDeco(key) {
