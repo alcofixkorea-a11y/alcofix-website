@@ -1691,3 +1691,26 @@ body.doc{overflow:auto;background:#fff}
     .spec-list{grid-template-columns:1fr}
     .sp{grid-template-columns:1fr;gap:4px}
 }
+
+/* ===== Language switch: KR · EN ===== */
+.lang{
+    display:inline-flex;align-items:center;gap:10px;flex:none;
+    font-size:11.5px;font-weight:600;letter-spacing:1.6px;
+}
+.lang a{color:var(--ink-soft);padding:6px 2px;cursor:pointer;transition:color .2s ease}
+.lang a:hover{color:var(--ink)}
+.lang a[aria-current]{color:var(--ink);font-weight:800;cursor:default}
+.lang a:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.lang i{width:1px;height:10px;background:var(--outline)}
+.panel-bar > .lang{justify-self:end}
+@media(max-width:900px){
+    .panel-bar > .lang{margin-left:6px}
+}
+/* on the main screen the switch sits beside the logo, clear of the changing message on the right */
+.menu-header > .lang{margin-right:auto;padding-left:clamp(14px,1.6vw,22px);border-left:1px solid var(--outline)}
+/* English runs longer than the Korean line, so let it wrap instead of running off the screen */
+html[lang="en"] .hero-h{white-space:normal;text-wrap:balance}
+/* the line breaks set for wide screens leave stray short lines on a phone; let English sentences flow there */
+@media(max-width:768px){
+    html[lang="en"] :is(.p-lead,.fd-line,.road-close,.vs-big,.facility-t) br{display:none}
+}

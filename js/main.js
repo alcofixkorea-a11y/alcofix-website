@@ -152,12 +152,36 @@
         }, 170);
     }
 
+    /* ===== Language: the English pages under /en/ run this same script ===== */
+    var EN = (document.documentElement.lang || '').slice(0, 2) === 'en';
+    var T = EN ? {
+        pagesNav: 'Pages',
+        sending: 'Sending…',
+        wait: 'Sending your message.',
+        ok: 'Thank you. We have received your message and will reply to the email address you entered.',
+        fail: 'Your message could not be sent. Please try again later, or email us at ',
+        failTail: '.',
+        send: 'Send message',
+        subject: '[알코픽스 홈페이지 문의 · EN] ',
+        langNav: 'Language'
+    } : {
+        pagesNav: '페이지 선택',
+        sending: '보내는 중…',
+        wait: '문의를 보내고 있습니다.',
+        ok: '문의가 접수되었습니다. 확인 후 입력하신 이메일로 답변드리겠습니다.',
+        fail: '문의를 보내지 못했습니다. 잠시 후 다시 시도하시거나 ',
+        failTail: '으로 보내주세요.',
+        send: '문의하기',
+        subject: '[알코픽스 홈페이지 문의] ',
+        langNav: '언어 선택'
+    };
+
     /* ===== Panels ===== */
     var pages = [
-        { id: 'about',    en: 'We are ALCOFIX', ko: '기업 소개' },
-        { id: 'product',  en: 'Our Product',    ko: '제품 소개' },
-        { id: 'vision',   en: 'Our Vision',     ko: '비전' },
-        { id: 'contact',  en: 'Contact Us',     ko: '문의하기' }
+        { id: 'about',    en: 'We are ALCOFIX', ko: EN ? 'Company'  : '기업 소개' },
+        { id: 'product',  en: 'Our Product',    ko: EN ? 'Products' : '제품 소개' },
+        { id: 'vision',   en: 'Our Vision',     ko: EN ? 'Vision'   : '비전' },
+        { id: 'contact',  en: 'Contact Us',     ko: EN ? 'Contact'  : '문의하기' }
     ];
 
     /* ===== Page addresses: every page has its own link (about/, product/, vision/, contact/) ===== */
@@ -176,12 +200,46 @@
         var hash = location.hash.slice(1);
         return (!rest && pageIds.indexOf(hash) >= 0) ? hash : '';
     }
-    var PAGE_TITLES = { '': 'ALCOFIX 알코픽스 | 건강한 음주문화를 선도하는 알코올 토탈 솔루션 기업', about: '기업소개 | ALCOFIX 알코픽스', product: '제품소개 | ALCOFIX 알코픽스', vision: '비전 | ALCOFIX 알코픽스', contact: '문의하기 | ALCOFIX 알코픽스' };
+    var PAGE_TITLES = EN
+        ? { '': 'ALCOFIX | Alcohol Total Solution Company for a Healthier Drinking Culture', about: 'About | ALCOFIX', product: 'Products | ALCOFIX', vision: 'Vision | ALCOFIX', contact: 'Contact | ALCOFIX' }
+        : { '': 'ALCOFIX 알코픽스 | 건강한 음주문화를 선도하는 알코올 토탈 솔루션 기업', about: '기업소개 | ALCOFIX 알코픽스', product: '제품소개 | ALCOFIX 알코픽스', vision: '비전 | ALCOFIX 알코픽스', contact: '문의하기 | ALCOFIX 알코픽스' };
     function remember(id) {
         document.title = PAGE_TITLES[id] || PAGE_TITLES[''];
         var url = pageUrl(id);
         if (location.href !== url && window.history && history.pushState) history.pushState({ page: id }, '', url);
+        updateLangLinks();
     }
+
+    /* ===== Language switch: KR · EN, pointing at the same page in the other language ===== */
+    var OTHER_ROOT = new URL(EN ? '../' : 'en/', SITE).href;
+    function otherLangUrl() {
+        var id = pageFromLocation();
+        return new URL(id ? id + '/' : '', OTHER_ROOT).href + location.hash;
+    }
+    function langSwitch() {
+        var wrap = document.createElement('nav');
+        wrap.className = 'lang';
+        wrap.setAttribute('aria-label', T.langNav);
+        wrap.innerHTML =
+            '<a lang="ko" hreflang="ko" data-lang="ko"' + (EN ? '' : ' aria-current="true"') + '>KR</a>' +
+            '<i aria-hidden="true"></i>' +
+            '<a lang="en" hreflang="en" data-lang="en"' + (EN ? ' aria-current="true"' : '') + '>EN</a>';
+        return wrap;
+    }
+    function updateLangLinks() {
+        var target = otherLangUrl();
+        document.querySelectorAll('.lang a').forEach(function(a) {
+            a.href = a.hasAttribute('aria-current') ? location.href : target;
+        });
+    }
+    document.addEventListener('click', function(e) {
+        var a = e.target.closest && e.target.closest('.lang a');
+        if (!a) return;
+        e.preventDefault();
+        if (!a.hasAttribute('aria-current')) location.href = otherLangUrl();
+    });
+    var menuHeader = document.querySelector('.menu-header');
+    if (menuHeader) menuHeader.appendChild(langSwitch());
 
     /* Hovering a word only changes the photo; a click opens the page.
        Moving between pages: the current content clears away while the top bar stays,
@@ -403,7 +461,7 @@
 
         var nav = document.createElement('nav');
         nav.className = 'panel-nav';
-        nav.setAttribute('aria-label', '페이지 선택');
+        nav.setAttribute('aria-label', T.pagesNav);
         pages.forEach(function(pg) {
             var a = document.createElement('a');
             a.className = 'pn' + (pg.id === current ? ' active' : '');
@@ -415,6 +473,7 @@
             nav.appendChild(a);
         });
         bar.appendChild(nav);
+        bar.appendChild(langSwitch());
 
         nav.addEventListener('click', function(e) {
             var link = e.target.closest('.pn');
@@ -517,8 +576,8 @@
             var fd = new FormData(form);
             if (fd.get('_honey')) return;       // filled in only by bots
             sendBtn.disabled = true;
-            sendBtn.textContent = '보내는 중…';
-            say('wait', '문의를 보내고 있습니다.');
+            sendBtn.textContent = T.sending;
+            say('wait', T.wait);
             fetch(FORM_ENDPOINT, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -528,7 +587,7 @@
                     '문의 유형': fd.get('type'),
                     '문의 내용': fd.get('message'),
                     '개인정보 동의': '동의함',
-                    _subject: '[알코픽스 홈페이지 문의] ' + fd.get('type') + ' - ' + fd.get('name'),
+                    _subject: T.subject + fd.get('type') + ' - ' + fd.get('name'),
                     _replyto: fd.get('email'),
                     _template: 'table',
                     _captcha: 'false'
@@ -538,15 +597,15 @@
                 .then(function(res) {
                     if (String(res.success) !== 'true') throw new Error(res.message || 'not sent');
                     form.reset();
-                    say('ok', '문의가 접수되었습니다. 확인 후 입력하신 이메일로 답변드리겠습니다.');
+                    say('ok', T.ok);
                 })
                 .catch(function() {
-                    say('error', '문의를 보내지 못했습니다. 잠시 후 다시 시도하시거나 ' +
-                        '<a href="mailto:alcofixkorea@gmail.com">alcofixkorea@gmail.com</a>으로 보내주세요.');
+                    say('error', T.fail +
+                        '<a href="mailto:alcofixkorea@gmail.com">alcofixkorea@gmail.com</a>' + T.failTail);
                 })
                 .then(function() {
                     sendBtn.disabled = false;
-                    sendBtn.textContent = '문의하기';
+                    sendBtn.textContent = T.send;
                 });
         });
     }
@@ -568,6 +627,9 @@
     } else {
         startIntro();
     }
+    updateLangLinks();
+    // back and forward move between pages too; keep the language switch on the same page
+    window.addEventListener('popstate', updateLangLinks);
 
 })();
 
